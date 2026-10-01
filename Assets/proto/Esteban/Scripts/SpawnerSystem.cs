@@ -5,6 +5,8 @@ using Unity.Mathematics;
 using UnityEngine;
 using Random = Unity.Mathematics.Random;
 
+
+
 public partial struct SpawnerSystem : ISystem
 {
     private float nextSpawn;
@@ -17,6 +19,7 @@ public partial struct SpawnerSystem : ISystem
         // This also prevents GetSingleton from throwing an exception if it doesn't find
         // an object of type Spawner.
         state.RequireForUpdate<SpawnerData>();
+        state.RequireForUpdate<Slot>();
         random = new Random((uint)System.DateTime.Now.Ticks);
     }
     
@@ -26,10 +29,13 @@ public partial struct SpawnerSystem : ISystem
     {
         
         SpawnerData spawnerData = SystemAPI.GetSingleton<SpawnerData>();
+        Slot slot = SystemAPI.GetSingleton<Slot>();
         
         if (!(nextSpawn < SystemAPI.Time.ElapsedTime)) return;
+
+        if (slot.value == null) return;
         
-        Entity newEntity = state.EntityManager.Instantiate(spawnerData.Prefab);
+        Entity newEntity = state.EntityManager.Instantiate(slot.value);
         
         float3 randomOffset = (random.NextFloat3() - 0.5f) * 5f;
         randomOffset.y = 0;
