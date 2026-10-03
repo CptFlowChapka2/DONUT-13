@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,8 +11,10 @@ public enum KeyWordType
     Control
 }
 
+[Serializable]
 public class KeyWord : MonoBehaviour
 {
+    public string name;
     public KeyWordType type;
-    public List<GameObject> referencedObjects;
+    public GameObject referencedObject;
 }
