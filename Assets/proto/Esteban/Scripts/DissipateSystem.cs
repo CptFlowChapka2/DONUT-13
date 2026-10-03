@@ -1,3 +1,4 @@
+using System;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
@@ -33,4 +34,9 @@ public partial struct DissipateSystem : ISystem
         dog.Playback(entityManager);
         dog.Dispose();
     }
+}
+
+public class bob
+{
+    
 }
