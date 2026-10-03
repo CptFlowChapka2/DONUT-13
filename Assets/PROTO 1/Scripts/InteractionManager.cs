@@ -25,18 +25,21 @@ public class InteractionManager : MonoBehaviour
         {
             currentSelectedKeyWord = word;
             currentSelectedSlot = slot;
+            Debug.Log(currentSelectedKeyWord);
             //Effets visuels et sonores de sélection
             return;
         }
         
         Swap(word, currentSelectedKeyWord, slot, currentSelectedSlot);
+        currentSelectedKeyWord = null;
+        currentSelectedSlot = null;
     }
 
     public void Swap(KeyWord word1, KeyWord word2, Slot slot1, Slot slot2)
     {
         slot1.slottedKeyWord = word2;
         slot2.slottedKeyWord = word1;
-        word1.GetComponent<RectTransform>().anchoredPosition = slot2.GetComponent<RectTransform>().anchoredPosition;
-        word2.GetComponent<RectTransform>().anchoredPosition = slot1.GetComponent<RectTransform>().anchoredPosition;
+        word1.GetComponent<RectTransform>().anchoredPosition = slot2.anchorPoint.GetComponent<RectTransform>().anchoredPosition;
+        word2.GetComponent<RectTransform>().anchoredPosition = slot1.anchorPoint.GetComponent<RectTransform>().anchoredPosition;
     }
 }

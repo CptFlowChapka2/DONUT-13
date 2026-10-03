@@ -6,6 +6,8 @@ public class Slot : MonoBehaviour
 {
     public KeyWordType[] authorizedType;
     public KeyWord slottedKeyWord;
+
+    public GameObject anchorPoint;
     
     private InteractionManager interactionManager;
 
