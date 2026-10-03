@@ -739,15 +739,31 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8065536456710327187, guid: 63623723c2397b34a891d65f4f3de231, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8065536456710327187, guid: 63623723c2397b34a891d65f4f3de231, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8065536456710327187, guid: 63623723c2397b34a891d65f4f3de231, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 2000369837}
+    - target: {fileID: 8065536456710327187, guid: 63623723c2397b34a891d65f4f3de231, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8065536456710327187, guid: 63623723c2397b34a891d65f4f3de231, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnClick
+      objectReference: {fileID: 0}
+    - target: {fileID: 8065536456710327187, guid: 63623723c2397b34a891d65f4f3de231, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: Slot, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 8065536456710327187, guid: 63623723c2397b34a891d65f4f3de231, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3525,6 +3541,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 5406490101315862114, guid: 817ff97b4ef9d0440bc7491a5664fdaa, type: 3}
   m_PrefabInstance: {fileID: 1687142355}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2000369837 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1435510046692453006, guid: 63623723c2397b34a891d65f4f3de231, type: 3}
+  m_PrefabInstance: {fileID: 341015034}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b398782e053b4d34783528e1de66c802, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Slot
 --- !u!1001 &2106146584
 PrefabInstance:
   m_ObjectHideFlags: 0
