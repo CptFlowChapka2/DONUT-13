@@ -298,7 +298,8 @@ Shader "Voronoi3D"
 				#define ENABLE_TERRAIN_PERPIXEL_NORMAL
 			#endif
 
-			#define ASE_NEEDS_VERT_POSITION
+			#define ASE_NEEDS_WORLD_POSITION
+			#define ASE_NEEDS_FRAG_WORLD_POSITION
 
 
 			#if defined(ASE_WRITE_DEPTH_CONSERVATIVE) && (SHADER_TARGET >= 45)
@@ -346,7 +347,7 @@ Shader "Voronoi3D"
 				#if defined(USE_APV_PROBE_OCCLUSION)
 					float4 probeOcclusion : TEXCOORD6;
 				#endif
-				float4 ase_texcoord7 : TEXCOORD7;
+				
 				UNITY_VERTEX_INPUT_INSTANCE_ID
 				UNITY_VERTEX_OUTPUT_STEREO
 			};
@@ -386,14 +387,14 @@ Shader "Voronoi3D"
 
 			
 
-					float2 voronoihash11_g1( float2 p )
+					float2 voronoihash20( float2 p )
 					{
 						
 						p = float2( dot( p, float2( 127.1, 311.7 ) ), dot( p, float2( 269.5, 183.3 ) ) );
 						return frac( sin( p ) *43758.5453);
 					}
 			
-					float voronoi11_g1( float2 v, float time, inout float2 id, inout float2 mr, float smoothness, inout float2 smoothId )
+					float voronoi20( float2 v, float time, inout float2 id, inout float2 mr, float smoothness, inout float2 smoothId )
 					{
 						float2 n = floor( v );
 						float2 f = frac( v );
@@ -404,7 +405,7 @@ Shader "Voronoi3D"
 							for ( i = -1; i <= 1; i++ )
 						 	{
 						 		float2 g = float2( i, j );
-						 		float2 o = voronoihash11_g1( n + g );
+						 		float2 o = voronoihash20( n + g );
 								o = ( sin( time + o * 6.2831 ) * 0.5 + 0.5 ); float2 r = f - g - o;
 								float d = 0.5 * dot( r, r );
 						 		if( d<F1 ) {
@@ -416,8 +417,55 @@ Shader "Voronoi3D"
 						 		}
 						 	}
 						}
-						return F2;
+						return F1;
 					}
+			
+			float3 mod3D289( float3 x ) { return x - floor( x / 289.0 ) * 289.0; }
+			float4 mod3D289( float4 x ) { return x - floor( x / 289.0 ) * 289.0; }
+			float4 permute( float4 x ) { return mod3D289( ( x * 34.0 + 1.0 ) * x ); }
+			float4 taylorInvSqrt( float4 r ) { return 1.79284291400159 - r * 0.85373472095314; }
+			float snoise( float3 v )
+			{
+				const float2 C = float2( 1.0 / 6.0, 1.0 / 3.0 );
+				float3 i = floor( v + dot( v, C.yyy ) );
+				float3 x0 = v - i + dot( i, C.xxx );
+				float3 g = step( x0.yzx, x0.xyz );
+				float3 l = 1.0 - g;
+				float3 i1 = min( g.xyz, l.zxy );
+				float3 i2 = max( g.xyz, l.zxy );
+				float3 x1 = x0 - i1 + C.xxx;
+				float3 x2 = x0 - i2 + C.yyy;
+				float3 x3 = x0 - 0.5;
+				i = mod3D289( i);
+				float4 p = permute( permute( permute( i.z + float4( 0.0, i1.z, i2.z, 1.0 ) ) + i.y + float4( 0.0, i1.y, i2.y, 1.0 ) ) + i.x + float4( 0.0, i1.x, i2.x, 1.0 ) );
+				float4 j = p - 49.0 * floor( p / 49.0 );  // mod(p,7*7)
+				float4 x_ = floor( j / 7.0 );
+				float4 y_ = floor( j - 7.0 * x_ );  // mod(j,N)
+				float4 x = ( x_ * 2.0 + 0.5 ) / 7.0 - 1.0;
+				float4 y = ( y_ * 2.0 + 0.5 ) / 7.0 - 1.0;
+				float4 h = 1.0 - abs( x ) - abs( y );
+				float4 b0 = float4( x.xy, y.xy );
+				float4 b1 = float4( x.zw, y.zw );
+				float4 s0 = floor( b0 ) * 2.0 + 1.0;
+				float4 s1 = floor( b1 ) * 2.0 + 1.0;
+				float4 sh = -step( h, 0.0 );
+				float4 a0 = b0.xzyw + s0.xzyw * sh.xxyy;
+				float4 a1 = b1.xzyw + s1.xzyw * sh.zzww;
+				float3 g0 = float3( a0.xy, h.x );
+				float3 g1 = float3( a0.zw, h.y );
+				float3 g2 = float3( a1.xy, h.z );
+				float3 g3 = float3( a1.zw, h.w );
+				float4 norm = taylorInvSqrt( float4( dot( g0, g0 ), dot( g1, g1 ), dot( g2, g2 ), dot( g3, g3 ) ) );
+				g0 *= norm.x;
+				g1 *= norm.y;
+				g2 *= norm.z;
+				g3 *= norm.w;
+				float4 m = max( 0.6 - float4( dot( x0, x0 ), dot( x1, x1 ), dot( x2, x2 ), dot( x3, x3 ) ), 0.0 );
+				m = m* m;
+				m = m* m;
+				float4 px = float4( dot( x0, g0 ), dot( x1, g1 ), dot( x2, g2 ), dot( x3, g3 ) );
+				return 42.0 * dot( m, px);
+			}
 			
 
 			PackedVaryings VertexFunction( Attributes input  )
@@ -427,16 +475,18 @@ Shader "Voronoi3D"
 				UNITY_TRANSFER_INSTANCE_ID(input, output);
 				UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(output);
 
-				float time11_g1 = 0.0;
-				float2 voronoiSmoothId11_g1 = 0;
-				float2 coords11_g1 = ( ( input.positionOS.xyz + ( float3( 0, 1, 0 ) * _TimeParameters.x ) ) / 2.0 ).xy * 1.0;
-				float2 id11_g1 = 0;
-				float2 uv11_g1 = 0;
-				float voroi11_g1 = voronoi11_g1( coords11_g1, time11_g1, id11_g1, uv11_g1, 0, voronoiSmoothId11_g1 );
-				float temp_output_12_0 = voroi11_g1;
-				float3 temp_cast_1 = (temp_output_12_0).xxx;
+				float time20 = _TimeParameters.x;
+				float2 voronoiSmoothId20 = 0;
+				float3 ase_positionWS = TransformObjectToWorld( ( input.positionOS ).xyz );
+				float simplePerlin3D17 = snoise( ase_positionWS );
+				simplePerlin3D17 = simplePerlin3D17*0.5 + 0.5;
+				float2 temp_cast_0 = (simplePerlin3D17).xx;
+				float2 coords20 = temp_cast_0 * 4.0;
+				float2 id20 = 0;
+				float2 uv20 = 0;
+				float voroi20 = voronoi20( coords20, time20, id20, uv20, 0, voronoiSmoothId20 );
+				float3 temp_cast_1 = (voroi20).xxx;
 				
-				output.ase_texcoord7 = input.positionOS;
 
 				#ifdef ASE_ABSOLUTE_VERTEX_POS
 					float3 defaultVertexValue = input.positionOS.xyz;
@@ -647,14 +697,16 @@ Shader "Voronoi3D"
 					BitangentWS = cross(NormalWS, -TangentWS);
 				#endif
 
-				float time11_g1 = 0.0;
-				float2 voronoiSmoothId11_g1 = 0;
-				float2 coords11_g1 = ( ( input.ase_texcoord7.xyz + ( float3( 0, 1, 0 ) * _TimeParameters.x ) ) / 2.0 ).xy * 1.0;
-				float2 id11_g1 = 0;
-				float2 uv11_g1 = 0;
-				float voroi11_g1 = voronoi11_g1( coords11_g1, time11_g1, id11_g1, uv11_g1, 0, voronoiSmoothId11_g1 );
-				float temp_output_12_0 = voroi11_g1;
-				float3 temp_cast_1 = (temp_output_12_0).xxx;
+				float time20 = _TimeParameters.x;
+				float2 voronoiSmoothId20 = 0;
+				float simplePerlin3D17 = snoise( PositionWS );
+				simplePerlin3D17 = simplePerlin3D17*0.5 + 0.5;
+				float2 temp_cast_0 = (simplePerlin3D17).xx;
+				float2 coords20 = temp_cast_0 * 4.0;
+				float2 id20 = 0;
+				float2 uv20 = 0;
+				float voroi20 = voronoi20( coords20, time20, id20, uv20, 0, voronoiSmoothId20 );
+				float3 temp_cast_1 = (voroi20).xxx;
 				
 
 				float3 BaseColor = temp_cast_1;
@@ -981,8 +1033,7 @@ Shader "Voronoi3D"
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/LODCrossFade.hlsl"
             #endif
 
-			#define ASE_NEEDS_VERT_POSITION
-
+			
 
 			#if defined(ASE_WRITE_DEPTH_CONSERVATIVE) && (SHADER_TARGET >= 45)
 				#define ASE_SV_DEPTH SV_DepthLessEqual
@@ -1048,14 +1099,14 @@ Shader "Voronoi3D"
 			float3 _LightDirection;
 			float3 _LightPosition;
 
-					float2 voronoihash11_g1( float2 p )
+					float2 voronoihash20( float2 p )
 					{
 						
 						p = float2( dot( p, float2( 127.1, 311.7 ) ), dot( p, float2( 269.5, 183.3 ) ) );
 						return frac( sin( p ) *43758.5453);
 					}
 			
-					float voronoi11_g1( float2 v, float time, inout float2 id, inout float2 mr, float smoothness, inout float2 smoothId )
+					float voronoi20( float2 v, float time, inout float2 id, inout float2 mr, float smoothness, inout float2 smoothId )
 					{
 						float2 n = floor( v );
 						float2 f = frac( v );
@@ -1066,7 +1117,7 @@ Shader "Voronoi3D"
 							for ( i = -1; i <= 1; i++ )
 						 	{
 						 		float2 g = float2( i, j );
-						 		float2 o = voronoihash11_g1( n + g );
+						 		float2 o = voronoihash20( n + g );
 								o = ( sin( time + o * 6.2831 ) * 0.5 + 0.5 ); float2 r = f - g - o;
 								float d = 0.5 * dot( r, r );
 						 		if( d<F1 ) {
@@ -1078,8 +1129,55 @@ Shader "Voronoi3D"
 						 		}
 						 	}
 						}
-						return F2;
+						return F1;
 					}
+			
+			float3 mod3D289( float3 x ) { return x - floor( x / 289.0 ) * 289.0; }
+			float4 mod3D289( float4 x ) { return x - floor( x / 289.0 ) * 289.0; }
+			float4 permute( float4 x ) { return mod3D289( ( x * 34.0 + 1.0 ) * x ); }
+			float4 taylorInvSqrt( float4 r ) { return 1.79284291400159 - r * 0.85373472095314; }
+			float snoise( float3 v )
+			{
+				const float2 C = float2( 1.0 / 6.0, 1.0 / 3.0 );
+				float3 i = floor( v + dot( v, C.yyy ) );
+				float3 x0 = v - i + dot( i, C.xxx );
+				float3 g = step( x0.yzx, x0.xyz );
+				float3 l = 1.0 - g;
+				float3 i1 = min( g.xyz, l.zxy );
+				float3 i2 = max( g.xyz, l.zxy );
+				float3 x1 = x0 - i1 + C.xxx;
+				float3 x2 = x0 - i2 + C.yyy;
+				float3 x3 = x0 - 0.5;
+				i = mod3D289( i);
+				float4 p = permute( permute( permute( i.z + float4( 0.0, i1.z, i2.z, 1.0 ) ) + i.y + float4( 0.0, i1.y, i2.y, 1.0 ) ) + i.x + float4( 0.0, i1.x, i2.x, 1.0 ) );
+				float4 j = p - 49.0 * floor( p / 49.0 );  // mod(p,7*7)
+				float4 x_ = floor( j / 7.0 );
+				float4 y_ = floor( j - 7.0 * x_ );  // mod(j,N)
+				float4 x = ( x_ * 2.0 + 0.5 ) / 7.0 - 1.0;
+				float4 y = ( y_ * 2.0 + 0.5 ) / 7.0 - 1.0;
+				float4 h = 1.0 - abs( x ) - abs( y );
+				float4 b0 = float4( x.xy, y.xy );
+				float4 b1 = float4( x.zw, y.zw );
+				float4 s0 = floor( b0 ) * 2.0 + 1.0;
+				float4 s1 = floor( b1 ) * 2.0 + 1.0;
+				float4 sh = -step( h, 0.0 );
+				float4 a0 = b0.xzyw + s0.xzyw * sh.xxyy;
+				float4 a1 = b1.xzyw + s1.xzyw * sh.zzww;
+				float3 g0 = float3( a0.xy, h.x );
+				float3 g1 = float3( a0.zw, h.y );
+				float3 g2 = float3( a1.xy, h.z );
+				float3 g3 = float3( a1.zw, h.w );
+				float4 norm = taylorInvSqrt( float4( dot( g0, g0 ), dot( g1, g1 ), dot( g2, g2 ), dot( g3, g3 ) ) );
+				g0 *= norm.x;
+				g1 *= norm.y;
+				g2 *= norm.z;
+				g3 *= norm.w;
+				float4 m = max( 0.6 - float4( dot( x0, x0 ), dot( x1, x1 ), dot( x2, x2 ), dot( x3, x3 ) ), 0.0 );
+				m = m* m;
+				m = m* m;
+				float4 px = float4( dot( x0, g0 ), dot( x1, g1 ), dot( x2, g2 ), dot( x3, g3 ) );
+				return 42.0 * dot( m, px);
+			}
 			
 
 			PackedVaryings VertexFunction( Attributes input )
@@ -1089,14 +1187,17 @@ Shader "Voronoi3D"
 				UNITY_TRANSFER_INSTANCE_ID(input, output);
 				UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO( output );
 
-				float time11_g1 = 0.0;
-				float2 voronoiSmoothId11_g1 = 0;
-				float2 coords11_g1 = ( ( input.positionOS.xyz + ( float3( 0, 1, 0 ) * _TimeParameters.x ) ) / 2.0 ).xy * 1.0;
-				float2 id11_g1 = 0;
-				float2 uv11_g1 = 0;
-				float voroi11_g1 = voronoi11_g1( coords11_g1, time11_g1, id11_g1, uv11_g1, 0, voronoiSmoothId11_g1 );
-				float temp_output_12_0 = voroi11_g1;
-				float3 temp_cast_1 = (temp_output_12_0).xxx;
+				float time20 = _TimeParameters.x;
+				float2 voronoiSmoothId20 = 0;
+				float3 ase_positionWS = TransformObjectToWorld( ( input.positionOS ).xyz );
+				float simplePerlin3D17 = snoise( ase_positionWS );
+				simplePerlin3D17 = simplePerlin3D17*0.5 + 0.5;
+				float2 temp_cast_0 = (simplePerlin3D17).xx;
+				float2 coords20 = temp_cast_0 * 4.0;
+				float2 id20 = 0;
+				float2 uv20 = 0;
+				float voroi20 = voronoi20( coords20, time20, id20, uv20, 0, voronoiSmoothId20 );
+				float3 temp_cast_1 = (voroi20).xxx;
 				
 
 				#ifdef ASE_ABSOLUTE_VERTEX_POS
@@ -1324,8 +1425,7 @@ Shader "Voronoi3D"
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/LODCrossFade.hlsl"
             #endif
 
-			#define ASE_NEEDS_VERT_POSITION
-
+			
 
 			#if defined(ASE_WRITE_DEPTH_CONSERVATIVE) && (SHADER_TARGET >= 45)
 				#define ASE_SV_DEPTH SV_DepthLessEqual
@@ -1388,14 +1488,14 @@ Shader "Voronoi3D"
 
 			
 
-					float2 voronoihash11_g1( float2 p )
+					float2 voronoihash20( float2 p )
 					{
 						
 						p = float2( dot( p, float2( 127.1, 311.7 ) ), dot( p, float2( 269.5, 183.3 ) ) );
 						return frac( sin( p ) *43758.5453);
 					}
 			
-					float voronoi11_g1( float2 v, float time, inout float2 id, inout float2 mr, float smoothness, inout float2 smoothId )
+					float voronoi20( float2 v, float time, inout float2 id, inout float2 mr, float smoothness, inout float2 smoothId )
 					{
 						float2 n = floor( v );
 						float2 f = frac( v );
@@ -1406,7 +1506,7 @@ Shader "Voronoi3D"
 							for ( i = -1; i <= 1; i++ )
 						 	{
 						 		float2 g = float2( i, j );
-						 		float2 o = voronoihash11_g1( n + g );
+						 		float2 o = voronoihash20( n + g );
 								o = ( sin( time + o * 6.2831 ) * 0.5 + 0.5 ); float2 r = f - g - o;
 								float d = 0.5 * dot( r, r );
 						 		if( d<F1 ) {
@@ -1418,8 +1518,55 @@ Shader "Voronoi3D"
 						 		}
 						 	}
 						}
-						return F2;
+						return F1;
 					}
+			
+			float3 mod3D289( float3 x ) { return x - floor( x / 289.0 ) * 289.0; }
+			float4 mod3D289( float4 x ) { return x - floor( x / 289.0 ) * 289.0; }
+			float4 permute( float4 x ) { return mod3D289( ( x * 34.0 + 1.0 ) * x ); }
+			float4 taylorInvSqrt( float4 r ) { return 1.79284291400159 - r * 0.85373472095314; }
+			float snoise( float3 v )
+			{
+				const float2 C = float2( 1.0 / 6.0, 1.0 / 3.0 );
+				float3 i = floor( v + dot( v, C.yyy ) );
+				float3 x0 = v - i + dot( i, C.xxx );
+				float3 g = step( x0.yzx, x0.xyz );
+				float3 l = 1.0 - g;
+				float3 i1 = min( g.xyz, l.zxy );
+				float3 i2 = max( g.xyz, l.zxy );
+				float3 x1 = x0 - i1 + C.xxx;
+				float3 x2 = x0 - i2 + C.yyy;
+				float3 x3 = x0 - 0.5;
+				i = mod3D289( i);
+				float4 p = permute( permute( permute( i.z + float4( 0.0, i1.z, i2.z, 1.0 ) ) + i.y + float4( 0.0, i1.y, i2.y, 1.0 ) ) + i.x + float4( 0.0, i1.x, i2.x, 1.0 ) );
+				float4 j = p - 49.0 * floor( p / 49.0 );  // mod(p,7*7)
+				float4 x_ = floor( j / 7.0 );
+				float4 y_ = floor( j - 7.0 * x_ );  // mod(j,N)
+				float4 x = ( x_ * 2.0 + 0.5 ) / 7.0 - 1.0;
+				float4 y = ( y_ * 2.0 + 0.5 ) / 7.0 - 1.0;
+				float4 h = 1.0 - abs( x ) - abs( y );
+				float4 b0 = float4( x.xy, y.xy );
+				float4 b1 = float4( x.zw, y.zw );
+				float4 s0 = floor( b0 ) * 2.0 + 1.0;
+				float4 s1 = floor( b1 ) * 2.0 + 1.0;
+				float4 sh = -step( h, 0.0 );
+				float4 a0 = b0.xzyw + s0.xzyw * sh.xxyy;
+				float4 a1 = b1.xzyw + s1.xzyw * sh.zzww;
+				float3 g0 = float3( a0.xy, h.x );
+				float3 g1 = float3( a0.zw, h.y );
+				float3 g2 = float3( a1.xy, h.z );
+				float3 g3 = float3( a1.zw, h.w );
+				float4 norm = taylorInvSqrt( float4( dot( g0, g0 ), dot( g1, g1 ), dot( g2, g2 ), dot( g3, g3 ) ) );
+				g0 *= norm.x;
+				g1 *= norm.y;
+				g2 *= norm.z;
+				g3 *= norm.w;
+				float4 m = max( 0.6 - float4( dot( x0, x0 ), dot( x1, x1 ), dot( x2, x2 ), dot( x3, x3 ) ), 0.0 );
+				m = m* m;
+				m = m* m;
+				float4 px = float4( dot( x0, g0 ), dot( x1, g1 ), dot( x2, g2 ), dot( x3, g3 ) );
+				return 42.0 * dot( m, px);
+			}
 			
 
 			PackedVaryings VertexFunction( Attributes input  )
@@ -1429,14 +1576,17 @@ Shader "Voronoi3D"
 				UNITY_TRANSFER_INSTANCE_ID(input, output);
 				UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(output);
 
-				float time11_g1 = 0.0;
-				float2 voronoiSmoothId11_g1 = 0;
-				float2 coords11_g1 = ( ( input.positionOS.xyz + ( float3( 0, 1, 0 ) * _TimeParameters.x ) ) / 2.0 ).xy * 1.0;
-				float2 id11_g1 = 0;
-				float2 uv11_g1 = 0;
-				float voroi11_g1 = voronoi11_g1( coords11_g1, time11_g1, id11_g1, uv11_g1, 0, voronoiSmoothId11_g1 );
-				float temp_output_12_0 = voroi11_g1;
-				float3 temp_cast_1 = (temp_output_12_0).xxx;
+				float time20 = _TimeParameters.x;
+				float2 voronoiSmoothId20 = 0;
+				float3 ase_positionWS = TransformObjectToWorld( ( input.positionOS ).xyz );
+				float simplePerlin3D17 = snoise( ase_positionWS );
+				simplePerlin3D17 = simplePerlin3D17*0.5 + 0.5;
+				float2 temp_cast_0 = (simplePerlin3D17).xx;
+				float2 coords20 = temp_cast_0 * 4.0;
+				float2 id20 = 0;
+				float2 uv20 = 0;
+				float voroi20 = voronoi20( coords20, time20, id20, uv20, 0, voronoiSmoothId20 );
+				float3 temp_cast_1 = (voroi20).xxx;
 				
 
 				#ifdef ASE_ABSOLUTE_VERTEX_POS
@@ -1640,7 +1790,8 @@ Shader "Voronoi3D"
 			#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/MetaInput.hlsl"
 			#include "Packages/com.unity.render-pipelines.universal/Editor/ShaderGraph/Includes/ShaderPass.hlsl"
 
-			#define ASE_NEEDS_VERT_POSITION
+			#define ASE_NEEDS_WORLD_POSITION
+			#define ASE_NEEDS_FRAG_WORLD_POSITION
 
 
 			struct Attributes
@@ -1663,7 +1814,7 @@ Shader "Voronoi3D"
 					float4 VizUV : TEXCOORD1;
 					float4 LightCoord : TEXCOORD2;
 				#endif
-				float4 ase_texcoord3 : TEXCOORD3;
+				
 				UNITY_VERTEX_INPUT_INSTANCE_ID
 				UNITY_VERTEX_OUTPUT_STEREO
 			};
@@ -1703,14 +1854,14 @@ Shader "Voronoi3D"
 
 			
 
-					float2 voronoihash11_g1( float2 p )
+					float2 voronoihash20( float2 p )
 					{
 						
 						p = float2( dot( p, float2( 127.1, 311.7 ) ), dot( p, float2( 269.5, 183.3 ) ) );
 						return frac( sin( p ) *43758.5453);
 					}
 			
-					float voronoi11_g1( float2 v, float time, inout float2 id, inout float2 mr, float smoothness, inout float2 smoothId )
+					float voronoi20( float2 v, float time, inout float2 id, inout float2 mr, float smoothness, inout float2 smoothId )
 					{
 						float2 n = floor( v );
 						float2 f = frac( v );
@@ -1721,7 +1872,7 @@ Shader "Voronoi3D"
 							for ( i = -1; i <= 1; i++ )
 						 	{
 						 		float2 g = float2( i, j );
-						 		float2 o = voronoihash11_g1( n + g );
+						 		float2 o = voronoihash20( n + g );
 								o = ( sin( time + o * 6.2831 ) * 0.5 + 0.5 ); float2 r = f - g - o;
 								float d = 0.5 * dot( r, r );
 						 		if( d<F1 ) {
@@ -1733,8 +1884,55 @@ Shader "Voronoi3D"
 						 		}
 						 	}
 						}
-						return F2;
+						return F1;
 					}
+			
+			float3 mod3D289( float3 x ) { return x - floor( x / 289.0 ) * 289.0; }
+			float4 mod3D289( float4 x ) { return x - floor( x / 289.0 ) * 289.0; }
+			float4 permute( float4 x ) { return mod3D289( ( x * 34.0 + 1.0 ) * x ); }
+			float4 taylorInvSqrt( float4 r ) { return 1.79284291400159 - r * 0.85373472095314; }
+			float snoise( float3 v )
+			{
+				const float2 C = float2( 1.0 / 6.0, 1.0 / 3.0 );
+				float3 i = floor( v + dot( v, C.yyy ) );
+				float3 x0 = v - i + dot( i, C.xxx );
+				float3 g = step( x0.yzx, x0.xyz );
+				float3 l = 1.0 - g;
+				float3 i1 = min( g.xyz, l.zxy );
+				float3 i2 = max( g.xyz, l.zxy );
+				float3 x1 = x0 - i1 + C.xxx;
+				float3 x2 = x0 - i2 + C.yyy;
+				float3 x3 = x0 - 0.5;
+				i = mod3D289( i);
+				float4 p = permute( permute( permute( i.z + float4( 0.0, i1.z, i2.z, 1.0 ) ) + i.y + float4( 0.0, i1.y, i2.y, 1.0 ) ) + i.x + float4( 0.0, i1.x, i2.x, 1.0 ) );
+				float4 j = p - 49.0 * floor( p / 49.0 );  // mod(p,7*7)
+				float4 x_ = floor( j / 7.0 );
+				float4 y_ = floor( j - 7.0 * x_ );  // mod(j,N)
+				float4 x = ( x_ * 2.0 + 0.5 ) / 7.0 - 1.0;
+				float4 y = ( y_ * 2.0 + 0.5 ) / 7.0 - 1.0;
+				float4 h = 1.0 - abs( x ) - abs( y );
+				float4 b0 = float4( x.xy, y.xy );
+				float4 b1 = float4( x.zw, y.zw );
+				float4 s0 = floor( b0 ) * 2.0 + 1.0;
+				float4 s1 = floor( b1 ) * 2.0 + 1.0;
+				float4 sh = -step( h, 0.0 );
+				float4 a0 = b0.xzyw + s0.xzyw * sh.xxyy;
+				float4 a1 = b1.xzyw + s1.xzyw * sh.zzww;
+				float3 g0 = float3( a0.xy, h.x );
+				float3 g1 = float3( a0.zw, h.y );
+				float3 g2 = float3( a1.xy, h.z );
+				float3 g3 = float3( a1.zw, h.w );
+				float4 norm = taylorInvSqrt( float4( dot( g0, g0 ), dot( g1, g1 ), dot( g2, g2 ), dot( g3, g3 ) ) );
+				g0 *= norm.x;
+				g1 *= norm.y;
+				g2 *= norm.z;
+				g3 *= norm.w;
+				float4 m = max( 0.6 - float4( dot( x0, x0 ), dot( x1, x1 ), dot( x2, x2 ), dot( x3, x3 ) ), 0.0 );
+				m = m* m;
+				m = m* m;
+				float4 px = float4( dot( x0, g0 ), dot( x1, g1 ), dot( x2, g2 ), dot( x3, g3 ) );
+				return 42.0 * dot( m, px);
+			}
 			
 
 			PackedVaryings VertexFunction( Attributes input  )
@@ -1744,16 +1942,18 @@ Shader "Voronoi3D"
 				UNITY_TRANSFER_INSTANCE_ID(input, output);
 				UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(output);
 
-				float time11_g1 = 0.0;
-				float2 voronoiSmoothId11_g1 = 0;
-				float2 coords11_g1 = ( ( input.positionOS.xyz + ( float3( 0, 1, 0 ) * _TimeParameters.x ) ) / 2.0 ).xy * 1.0;
-				float2 id11_g1 = 0;
-				float2 uv11_g1 = 0;
-				float voroi11_g1 = voronoi11_g1( coords11_g1, time11_g1, id11_g1, uv11_g1, 0, voronoiSmoothId11_g1 );
-				float temp_output_12_0 = voroi11_g1;
-				float3 temp_cast_1 = (temp_output_12_0).xxx;
+				float time20 = _TimeParameters.x;
+				float2 voronoiSmoothId20 = 0;
+				float3 ase_positionWS = TransformObjectToWorld( ( input.positionOS ).xyz );
+				float simplePerlin3D17 = snoise( ase_positionWS );
+				simplePerlin3D17 = simplePerlin3D17*0.5 + 0.5;
+				float2 temp_cast_0 = (simplePerlin3D17).xx;
+				float2 coords20 = temp_cast_0 * 4.0;
+				float2 id20 = 0;
+				float2 uv20 = 0;
+				float voroi20 = voronoi20( coords20, time20, id20, uv20, 0, voronoiSmoothId20 );
+				float3 temp_cast_1 = (voroi20).xxx;
 				
-				output.ase_texcoord3 = input.positionOS;
 
 				#ifdef ASE_ABSOLUTE_VERTEX_POS
 					float3 defaultVertexValue = input.positionOS.xyz;
@@ -1891,14 +2091,16 @@ Shader "Voronoi3D"
 				float3 PositionRWS = GetCameraRelativePositionWS( input.positionWS );
 				float4 ShadowCoord = shadowCoord;
 
-				float time11_g1 = 0.0;
-				float2 voronoiSmoothId11_g1 = 0;
-				float2 coords11_g1 = ( ( input.ase_texcoord3.xyz + ( float3( 0, 1, 0 ) * _TimeParameters.x ) ) / 2.0 ).xy * 1.0;
-				float2 id11_g1 = 0;
-				float2 uv11_g1 = 0;
-				float voroi11_g1 = voronoi11_g1( coords11_g1, time11_g1, id11_g1, uv11_g1, 0, voronoiSmoothId11_g1 );
-				float temp_output_12_0 = voroi11_g1;
-				float3 temp_cast_1 = (temp_output_12_0).xxx;
+				float time20 = _TimeParameters.x;
+				float2 voronoiSmoothId20 = 0;
+				float simplePerlin3D17 = snoise( PositionWS );
+				simplePerlin3D17 = simplePerlin3D17*0.5 + 0.5;
+				float2 temp_cast_0 = (simplePerlin3D17).xx;
+				float2 coords20 = temp_cast_0 * 4.0;
+				float2 id20 = 0;
+				float2 uv20 = 0;
+				float voroi20 = voronoi20( coords20, time20, id20, uv20, 0, voronoiSmoothId20 );
+				float3 temp_cast_1 = (voroi20).xxx;
 				
 
 				float3 BaseColor = temp_cast_1;
@@ -1973,7 +2175,8 @@ Shader "Voronoi3D"
 			#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/ShaderGraphFunctions.hlsl"
 			#include "Packages/com.unity.render-pipelines.universal/Editor/ShaderGraph/Includes/ShaderPass.hlsl"
 
-			#define ASE_NEEDS_VERT_POSITION
+			#define ASE_NEEDS_WORLD_POSITION
+			#define ASE_NEEDS_FRAG_WORLD_POSITION
 
 
 			struct Attributes
@@ -1989,7 +2192,7 @@ Shader "Voronoi3D"
 			{
 				float4 positionCS : SV_POSITION;
 				float3 positionWS : TEXCOORD0;
-				float4 ase_texcoord1 : TEXCOORD1;
+				
 				UNITY_VERTEX_INPUT_INSTANCE_ID
 				UNITY_VERTEX_OUTPUT_STEREO
 			};
@@ -2029,14 +2232,14 @@ Shader "Voronoi3D"
 
 			
 
-					float2 voronoihash11_g1( float2 p )
+					float2 voronoihash20( float2 p )
 					{
 						
 						p = float2( dot( p, float2( 127.1, 311.7 ) ), dot( p, float2( 269.5, 183.3 ) ) );
 						return frac( sin( p ) *43758.5453);
 					}
 			
-					float voronoi11_g1( float2 v, float time, inout float2 id, inout float2 mr, float smoothness, inout float2 smoothId )
+					float voronoi20( float2 v, float time, inout float2 id, inout float2 mr, float smoothness, inout float2 smoothId )
 					{
 						float2 n = floor( v );
 						float2 f = frac( v );
@@ -2047,7 +2250,7 @@ Shader "Voronoi3D"
 							for ( i = -1; i <= 1; i++ )
 						 	{
 						 		float2 g = float2( i, j );
-						 		float2 o = voronoihash11_g1( n + g );
+						 		float2 o = voronoihash20( n + g );
 								o = ( sin( time + o * 6.2831 ) * 0.5 + 0.5 ); float2 r = f - g - o;
 								float d = 0.5 * dot( r, r );
 						 		if( d<F1 ) {
@@ -2059,8 +2262,55 @@ Shader "Voronoi3D"
 						 		}
 						 	}
 						}
-						return F2;
+						return F1;
 					}
+			
+			float3 mod3D289( float3 x ) { return x - floor( x / 289.0 ) * 289.0; }
+			float4 mod3D289( float4 x ) { return x - floor( x / 289.0 ) * 289.0; }
+			float4 permute( float4 x ) { return mod3D289( ( x * 34.0 + 1.0 ) * x ); }
+			float4 taylorInvSqrt( float4 r ) { return 1.79284291400159 - r * 0.85373472095314; }
+			float snoise( float3 v )
+			{
+				const float2 C = float2( 1.0 / 6.0, 1.0 / 3.0 );
+				float3 i = floor( v + dot( v, C.yyy ) );
+				float3 x0 = v - i + dot( i, C.xxx );
+				float3 g = step( x0.yzx, x0.xyz );
+				float3 l = 1.0 - g;
+				float3 i1 = min( g.xyz, l.zxy );
+				float3 i2 = max( g.xyz, l.zxy );
+				float3 x1 = x0 - i1 + C.xxx;
+				float3 x2 = x0 - i2 + C.yyy;
+				float3 x3 = x0 - 0.5;
+				i = mod3D289( i);
+				float4 p = permute( permute( permute( i.z + float4( 0.0, i1.z, i2.z, 1.0 ) ) + i.y + float4( 0.0, i1.y, i2.y, 1.0 ) ) + i.x + float4( 0.0, i1.x, i2.x, 1.0 ) );
+				float4 j = p - 49.0 * floor( p / 49.0 );  // mod(p,7*7)
+				float4 x_ = floor( j / 7.0 );
+				float4 y_ = floor( j - 7.0 * x_ );  // mod(j,N)
+				float4 x = ( x_ * 2.0 + 0.5 ) / 7.0 - 1.0;
+				float4 y = ( y_ * 2.0 + 0.5 ) / 7.0 - 1.0;
+				float4 h = 1.0 - abs( x ) - abs( y );
+				float4 b0 = float4( x.xy, y.xy );
+				float4 b1 = float4( x.zw, y.zw );
+				float4 s0 = floor( b0 ) * 2.0 + 1.0;
+				float4 s1 = floor( b1 ) * 2.0 + 1.0;
+				float4 sh = -step( h, 0.0 );
+				float4 a0 = b0.xzyw + s0.xzyw * sh.xxyy;
+				float4 a1 = b1.xzyw + s1.xzyw * sh.zzww;
+				float3 g0 = float3( a0.xy, h.x );
+				float3 g1 = float3( a0.zw, h.y );
+				float3 g2 = float3( a1.xy, h.z );
+				float3 g3 = float3( a1.zw, h.w );
+				float4 norm = taylorInvSqrt( float4( dot( g0, g0 ), dot( g1, g1 ), dot( g2, g2 ), dot( g3, g3 ) ) );
+				g0 *= norm.x;
+				g1 *= norm.y;
+				g2 *= norm.z;
+				g3 *= norm.w;
+				float4 m = max( 0.6 - float4( dot( x0, x0 ), dot( x1, x1 ), dot( x2, x2 ), dot( x3, x3 ) ), 0.0 );
+				m = m* m;
+				m = m* m;
+				float4 px = float4( dot( x0, g0 ), dot( x1, g1 ), dot( x2, g2 ), dot( x3, g3 ) );
+				return 42.0 * dot( m, px);
+			}
 			
 
 			PackedVaryings VertexFunction( Attributes input  )
@@ -2070,16 +2320,18 @@ Shader "Voronoi3D"
 				UNITY_TRANSFER_INSTANCE_ID( input, output );
 				UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO( output );
 
-				float time11_g1 = 0.0;
-				float2 voronoiSmoothId11_g1 = 0;
-				float2 coords11_g1 = ( ( input.positionOS.xyz + ( float3( 0, 1, 0 ) * _TimeParameters.x ) ) / 2.0 ).xy * 1.0;
-				float2 id11_g1 = 0;
-				float2 uv11_g1 = 0;
-				float voroi11_g1 = voronoi11_g1( coords11_g1, time11_g1, id11_g1, uv11_g1, 0, voronoiSmoothId11_g1 );
-				float temp_output_12_0 = voroi11_g1;
-				float3 temp_cast_1 = (temp_output_12_0).xxx;
+				float time20 = _TimeParameters.x;
+				float2 voronoiSmoothId20 = 0;
+				float3 ase_positionWS = TransformObjectToWorld( ( input.positionOS ).xyz );
+				float simplePerlin3D17 = snoise( ase_positionWS );
+				simplePerlin3D17 = simplePerlin3D17*0.5 + 0.5;
+				float2 temp_cast_0 = (simplePerlin3D17).xx;
+				float2 coords20 = temp_cast_0 * 4.0;
+				float2 id20 = 0;
+				float2 uv20 = 0;
+				float voroi20 = voronoi20( coords20, time20, id20, uv20, 0, voronoiSmoothId20 );
+				float3 temp_cast_1 = (voroi20).xxx;
 				
-				output.ase_texcoord1 = input.positionOS;
 
 				#ifdef ASE_ABSOLUTE_VERTEX_POS
 					float3 defaultVertexValue = input.positionOS.xyz;
@@ -2202,14 +2454,16 @@ Shader "Voronoi3D"
 				float3 PositionRWS = GetCameraRelativePositionWS( input.positionWS );
 				float4 ShadowCoord = shadowCoord;
 
-				float time11_g1 = 0.0;
-				float2 voronoiSmoothId11_g1 = 0;
-				float2 coords11_g1 = ( ( input.ase_texcoord1.xyz + ( float3( 0, 1, 0 ) * _TimeParameters.x ) ) / 2.0 ).xy * 1.0;
-				float2 id11_g1 = 0;
-				float2 uv11_g1 = 0;
-				float voroi11_g1 = voronoi11_g1( coords11_g1, time11_g1, id11_g1, uv11_g1, 0, voronoiSmoothId11_g1 );
-				float temp_output_12_0 = voroi11_g1;
-				float3 temp_cast_1 = (temp_output_12_0).xxx;
+				float time20 = _TimeParameters.x;
+				float2 voronoiSmoothId20 = 0;
+				float simplePerlin3D17 = snoise( PositionWS );
+				simplePerlin3D17 = simplePerlin3D17*0.5 + 0.5;
+				float2 temp_cast_0 = (simplePerlin3D17).xx;
+				float2 coords20 = temp_cast_0 * 4.0;
+				float2 id20 = 0;
+				float2 uv20 = 0;
+				float voroi20 = voronoi20( coords20, time20, id20, uv20, 0, voronoiSmoothId20 );
+				float3 temp_cast_1 = (voroi20).xxx;
 				
 
 				float3 BaseColor = temp_cast_1;
@@ -2289,8 +2543,7 @@ Shader "Voronoi3D"
 				#define ENABLE_TERRAIN_PERPIXEL_NORMAL
 			#endif
 
-			#define ASE_NEEDS_VERT_POSITION
-
+			
 
 			#if defined(ASE_WRITE_DEPTH_CONSERVATIVE) && (SHADER_TARGET >= 45)
 				#define ASE_SV_DEPTH SV_DepthLessEqual
@@ -2356,14 +2609,14 @@ Shader "Voronoi3D"
 
 			
 
-					float2 voronoihash11_g1( float2 p )
+					float2 voronoihash20( float2 p )
 					{
 						
 						p = float2( dot( p, float2( 127.1, 311.7 ) ), dot( p, float2( 269.5, 183.3 ) ) );
 						return frac( sin( p ) *43758.5453);
 					}
 			
-					float voronoi11_g1( float2 v, float time, inout float2 id, inout float2 mr, float smoothness, inout float2 smoothId )
+					float voronoi20( float2 v, float time, inout float2 id, inout float2 mr, float smoothness, inout float2 smoothId )
 					{
 						float2 n = floor( v );
 						float2 f = frac( v );
@@ -2374,7 +2627,7 @@ Shader "Voronoi3D"
 							for ( i = -1; i <= 1; i++ )
 						 	{
 						 		float2 g = float2( i, j );
-						 		float2 o = voronoihash11_g1( n + g );
+						 		float2 o = voronoihash20( n + g );
 								o = ( sin( time + o * 6.2831 ) * 0.5 + 0.5 ); float2 r = f - g - o;
 								float d = 0.5 * dot( r, r );
 						 		if( d<F1 ) {
@@ -2386,8 +2639,55 @@ Shader "Voronoi3D"
 						 		}
 						 	}
 						}
-						return F2;
+						return F1;
 					}
+			
+			float3 mod3D289( float3 x ) { return x - floor( x / 289.0 ) * 289.0; }
+			float4 mod3D289( float4 x ) { return x - floor( x / 289.0 ) * 289.0; }
+			float4 permute( float4 x ) { return mod3D289( ( x * 34.0 + 1.0 ) * x ); }
+			float4 taylorInvSqrt( float4 r ) { return 1.79284291400159 - r * 0.85373472095314; }
+			float snoise( float3 v )
+			{
+				const float2 C = float2( 1.0 / 6.0, 1.0 / 3.0 );
+				float3 i = floor( v + dot( v, C.yyy ) );
+				float3 x0 = v - i + dot( i, C.xxx );
+				float3 g = step( x0.yzx, x0.xyz );
+				float3 l = 1.0 - g;
+				float3 i1 = min( g.xyz, l.zxy );
+				float3 i2 = max( g.xyz, l.zxy );
+				float3 x1 = x0 - i1 + C.xxx;
+				float3 x2 = x0 - i2 + C.yyy;
+				float3 x3 = x0 - 0.5;
+				i = mod3D289( i);
+				float4 p = permute( permute( permute( i.z + float4( 0.0, i1.z, i2.z, 1.0 ) ) + i.y + float4( 0.0, i1.y, i2.y, 1.0 ) ) + i.x + float4( 0.0, i1.x, i2.x, 1.0 ) );
+				float4 j = p - 49.0 * floor( p / 49.0 );  // mod(p,7*7)
+				float4 x_ = floor( j / 7.0 );
+				float4 y_ = floor( j - 7.0 * x_ );  // mod(j,N)
+				float4 x = ( x_ * 2.0 + 0.5 ) / 7.0 - 1.0;
+				float4 y = ( y_ * 2.0 + 0.5 ) / 7.0 - 1.0;
+				float4 h = 1.0 - abs( x ) - abs( y );
+				float4 b0 = float4( x.xy, y.xy );
+				float4 b1 = float4( x.zw, y.zw );
+				float4 s0 = floor( b0 ) * 2.0 + 1.0;
+				float4 s1 = floor( b1 ) * 2.0 + 1.0;
+				float4 sh = -step( h, 0.0 );
+				float4 a0 = b0.xzyw + s0.xzyw * sh.xxyy;
+				float4 a1 = b1.xzyw + s1.xzyw * sh.zzww;
+				float3 g0 = float3( a0.xy, h.x );
+				float3 g1 = float3( a0.zw, h.y );
+				float3 g2 = float3( a1.xy, h.z );
+				float3 g3 = float3( a1.zw, h.w );
+				float4 norm = taylorInvSqrt( float4( dot( g0, g0 ), dot( g1, g1 ), dot( g2, g2 ), dot( g3, g3 ) ) );
+				g0 *= norm.x;
+				g1 *= norm.y;
+				g2 *= norm.z;
+				g3 *= norm.w;
+				float4 m = max( 0.6 - float4( dot( x0, x0 ), dot( x1, x1 ), dot( x2, x2 ), dot( x3, x3 ) ), 0.0 );
+				m = m* m;
+				m = m* m;
+				float4 px = float4( dot( x0, g0 ), dot( x1, g1 ), dot( x2, g2 ), dot( x3, g3 ) );
+				return 42.0 * dot( m, px);
+			}
 			
 
 			PackedVaryings VertexFunction( Attributes input  )
@@ -2397,14 +2697,17 @@ Shader "Voronoi3D"
 				UNITY_TRANSFER_INSTANCE_ID(input, output);
 				UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(output);
 
-				float time11_g1 = 0.0;
-				float2 voronoiSmoothId11_g1 = 0;
-				float2 coords11_g1 = ( ( input.positionOS.xyz + ( float3( 0, 1, 0 ) * _TimeParameters.x ) ) / 2.0 ).xy * 1.0;
-				float2 id11_g1 = 0;
-				float2 uv11_g1 = 0;
-				float voroi11_g1 = voronoi11_g1( coords11_g1, time11_g1, id11_g1, uv11_g1, 0, voronoiSmoothId11_g1 );
-				float temp_output_12_0 = voroi11_g1;
-				float3 temp_cast_1 = (temp_output_12_0).xxx;
+				float time20 = _TimeParameters.x;
+				float2 voronoiSmoothId20 = 0;
+				float3 ase_positionWS = TransformObjectToWorld( ( input.positionOS ).xyz );
+				float simplePerlin3D17 = snoise( ase_positionWS );
+				simplePerlin3D17 = simplePerlin3D17*0.5 + 0.5;
+				float2 temp_cast_0 = (simplePerlin3D17).xx;
+				float2 coords20 = temp_cast_0 * 4.0;
+				float2 id20 = 0;
+				float2 uv20 = 0;
+				float voroi20 = voronoi20( coords20, time20, id20, uv20, 0, voronoiSmoothId20 );
+				float3 temp_cast_1 = (voroi20).xxx;
 				
 				#ifdef ASE_ABSOLUTE_VERTEX_POS
 					float3 defaultVertexValue = input.positionOS.xyz;
@@ -2729,7 +3032,8 @@ Shader "Voronoi3D"
 				#define ENABLE_TERRAIN_PERPIXEL_NORMAL
 			#endif
 
-			#define ASE_NEEDS_VERT_POSITION
+			#define ASE_NEEDS_WORLD_POSITION
+			#define ASE_NEEDS_FRAG_WORLD_POSITION
 
 
 			#if defined(ASE_WRITE_DEPTH_CONSERVATIVE) && (SHADER_TARGET >= 45)
@@ -2772,7 +3076,7 @@ Shader "Voronoi3D"
 				#if defined(USE_APV_PROBE_OCCLUSION)
 					float4 probeOcclusion : TEXCOORD6;
 				#endif
-				float4 ase_texcoord7 : TEXCOORD7;
+				
 				UNITY_VERTEX_INPUT_INSTANCE_ID
 				UNITY_VERTEX_OUTPUT_STEREO
 			};
@@ -2818,14 +3122,14 @@ Shader "Voronoi3D"
 			#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/UnityGBuffer.hlsl"
 			#endif
 
-					float2 voronoihash11_g1( float2 p )
+					float2 voronoihash20( float2 p )
 					{
 						
 						p = float2( dot( p, float2( 127.1, 311.7 ) ), dot( p, float2( 269.5, 183.3 ) ) );
 						return frac( sin( p ) *43758.5453);
 					}
 			
-					float voronoi11_g1( float2 v, float time, inout float2 id, inout float2 mr, float smoothness, inout float2 smoothId )
+					float voronoi20( float2 v, float time, inout float2 id, inout float2 mr, float smoothness, inout float2 smoothId )
 					{
 						float2 n = floor( v );
 						float2 f = frac( v );
@@ -2836,7 +3140,7 @@ Shader "Voronoi3D"
 							for ( i = -1; i <= 1; i++ )
 						 	{
 						 		float2 g = float2( i, j );
-						 		float2 o = voronoihash11_g1( n + g );
+						 		float2 o = voronoihash20( n + g );
 								o = ( sin( time + o * 6.2831 ) * 0.5 + 0.5 ); float2 r = f - g - o;
 								float d = 0.5 * dot( r, r );
 						 		if( d<F1 ) {
@@ -2848,8 +3152,55 @@ Shader "Voronoi3D"
 						 		}
 						 	}
 						}
-						return F2;
+						return F1;
 					}
+			
+			float3 mod3D289( float3 x ) { return x - floor( x / 289.0 ) * 289.0; }
+			float4 mod3D289( float4 x ) { return x - floor( x / 289.0 ) * 289.0; }
+			float4 permute( float4 x ) { return mod3D289( ( x * 34.0 + 1.0 ) * x ); }
+			float4 taylorInvSqrt( float4 r ) { return 1.79284291400159 - r * 0.85373472095314; }
+			float snoise( float3 v )
+			{
+				const float2 C = float2( 1.0 / 6.0, 1.0 / 3.0 );
+				float3 i = floor( v + dot( v, C.yyy ) );
+				float3 x0 = v - i + dot( i, C.xxx );
+				float3 g = step( x0.yzx, x0.xyz );
+				float3 l = 1.0 - g;
+				float3 i1 = min( g.xyz, l.zxy );
+				float3 i2 = max( g.xyz, l.zxy );
+				float3 x1 = x0 - i1 + C.xxx;
+				float3 x2 = x0 - i2 + C.yyy;
+				float3 x3 = x0 - 0.5;
+				i = mod3D289( i);
+				float4 p = permute( permute( permute( i.z + float4( 0.0, i1.z, i2.z, 1.0 ) ) + i.y + float4( 0.0, i1.y, i2.y, 1.0 ) ) + i.x + float4( 0.0, i1.x, i2.x, 1.0 ) );
+				float4 j = p - 49.0 * floor( p / 49.0 );  // mod(p,7*7)
+				float4 x_ = floor( j / 7.0 );
+				float4 y_ = floor( j - 7.0 * x_ );  // mod(j,N)
+				float4 x = ( x_ * 2.0 + 0.5 ) / 7.0 - 1.0;
+				float4 y = ( y_ * 2.0 + 0.5 ) / 7.0 - 1.0;
+				float4 h = 1.0 - abs( x ) - abs( y );
+				float4 b0 = float4( x.xy, y.xy );
+				float4 b1 = float4( x.zw, y.zw );
+				float4 s0 = floor( b0 ) * 2.0 + 1.0;
+				float4 s1 = floor( b1 ) * 2.0 + 1.0;
+				float4 sh = -step( h, 0.0 );
+				float4 a0 = b0.xzyw + s0.xzyw * sh.xxyy;
+				float4 a1 = b1.xzyw + s1.xzyw * sh.zzww;
+				float3 g0 = float3( a0.xy, h.x );
+				float3 g1 = float3( a0.zw, h.y );
+				float3 g2 = float3( a1.xy, h.z );
+				float3 g3 = float3( a1.zw, h.w );
+				float4 norm = taylorInvSqrt( float4( dot( g0, g0 ), dot( g1, g1 ), dot( g2, g2 ), dot( g3, g3 ) ) );
+				g0 *= norm.x;
+				g1 *= norm.y;
+				g2 *= norm.z;
+				g3 *= norm.w;
+				float4 m = max( 0.6 - float4( dot( x0, x0 ), dot( x1, x1 ), dot( x2, x2 ), dot( x3, x3 ) ), 0.0 );
+				m = m* m;
+				m = m* m;
+				float4 px = float4( dot( x0, g0 ), dot( x1, g1 ), dot( x2, g2 ), dot( x3, g3 ) );
+				return 42.0 * dot( m, px);
+			}
 			
 
 			PackedVaryings VertexFunction( Attributes input  )
@@ -2859,16 +3210,18 @@ Shader "Voronoi3D"
 				UNITY_TRANSFER_INSTANCE_ID(input, output);
 				UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(output);
 
-				float time11_g1 = 0.0;
-				float2 voronoiSmoothId11_g1 = 0;
-				float2 coords11_g1 = ( ( input.positionOS.xyz + ( float3( 0, 1, 0 ) * _TimeParameters.x ) ) / 2.0 ).xy * 1.0;
-				float2 id11_g1 = 0;
-				float2 uv11_g1 = 0;
-				float voroi11_g1 = voronoi11_g1( coords11_g1, time11_g1, id11_g1, uv11_g1, 0, voronoiSmoothId11_g1 );
-				float temp_output_12_0 = voroi11_g1;
-				float3 temp_cast_1 = (temp_output_12_0).xxx;
+				float time20 = _TimeParameters.x;
+				float2 voronoiSmoothId20 = 0;
+				float3 ase_positionWS = TransformObjectToWorld( ( input.positionOS ).xyz );
+				float simplePerlin3D17 = snoise( ase_positionWS );
+				simplePerlin3D17 = simplePerlin3D17*0.5 + 0.5;
+				float2 temp_cast_0 = (simplePerlin3D17).xx;
+				float2 coords20 = temp_cast_0 * 4.0;
+				float2 id20 = 0;
+				float2 uv20 = 0;
+				float voroi20 = voronoi20( coords20, time20, id20, uv20, 0, voronoiSmoothId20 );
+				float3 temp_cast_1 = (voroi20).xxx;
 				
-				output.ase_texcoord7 = input.positionOS;
 				#ifdef ASE_ABSOLUTE_VERTEX_POS
 					float3 defaultVertexValue = input.positionOS.xyz;
 				#else
@@ -3070,14 +3423,16 @@ Shader "Voronoi3D"
 					BitangentWS = cross(NormalWS, -TangentWS);
 				#endif
 
-				float time11_g1 = 0.0;
-				float2 voronoiSmoothId11_g1 = 0;
-				float2 coords11_g1 = ( ( input.ase_texcoord7.xyz + ( float3( 0, 1, 0 ) * _TimeParameters.x ) ) / 2.0 ).xy * 1.0;
-				float2 id11_g1 = 0;
-				float2 uv11_g1 = 0;
-				float voroi11_g1 = voronoi11_g1( coords11_g1, time11_g1, id11_g1, uv11_g1, 0, voronoiSmoothId11_g1 );
-				float temp_output_12_0 = voroi11_g1;
-				float3 temp_cast_1 = (temp_output_12_0).xxx;
+				float time20 = _TimeParameters.x;
+				float2 voronoiSmoothId20 = 0;
+				float simplePerlin3D17 = snoise( PositionWS );
+				simplePerlin3D17 = simplePerlin3D17*0.5 + 0.5;
+				float2 temp_cast_0 = (simplePerlin3D17).xx;
+				float2 coords20 = temp_cast_0 * 4.0;
+				float2 id20 = 0;
+				float2 uv20 = 0;
+				float voroi20 = voronoi20( coords20, time20, id20, uv20, 0, voronoiSmoothId20 );
+				float3 temp_cast_1 = (voroi20).xxx;
 				
 
 				float3 BaseColor = temp_cast_1;
@@ -3279,8 +3634,7 @@ Shader "Voronoi3D"
 			#include_with_pragmas "Packages/com.unity.render-pipelines.universal/ShaderLibrary/DOTS.hlsl"
 			#include "Packages/com.unity.render-pipelines.universal/Editor/ShaderGraph/Includes/ShaderPass.hlsl"
 
-			#define ASE_NEEDS_VERT_POSITION
-
+			
 
 			#if defined(ASE_WRITE_DEPTH_CONSERVATIVE) && (SHADER_TARGET >= 45)
 				#define ASE_SV_DEPTH SV_DepthLessEqual
@@ -3343,14 +3697,14 @@ Shader "Voronoi3D"
 
 			
 
-					float2 voronoihash11_g1( float2 p )
+					float2 voronoihash20( float2 p )
 					{
 						
 						p = float2( dot( p, float2( 127.1, 311.7 ) ), dot( p, float2( 269.5, 183.3 ) ) );
 						return frac( sin( p ) *43758.5453);
 					}
 			
-					float voronoi11_g1( float2 v, float time, inout float2 id, inout float2 mr, float smoothness, inout float2 smoothId )
+					float voronoi20( float2 v, float time, inout float2 id, inout float2 mr, float smoothness, inout float2 smoothId )
 					{
 						float2 n = floor( v );
 						float2 f = frac( v );
@@ -3361,7 +3715,7 @@ Shader "Voronoi3D"
 							for ( i = -1; i <= 1; i++ )
 						 	{
 						 		float2 g = float2( i, j );
-						 		float2 o = voronoihash11_g1( n + g );
+						 		float2 o = voronoihash20( n + g );
 								o = ( sin( time + o * 6.2831 ) * 0.5 + 0.5 ); float2 r = f - g - o;
 								float d = 0.5 * dot( r, r );
 						 		if( d<F1 ) {
@@ -3373,8 +3727,55 @@ Shader "Voronoi3D"
 						 		}
 						 	}
 						}
-						return F2;
+						return F1;
 					}
+			
+			float3 mod3D289( float3 x ) { return x - floor( x / 289.0 ) * 289.0; }
+			float4 mod3D289( float4 x ) { return x - floor( x / 289.0 ) * 289.0; }
+			float4 permute( float4 x ) { return mod3D289( ( x * 34.0 + 1.0 ) * x ); }
+			float4 taylorInvSqrt( float4 r ) { return 1.79284291400159 - r * 0.85373472095314; }
+			float snoise( float3 v )
+			{
+				const float2 C = float2( 1.0 / 6.0, 1.0 / 3.0 );
+				float3 i = floor( v + dot( v, C.yyy ) );
+				float3 x0 = v - i + dot( i, C.xxx );
+				float3 g = step( x0.yzx, x0.xyz );
+				float3 l = 1.0 - g;
+				float3 i1 = min( g.xyz, l.zxy );
+				float3 i2 = max( g.xyz, l.zxy );
+				float3 x1 = x0 - i1 + C.xxx;
+				float3 x2 = x0 - i2 + C.yyy;
+				float3 x3 = x0 - 0.5;
+				i = mod3D289( i);
+				float4 p = permute( permute( permute( i.z + float4( 0.0, i1.z, i2.z, 1.0 ) ) + i.y + float4( 0.0, i1.y, i2.y, 1.0 ) ) + i.x + float4( 0.0, i1.x, i2.x, 1.0 ) );
+				float4 j = p - 49.0 * floor( p / 49.0 );  // mod(p,7*7)
+				float4 x_ = floor( j / 7.0 );
+				float4 y_ = floor( j - 7.0 * x_ );  // mod(j,N)
+				float4 x = ( x_ * 2.0 + 0.5 ) / 7.0 - 1.0;
+				float4 y = ( y_ * 2.0 + 0.5 ) / 7.0 - 1.0;
+				float4 h = 1.0 - abs( x ) - abs( y );
+				float4 b0 = float4( x.xy, y.xy );
+				float4 b1 = float4( x.zw, y.zw );
+				float4 s0 = floor( b0 ) * 2.0 + 1.0;
+				float4 s1 = floor( b1 ) * 2.0 + 1.0;
+				float4 sh = -step( h, 0.0 );
+				float4 a0 = b0.xzyw + s0.xzyw * sh.xxyy;
+				float4 a1 = b1.xzyw + s1.xzyw * sh.zzww;
+				float3 g0 = float3( a0.xy, h.x );
+				float3 g1 = float3( a0.zw, h.y );
+				float3 g2 = float3( a1.xy, h.z );
+				float3 g3 = float3( a1.zw, h.w );
+				float4 norm = taylorInvSqrt( float4( dot( g0, g0 ), dot( g1, g1 ), dot( g2, g2 ), dot( g3, g3 ) ) );
+				g0 *= norm.x;
+				g1 *= norm.y;
+				g2 *= norm.z;
+				g3 *= norm.w;
+				float4 m = max( 0.6 - float4( dot( x0, x0 ), dot( x1, x1 ), dot( x2, x2 ), dot( x3, x3 ) ), 0.0 );
+				m = m* m;
+				m = m* m;
+				float4 px = float4( dot( x0, g0 ), dot( x1, g1 ), dot( x2, g2 ), dot( x3, g3 ) );
+				return 42.0 * dot( m, px);
+			}
 			
 
 			struct SurfaceDescription
@@ -3392,14 +3793,17 @@ Shader "Voronoi3D"
 				UNITY_TRANSFER_INSTANCE_ID(input, output);
 				UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(output);
 
-				float time11_g1 = 0.0;
-				float2 voronoiSmoothId11_g1 = 0;
-				float2 coords11_g1 = ( ( input.positionOS.xyz + ( float3( 0, 1, 0 ) * _TimeParameters.x ) ) / 2.0 ).xy * 1.0;
-				float2 id11_g1 = 0;
-				float2 uv11_g1 = 0;
-				float voroi11_g1 = voronoi11_g1( coords11_g1, time11_g1, id11_g1, uv11_g1, 0, voronoiSmoothId11_g1 );
-				float temp_output_12_0 = voroi11_g1;
-				float3 temp_cast_1 = (temp_output_12_0).xxx;
+				float time20 = _TimeParameters.x;
+				float2 voronoiSmoothId20 = 0;
+				float3 ase_positionWS = TransformObjectToWorld( ( input.positionOS ).xyz );
+				float simplePerlin3D17 = snoise( ase_positionWS );
+				simplePerlin3D17 = simplePerlin3D17*0.5 + 0.5;
+				float2 temp_cast_0 = (simplePerlin3D17).xx;
+				float2 coords20 = temp_cast_0 * 4.0;
+				float2 id20 = 0;
+				float2 uv20 = 0;
+				float voroi20 = voronoi20( coords20, time20, id20, uv20, 0, voronoiSmoothId20 );
+				float3 temp_cast_1 = (voroi20).xxx;
 				
 
 				#ifdef ASE_ABSOLUTE_VERTEX_POS
@@ -3594,8 +3998,7 @@ Shader "Voronoi3D"
 			#include_with_pragmas "Packages/com.unity.render-pipelines.universal/ShaderLibrary/DOTS.hlsl"
 			#include "Packages/com.unity.render-pipelines.universal/Editor/ShaderGraph/Includes/ShaderPass.hlsl"
 
-			#define ASE_NEEDS_VERT_POSITION
-
+			
 
 			#if defined(ASE_WRITE_DEPTH_CONSERVATIVE) && (SHADER_TARGET >= 45)
 				#define ASE_SV_DEPTH SV_DepthLessEqual
@@ -3658,14 +4061,14 @@ Shader "Voronoi3D"
 
 			
 
-					float2 voronoihash11_g1( float2 p )
+					float2 voronoihash20( float2 p )
 					{
 						
 						p = float2( dot( p, float2( 127.1, 311.7 ) ), dot( p, float2( 269.5, 183.3 ) ) );
 						return frac( sin( p ) *43758.5453);
 					}
 			
-					float voronoi11_g1( float2 v, float time, inout float2 id, inout float2 mr, float smoothness, inout float2 smoothId )
+					float voronoi20( float2 v, float time, inout float2 id, inout float2 mr, float smoothness, inout float2 smoothId )
 					{
 						float2 n = floor( v );
 						float2 f = frac( v );
@@ -3676,7 +4079,7 @@ Shader "Voronoi3D"
 							for ( i = -1; i <= 1; i++ )
 						 	{
 						 		float2 g = float2( i, j );
-						 		float2 o = voronoihash11_g1( n + g );
+						 		float2 o = voronoihash20( n + g );
 								o = ( sin( time + o * 6.2831 ) * 0.5 + 0.5 ); float2 r = f - g - o;
 								float d = 0.5 * dot( r, r );
 						 		if( d<F1 ) {
@@ -3688,8 +4091,55 @@ Shader "Voronoi3D"
 						 		}
 						 	}
 						}
-						return F2;
+						return F1;
 					}
+			
+			float3 mod3D289( float3 x ) { return x - floor( x / 289.0 ) * 289.0; }
+			float4 mod3D289( float4 x ) { return x - floor( x / 289.0 ) * 289.0; }
+			float4 permute( float4 x ) { return mod3D289( ( x * 34.0 + 1.0 ) * x ); }
+			float4 taylorInvSqrt( float4 r ) { return 1.79284291400159 - r * 0.85373472095314; }
+			float snoise( float3 v )
+			{
+				const float2 C = float2( 1.0 / 6.0, 1.0 / 3.0 );
+				float3 i = floor( v + dot( v, C.yyy ) );
+				float3 x0 = v - i + dot( i, C.xxx );
+				float3 g = step( x0.yzx, x0.xyz );
+				float3 l = 1.0 - g;
+				float3 i1 = min( g.xyz, l.zxy );
+				float3 i2 = max( g.xyz, l.zxy );
+				float3 x1 = x0 - i1 + C.xxx;
+				float3 x2 = x0 - i2 + C.yyy;
+				float3 x3 = x0 - 0.5;
+				i = mod3D289( i);
+				float4 p = permute( permute( permute( i.z + float4( 0.0, i1.z, i2.z, 1.0 ) ) + i.y + float4( 0.0, i1.y, i2.y, 1.0 ) ) + i.x + float4( 0.0, i1.x, i2.x, 1.0 ) );
+				float4 j = p - 49.0 * floor( p / 49.0 );  // mod(p,7*7)
+				float4 x_ = floor( j / 7.0 );
+				float4 y_ = floor( j - 7.0 * x_ );  // mod(j,N)
+				float4 x = ( x_ * 2.0 + 0.5 ) / 7.0 - 1.0;
+				float4 y = ( y_ * 2.0 + 0.5 ) / 7.0 - 1.0;
+				float4 h = 1.0 - abs( x ) - abs( y );
+				float4 b0 = float4( x.xy, y.xy );
+				float4 b1 = float4( x.zw, y.zw );
+				float4 s0 = floor( b0 ) * 2.0 + 1.0;
+				float4 s1 = floor( b1 ) * 2.0 + 1.0;
+				float4 sh = -step( h, 0.0 );
+				float4 a0 = b0.xzyw + s0.xzyw * sh.xxyy;
+				float4 a1 = b1.xzyw + s1.xzyw * sh.zzww;
+				float3 g0 = float3( a0.xy, h.x );
+				float3 g1 = float3( a0.zw, h.y );
+				float3 g2 = float3( a1.xy, h.z );
+				float3 g3 = float3( a1.zw, h.w );
+				float4 norm = taylorInvSqrt( float4( dot( g0, g0 ), dot( g1, g1 ), dot( g2, g2 ), dot( g3, g3 ) ) );
+				g0 *= norm.x;
+				g1 *= norm.y;
+				g2 *= norm.z;
+				g3 *= norm.w;
+				float4 m = max( 0.6 - float4( dot( x0, x0 ), dot( x1, x1 ), dot( x2, x2 ), dot( x3, x3 ) ), 0.0 );
+				m = m* m;
+				m = m* m;
+				float4 px = float4( dot( x0, g0 ), dot( x1, g1 ), dot( x2, g2 ), dot( x3, g3 ) );
+				return 42.0 * dot( m, px);
+			}
 			
 
 			struct SurfaceDescription
@@ -3707,14 +4157,17 @@ Shader "Voronoi3D"
 				UNITY_TRANSFER_INSTANCE_ID(input, output);
 				UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(output);
 
-				float time11_g1 = 0.0;
-				float2 voronoiSmoothId11_g1 = 0;
-				float2 coords11_g1 = ( ( input.positionOS.xyz + ( float3( 0, 1, 0 ) * _TimeParameters.x ) ) / 2.0 ).xy * 1.0;
-				float2 id11_g1 = 0;
-				float2 uv11_g1 = 0;
-				float voroi11_g1 = voronoi11_g1( coords11_g1, time11_g1, id11_g1, uv11_g1, 0, voronoiSmoothId11_g1 );
-				float temp_output_12_0 = voroi11_g1;
-				float3 temp_cast_1 = (temp_output_12_0).xxx;
+				float time20 = _TimeParameters.x;
+				float2 voronoiSmoothId20 = 0;
+				float3 ase_positionWS = TransformObjectToWorld( ( input.positionOS ).xyz );
+				float simplePerlin3D17 = snoise( ase_positionWS );
+				simplePerlin3D17 = simplePerlin3D17*0.5 + 0.5;
+				float2 temp_cast_0 = (simplePerlin3D17).xx;
+				float2 coords20 = temp_cast_0 * 4.0;
+				float2 id20 = 0;
+				float2 uv20 = 0;
+				float voroi20 = voronoi20( coords20, time20, id20, uv20, 0, voronoiSmoothId20 );
+				float3 temp_cast_1 = (voroi20).xxx;
 				
 
 				#ifdef ASE_ABSOLUTE_VERTEX_POS
@@ -3913,8 +4366,7 @@ Shader "Voronoi3D"
 
 			#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/MotionVectorsCommon.hlsl"
 
-			#define ASE_NEEDS_VERT_POSITION
-
+			
 
 			#if defined(ASE_WRITE_DEPTH_CONSERVATIVE) && (SHADER_TARGET >= 45)
 				#define ASE_SV_DEPTH SV_DepthLessEqual
@@ -3987,14 +4439,14 @@ Shader "Voronoi3D"
 
 			
 
-					float2 voronoihash11_g1( float2 p )
+					float2 voronoihash20( float2 p )
 					{
 						
 						p = float2( dot( p, float2( 127.1, 311.7 ) ), dot( p, float2( 269.5, 183.3 ) ) );
 						return frac( sin( p ) *43758.5453);
 					}
 			
-					float voronoi11_g1( float2 v, float time, inout float2 id, inout float2 mr, float smoothness, inout float2 smoothId )
+					float voronoi20( float2 v, float time, inout float2 id, inout float2 mr, float smoothness, inout float2 smoothId )
 					{
 						float2 n = floor( v );
 						float2 f = frac( v );
@@ -4005,7 +4457,7 @@ Shader "Voronoi3D"
 							for ( i = -1; i <= 1; i++ )
 						 	{
 						 		float2 g = float2( i, j );
-						 		float2 o = voronoihash11_g1( n + g );
+						 		float2 o = voronoihash20( n + g );
 								o = ( sin( time + o * 6.2831 ) * 0.5 + 0.5 ); float2 r = f - g - o;
 								float d = 0.5 * dot( r, r );
 						 		if( d<F1 ) {
@@ -4017,8 +4469,55 @@ Shader "Voronoi3D"
 						 		}
 						 	}
 						}
-						return F2;
+						return F1;
 					}
+			
+			float3 mod3D289( float3 x ) { return x - floor( x / 289.0 ) * 289.0; }
+			float4 mod3D289( float4 x ) { return x - floor( x / 289.0 ) * 289.0; }
+			float4 permute( float4 x ) { return mod3D289( ( x * 34.0 + 1.0 ) * x ); }
+			float4 taylorInvSqrt( float4 r ) { return 1.79284291400159 - r * 0.85373472095314; }
+			float snoise( float3 v )
+			{
+				const float2 C = float2( 1.0 / 6.0, 1.0 / 3.0 );
+				float3 i = floor( v + dot( v, C.yyy ) );
+				float3 x0 = v - i + dot( i, C.xxx );
+				float3 g = step( x0.yzx, x0.xyz );
+				float3 l = 1.0 - g;
+				float3 i1 = min( g.xyz, l.zxy );
+				float3 i2 = max( g.xyz, l.zxy );
+				float3 x1 = x0 - i1 + C.xxx;
+				float3 x2 = x0 - i2 + C.yyy;
+				float3 x3 = x0 - 0.5;
+				i = mod3D289( i);
+				float4 p = permute( permute( permute( i.z + float4( 0.0, i1.z, i2.z, 1.0 ) ) + i.y + float4( 0.0, i1.y, i2.y, 1.0 ) ) + i.x + float4( 0.0, i1.x, i2.x, 1.0 ) );
+				float4 j = p - 49.0 * floor( p / 49.0 );  // mod(p,7*7)
+				float4 x_ = floor( j / 7.0 );
+				float4 y_ = floor( j - 7.0 * x_ );  // mod(j,N)
+				float4 x = ( x_ * 2.0 + 0.5 ) / 7.0 - 1.0;
+				float4 y = ( y_ * 2.0 + 0.5 ) / 7.0 - 1.0;
+				float4 h = 1.0 - abs( x ) - abs( y );
+				float4 b0 = float4( x.xy, y.xy );
+				float4 b1 = float4( x.zw, y.zw );
+				float4 s0 = floor( b0 ) * 2.0 + 1.0;
+				float4 s1 = floor( b1 ) * 2.0 + 1.0;
+				float4 sh = -step( h, 0.0 );
+				float4 a0 = b0.xzyw + s0.xzyw * sh.xxyy;
+				float4 a1 = b1.xzyw + s1.xzyw * sh.zzww;
+				float3 g0 = float3( a0.xy, h.x );
+				float3 g1 = float3( a0.zw, h.y );
+				float3 g2 = float3( a1.xy, h.z );
+				float3 g3 = float3( a1.zw, h.w );
+				float4 norm = taylorInvSqrt( float4( dot( g0, g0 ), dot( g1, g1 ), dot( g2, g2 ), dot( g3, g3 ) ) );
+				g0 *= norm.x;
+				g1 *= norm.y;
+				g2 *= norm.z;
+				g3 *= norm.w;
+				float4 m = max( 0.6 - float4( dot( x0, x0 ), dot( x1, x1 ), dot( x2, x2 ), dot( x3, x3 ) ), 0.0 );
+				m = m* m;
+				m = m* m;
+				float4 px = float4( dot( x0, g0 ), dot( x1, g1 ), dot( x2, g2 ), dot( x3, g3 ) );
+				return 42.0 * dot( m, px);
+			}
 			
 
 			// Applies the graph's vertex stage at a given time so the motion vector pass can
@@ -4028,14 +4527,17 @@ Shader "Voronoi3D"
 				float3 currentTimeParameters = _TimeParameters.xyz;
 				_TimeParameters.xyz = timeParameters;
 
-				float time11_g1 = 0.0;
-				float2 voronoiSmoothId11_g1 = 0;
-				float2 coords11_g1 = ( ( input.positionOS.xyz + ( float3( 0, 1, 0 ) * _TimeParameters.x ) ) / 2.0 ).xy * 1.0;
-				float2 id11_g1 = 0;
-				float2 uv11_g1 = 0;
-				float voroi11_g1 = voronoi11_g1( coords11_g1, time11_g1, id11_g1, uv11_g1, 0, voronoiSmoothId11_g1 );
-				float temp_output_12_0 = voroi11_g1;
-				float3 temp_cast_1 = (temp_output_12_0).xxx;
+				float time20 = _TimeParameters.x;
+				float2 voronoiSmoothId20 = 0;
+				float3 ase_positionWS = TransformObjectToWorld( ( input.positionOS ).xyz );
+				float simplePerlin3D17 = snoise( ase_positionWS );
+				simplePerlin3D17 = simplePerlin3D17*0.5 + 0.5;
+				float2 temp_cast_0 = (simplePerlin3D17).xx;
+				float2 coords20 = temp_cast_0 * 4.0;
+				float2 id20 = 0;
+				float2 uv20 = 0;
+				float voroi20 = voronoi20( coords20, time20, id20, uv20, 0, voronoiSmoothId20 );
+				float3 temp_cast_1 = (voroi20).xxx;
 				
 
 				#ifdef ASE_ABSOLUTE_VERTEX_POS
@@ -4178,11 +4680,13 @@ Shader "Voronoi3D"
 }
 /*ASEBEGIN
 Version=19912
-{"type":"AmplifyShaderEditor.Vector3Node, AmplifyShaderEditor","id":14,"pos":[1232,-288],"params":["Inherit","False","Constant","_Vector0","Vector 0","0","0","Create","True","0","0","0","False","0","False","Object","-1","","0,1,0","0,0,0","0","4","FLOAT3","0","FLOAT","1","FLOAT","2","FLOAT","3"]}
-{"type":"AmplifyShaderEditor.PosVertexDataNode, AmplifyShaderEditor","id":16,"pos":[1160,-464],"params":["Inherit","False","0","0","5","FLOAT3","0","FLOAT","1","FLOAT","2","FLOAT","3","FLOAT","4"]}
-{"type":"AmplifyShaderEditor.VertexColorNode, AmplifyShaderEditor","id":13,"pos":[1144,-808],"params":["Inherit","False","0","5","COLOR","0","FLOAT","1","FLOAT","2","FLOAT","3","FLOAT","4"]}
-{"type":"AmplifyShaderEditor.NormalVertexDataNode, AmplifyShaderEditor","id":15,"pos":[1144,-624],"params":["Inherit","False","0","5","FLOAT3","0","FLOAT","1","FLOAT","2","FLOAT","3","FLOAT","4"]}
-{"type":"AmplifyShaderEditor.FunctionNode, AmplifyShaderEditor","id":12,"pos":[1680,-256],"params":["Inherit","False","TEST_Voro","-1","","1","55bbc47be54475042bbbbfd0b9883793","1,3,1","3","2","FLOAT3","0,0,0","False","5","FLOAT3","0,0,0","False","9","FLOAT","2","False","1","FLOAT","0"]}
+{"type":"AmplifyShaderEditor.PositionNode, AmplifyShaderEditor","id":18,"pos":[1792,-552],"params":["Inherit","False","1","0","4","FLOAT3","0","FLOAT","1","FLOAT","2","FLOAT","3"]}
+{"type":"AmplifyShaderEditor.SimpleTimeNode, AmplifyShaderEditor","id":21,"pos":[2000,-280],"params":["Inherit","False","1","0","FLOAT","1","False","5","FLOAT","0","FLOAT","1","FLOAT","2","FLOAT","3","FLOAT","4"]}
+{"type":"AmplifyShaderEditor.NoiseGeneratorNode, AmplifyShaderEditor","id":17,"pos":[2072,-568],"params":["Inherit","True","Simplex3D","True","False","2","0","FLOAT3","0,0,0","False","1","FLOAT","1","False","1","FLOAT","0"]}
+{"type":"AmplifyShaderEditor.Vector3Node, AmplifyShaderEditor","id":14,"pos":[1920,-888],"params":["Inherit","False","Constant","_Vector0","Vector 0","0","0","Create","True","0","0","0","False","0","False","Object","-1","","0,1,0","0,0,0","0","4","FLOAT3","0","FLOAT","1","FLOAT","2","FLOAT","3"]}
+{"type":"AmplifyShaderEditor.PosVertexDataNode, AmplifyShaderEditor","id":16,"pos":[1848,-1064],"params":["Inherit","False","0","0","5","FLOAT3","0","FLOAT","1","FLOAT","2","FLOAT","3","FLOAT","4"]}
+{"type":"AmplifyShaderEditor.FunctionNode, AmplifyShaderEditor","id":12,"pos":[2368,-856],"params":["Inherit","False","TEST_Voro","-1","","1","55bbc47be54475042bbbbfd0b9883793","1,3,1","3","2","FLOAT3","0,0,0","False","5","FLOAT3","0,0,0","False","9","FLOAT","2","False","1","FLOAT","0"]}
+{"type":"AmplifyShaderEditor.VoronoiNode, AmplifyShaderEditor","id":20,"pos":[2480,-496],"params":["Inherit","True","0","0","1","0","1","False","1","False","False","False","4","0","FLOAT2","0,0","False","1","FLOAT","0","False","2","FLOAT","4","False","3","FLOAT","0","False","3","FLOAT","0","FLOAT2","1","FLOAT2","2"]}
 {"type":"AmplifyShaderEditor.TemplateMultiPassMasterNode, AmplifyShaderEditor","id":0,"pos":[0,0],"params":["Float","False","False","-1","3","UnityEditor.ShaderGraphLitGUI","0","1","New Amplify Shader","94348b07e5e8bab40bd6c8a1e3df54cd","True","ExtraPrePass","0","0","ExtraPrePass","6","False","False","False","False","False","False","False","False","False","False","False","False","True","0","False","","False","True","0","False","","False","False","False","False","False","False","False","False","False","True","False","0","False","","255","False","","255","False","","0","False","","0","False","","0","False","","0","False","","0","False","","0","False","","0","False","","0","False","","False","True","1","False","","True","3","False","","True","True","0","False","","0","False","","False","True","4","RenderPipeline=UniversalPipeline","RenderType=Opaque=RenderType","Queue=Geometry=Queue=0","UniversalMaterialType=Lit","True","5","True","14","all","0","False","True","1","1","False","","0","False","","0","1","False","","0","False","","False","False","False","False","False","False","False","False","False","False","False","False","True","0","False","","False","True","True","True","True","True","0","False","","False","False","False","False","False","False","False","True","False","0","False","","255","False","","255","False","","0","False","","0","False","","0","False","","0","False","","0","False","","0","False","","0","False","","0","False","","False","True","1","False","","True","3","False","","True","True","0","False","","0","False","","False","True","0","False","False","0","","0","0","Standard","0","False","0"]}
 {"type":"AmplifyShaderEditor.TemplateMultiPassMasterNode, AmplifyShaderEditor","id":2,"pos":[0,0],"params":["Float","False","False","-1","3","UnityEditor.ShaderGraphLitGUI","0","1","New Amplify Shader","94348b07e5e8bab40bd6c8a1e3df54cd","True","ShadowCaster","0","2","ShadowCaster","0","False","False","False","False","False","False","False","False","False","False","False","False","True","0","False","","False","True","0","False","","False","False","False","False","False","False","False","False","False","True","False","0","False","","255","False","","255","False","","0","False","","0","False","","0","False","","0","False","","0","False","","0","False","","0","False","","0","False","","False","True","1","False","","True","3","False","","True","True","0","False","","0","False","","False","True","4","RenderPipeline=UniversalPipeline","RenderType=Opaque=RenderType","Queue=Geometry=Queue=0","UniversalMaterialType=Lit","True","5","True","14","all","0","False","False","False","False","False","False","False","False","False","False","False","False","True","0","False","","False","False","False","True","False","False","False","False","0","False","","False","False","False","False","False","False","False","False","False","True","1","False","","True","3","False","","False","False","True","1","LightMode=ShadowCaster","False","False","0","","0","0","Standard","0","False","0"]}
 {"type":"AmplifyShaderEditor.TemplateMultiPassMasterNode, AmplifyShaderEditor","id":3,"pos":[0,0],"params":["Float","False","False","-1","3","UnityEditor.ShaderGraphLitGUI","0","1","New Amplify Shader","94348b07e5e8bab40bd6c8a1e3df54cd","True","DepthOnly","0","3","DepthOnly","0","False","False","False","False","False","False","False","False","False","False","False","False","True","0","False","","False","True","0","False","","False","False","False","False","False","False","False","False","False","True","False","0","False","","255","False","","255","False","","0","False","","0","False","","0","False","","0","False","","0","False","","0","False","","0","False","","0","False","","False","True","1","False","","True","3","False","","True","True","0","False","","0","False","","False","True","4","RenderPipeline=UniversalPipeline","RenderType=Opaque=RenderType","Queue=Geometry=Queue=0","UniversalMaterialType=Lit","True","5","True","14","all","0","False","False","False","False","False","False","False","False","False","False","False","False","True","0","False","","False","False","False","True","True","False","False","False","0","False","","False","False","False","False","False","False","False","False","False","True","1","False","","False","False","False","True","1","LightMode=DepthOnly","False","False","0","","0","0","Standard","0","False","0"]}
@@ -4194,10 +4698,13 @@ Version=19912
 {"type":"AmplifyShaderEditor.TemplateMultiPassMasterNode, AmplifyShaderEditor","id":9,"pos":[0,0],"params":["Float","False","False","-1","3","UnityEditor.ShaderGraphLitGUI","0","1","New Amplify Shader","94348b07e5e8bab40bd6c8a1e3df54cd","True","ScenePickingPass","0","9","ScenePickingPass","0","False","False","False","False","False","False","False","False","False","False","False","False","True","0","False","","False","True","0","False","","False","False","False","False","False","False","False","False","False","True","False","0","False","","255","False","","255","False","","0","False","","0","False","","0","False","","0","False","","0","False","","0","False","","0","False","","0","False","","False","True","1","False","","True","3","False","","True","True","0","False","","0","False","","False","True","4","RenderPipeline=UniversalPipeline","RenderType=Opaque=RenderType","Queue=Geometry=Queue=0","UniversalMaterialType=Lit","True","5","True","14","all","0","False","False","False","False","False","False","False","False","False","False","False","False","True","0","False","","False","False","False","False","False","False","False","False","False","False","False","False","False","False","False","False","False","True","1","LightMode=Picking","False","False","0","","0","0","Standard","0","False","0"]}
 {"type":"AmplifyShaderEditor.TemplateMultiPassMasterNode, AmplifyShaderEditor","id":10,"pos":[0,0],"params":["Float","False","False","-1","3","UnityEditor.ShaderGraphLitGUI","0","1","New Amplify Shader","94348b07e5e8bab40bd6c8a1e3df54cd","True","MotionVectors","0","10","MotionVectors","0","False","False","False","False","False","False","False","False","False","False","False","False","True","0","False","","False","True","0","False","","False","False","False","False","False","False","False","False","False","True","False","0","False","","255","False","","255","False","","0","False","","0","False","","0","False","","0","False","","0","False","","0","False","","0","False","","0","False","","False","True","1","False","","True","3","False","","True","True","0","False","","0","False","","False","True","4","RenderPipeline=UniversalPipeline","RenderType=Opaque=RenderType","Queue=Geometry=Queue=0","UniversalMaterialType=Lit","True","5","True","14","all","0","False","False","False","False","False","False","False","False","False","False","False","False","False","False","False","False","True","True","True","False","False","0","False","","False","False","False","False","False","False","False","False","False","False","False","False","False","True","1","LightMode=MotionVectors","False","False","0","","0","0","Standard","0","False","0"]}
 {"type":"AmplifyShaderEditor.TemplateMultiPassMasterNode, AmplifyShaderEditor","id":11,"pos":[0,0],"params":["Float","False","False","-1","3","UnityEditor.ShaderGraphLitGUI","0","1","New Amplify Shader","94348b07e5e8bab40bd6c8a1e3df54cd","True","XRMotionVectors","0","11","XRMotionVectors","0","False","False","False","False","False","False","False","False","False","False","False","False","True","0","False","","False","True","0","False","","False","False","False","False","False","False","False","False","False","True","False","0","False","","255","False","","255","False","","0","False","","0","False","","0","False","","0","False","","0","False","","0","False","","0","False","","0","False","","False","True","1","False","","True","3","False","","True","True","0","False","","0","False","","False","True","4","RenderPipeline=UniversalPipeline","RenderType=Opaque=RenderType","Queue=Geometry=Queue=0","UniversalMaterialType=Lit","True","5","True","14","all","0","False","False","False","False","False","False","False","False","False","False","False","False","False","False","False","False","True","True","True","True","True","0","False","","False","False","False","False","False","False","False","True","True","1","False","","255","False","","1","False","","7","False","","3","False","","0","False","","0","False","","0","False","","0","False","","0","False","","0","False","","False","False","False","False","False","True","1","LightMode=XRMotionVectors","False","False","0","","0","0","Standard","0","False","0"]}
-{"type":"AmplifyShaderEditor.TemplateMultiPassMasterNode, AmplifyShaderEditor","id":1,"pos":[2240,-320],"params":["Float","False","True","-1","3","UnityEditor.ShaderGraphLitGUI","0","15","Voronoi3D","94348b07e5e8bab40bd6c8a1e3df54cd","True","Forward","0","1","Forward","22","False","False","False","False","False","False","False","False","False","False","False","False","True","0","False","","False","True","0","False","","False","False","False","False","False","False","False","False","False","True","False","0","False","","255","False","","255","False","","0","False","","0","False","","0","False","","0","False","","0","False","","0","False","","0","False","","0","False","","False","True","1","False","","True","3","False","","True","True","0","False","","0","False","","False","True","4","RenderPipeline=UniversalPipeline","RenderType=Opaque=RenderType","Queue=Geometry=Queue=0","UniversalMaterialType=Lit","True","5","True","14","all","0","False","True","1","1","False","","0","False","","0","1","False","","0","False","","False","False","False","False","False","False","False","False","False","False","False","False","False","False","True","True","True","True","True","0","False","","False","False","False","False","False","False","False","True","False","0","False","","255","False","","255","False","","0","False","","0","False","","0","False","","0","False","","0","False","","0","False","","0","False","","0","False","","False","True","1","False","","True","3","False","","True","True","0","False","","0","False","","False","True","1","LightMode=UniversalForward","False","False","0","","0","0","Standard","52","Category","0","0","  Instanced Terrain Normals","1","0","Lighting Model","0","0","Workflow","1","0","Surface","0","0","  Keep Alpha","0","0","  Refraction Model","0","0","  Blend","0","0","Two Sided","1","0","Alpha Clipping","0","0","  Use Shadow Threshold","0","0","Fragment Normal Space","0","0","Forward Only","0","0","Transmission","0","0","  Transmission Shadow","0.5,False,","0","Translucency","0","0","  Translucency Strength","1,False,","0","  Normal Distortion","0.5,False,","0","  Scattering","2,False,","0","  Direct","0.9,False,","0","  Ambient","0.1,False,","0","  Shadow","0.5,False,","0","Cast Shadows","1","0","Receive Shadows","2","0","Specular Highlights","2","0","Environment Reflections","2","0","Receive SSAO","1","0","Motion Vectors","1","0","  Additional Motion Vectors","1","0","  Alembic Motion Vectors","0","0","  XR Motion Vectors","0","0","GPU Instancing","1","0","LOD CrossFade","1","0","Built-in Fog","1","0","_FinalColorxAlpha","0","0","Meta Pass","1","0","Override Baked GI","0","0","Extra Pre Pass","0","0","Tessellation","0","0","  Phong","0","0","  Strength","0.5,False,","0","  Type","0","0","  Tess","16,False,","0","  Min","10,False,","0","  Max","25,False,","0","  Edge Length","16,False,","0","  Max Displacement","25,False,","0","Write Depth","0","0","  Conservative","0","0","Vertex Position","1","0","Debug Display","1","0","Clear Coat","0","0","0","12","False","True","True","True","True","True","True","True","True","True","True","False","False","","False","0"]}
+{"type":"AmplifyShaderEditor.TemplateMultiPassMasterNode, AmplifyShaderEditor","id":1,"pos":[3136,-536],"params":["Float","False","True","-1","3","UnityEditor.ShaderGraphLitGUI","0","15","Voronoi3D","94348b07e5e8bab40bd6c8a1e3df54cd","True","Forward","0","1","Forward","22","False","False","False","False","False","False","False","False","False","False","False","False","True","0","False","","False","True","0","False","","False","False","False","False","False","False","False","False","False","True","False","0","False","","255","False","","255","False","","0","False","","0","False","","0","False","","0","False","","0","False","","0","False","","0","False","","0","False","","False","True","1","False","","True","3","False","","True","True","0","False","","0","False","","False","True","4","RenderPipeline=UniversalPipeline","RenderType=Opaque=RenderType","Queue=Geometry=Queue=0","UniversalMaterialType=Lit","True","5","True","14","all","0","False","True","1","1","False","","0","False","","0","1","False","","0","False","","False","False","False","False","False","False","False","False","False","False","False","False","False","False","True","True","True","True","True","0","False","","False","False","False","False","False","False","False","True","False","0","False","","255","False","","255","False","","0","False","","0","False","","0","False","","0","False","","0","False","","0","False","","0","False","","0","False","","False","True","1","False","","True","3","False","","True","True","0","False","","0","False","","False","True","1","LightMode=UniversalForward","False","False","0","","0","0","Standard","52","Category","0","0","  Instanced Terrain Normals","1","0","Lighting Model","0","0","Workflow","1","0","Surface","0","0","  Keep Alpha","0","0","  Refraction Model","0","0","  Blend","0","0","Two Sided","1","0","Alpha Clipping","0","0","  Use Shadow Threshold","0","0","Fragment Normal Space","0","0","Forward Only","0","0","Transmission","0","0","  Transmission Shadow","0.5,False,","0","Translucency","0","0","  Translucency Strength","1,False,","0","  Normal Distortion","0.5,False,","0","  Scattering","2,False,","0","  Direct","0.9,False,","0","  Ambient","0.1,False,","0","  Shadow","0.5,False,","0","Cast Shadows","1","0","Receive Shadows","2","0","Specular Highlights","2","0","Environment Reflections","2","0","Receive SSAO","1","0","Motion Vectors","1","0","  Additional Motion Vectors","1","0","  Alembic Motion Vectors","0","0","  XR Motion Vectors","0","0","GPU Instancing","1","0","LOD CrossFade","1","0","Built-in Fog","1","0","_FinalColorxAlpha","0","0","Meta Pass","1","0","Override Baked GI","0","0","Extra Pre Pass","0","0","Tessellation","0","0","  Phong","0","0","  Strength","0.5,False,","0","  Type","0","0","  Tess","16,False,","0","  Min","10,False,","0","  Max","25,False,","0","  Edge Length","16,False,","0","  Max Displacement","25,False,","0","Write Depth","0","0","  Conservative","0","0","Vertex Position","1","0","Debug Display","1","0","Clear Coat","0","0","0","12","False","True","True","True","True","True","True","True","True","True","True","False","False","","False","0"]}
+{"wire":[17,0,18,0]}
 {"wire":[12,2,16,0]}
 {"wire":[12,5,14,0]}
-{"wire":[1,0,12,0]}
-{"wire":[1,8,12,0]}
+{"wire":[20,0,17,0]}
+{"wire":[20,1,21,0]}
+{"wire":[1,0,20,0]}
+{"wire":[1,8,20,0]}
 ASEEND*/
-//CHKSM=2C631C70285045DDC4E234DED1242397F16F0B50
+//CHKSM=B2A25BB1D7FB0CA6412DEEC377737BA643288D1E
