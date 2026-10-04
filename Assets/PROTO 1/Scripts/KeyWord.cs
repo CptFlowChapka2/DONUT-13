@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public enum KeyWordType
@@ -18,6 +19,7 @@ public class KeyWord : MonoBehaviour
     public KeyWordType type;
     public GameObject referencedObject;
     public (string, object) paramValuePair;
+    public SerializableType test;
 
     private void Start()
     {
