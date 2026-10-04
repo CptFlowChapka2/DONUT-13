@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 965315659528148746}
   - component: {fileID: 7417326982247813335}
   - component: {fileID: 6894866041407526813}
+  - component: {fileID: -6417073535019931048}
   m_Layer: 0
   m_Name: Hero
   m_TagString: Untagged
@@ -128,3 +129,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Player
   parent: {fileID: 0}
+--- !u!114 &-6417073535019931048
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2321924507054408245}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b6671a9e32294743aaed73bda95c69c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DefaultPreFabValues

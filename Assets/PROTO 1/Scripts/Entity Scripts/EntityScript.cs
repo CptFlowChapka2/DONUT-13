@@ -6,7 +6,7 @@ using UnityEngine;
 public class EntityScript : MonoBehaviour
 {
     private EntityPrefabHolder holder;
-    private KeyWord currentKeyword;
+    public KeyWord currentKeyword;
     [SerializeField] private GameObject replacable;
 
     public Dictionary<string, object> allVerbParams = new Dictionary<string, object>();
@@ -37,14 +37,30 @@ public class EntityScript : MonoBehaviour
         List<Verb> allComponentInNew=new List<Verb>();
         
         nI.GetComponents<Verb>(allComponentInNew);
+        var defaultParamOverride = nI.gameObject.GetComponent<DefaultPreFabValues>();
+        foreach (var pair in defaultParamOverride.defaultVerbsParamsOverride)
+        {
+            if (allVerbParams.ContainsKey(pair.Key))
+            {
+                allVerbParams[pair.Key] = pair.Value;
+            }
+            else
+            {
+                allVerbParams.TryAdd(pair.Key, pair.Value);
+            }
+        }
+
+        currentKeyword = defaultParamOverride.actualKeyword;
 
         foreach (var verb in allComponentInNew)
         {
             verb.AddValues(ref allVerbParams);
         }
         
+        
         Destroy(replacable);
         replacable = nI;
     }
+    
     
 }
