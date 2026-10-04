@@ -4125,6 +4125,10 @@ PrefabInstance:
       propertyPath: replacable
       value: 
       objectReference: {fileID: 1696858126}
+    - target: {fileID: 6625634515729749271, guid: 1da6e4715ea6d2d43a84d72b1af93f8f, type: 3}
+      propertyPath: currentKeyword
+      value: 
+      objectReference: {fileID: 912064587}
     - target: {fileID: 7595922920238681603, guid: 1da6e4715ea6d2d43a84d72b1af93f8f, type: 3}
       propertyPath: m_Name
       value: EntityTest

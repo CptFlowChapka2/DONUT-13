@@ -21,6 +21,7 @@ public class KeyWord : MonoBehaviour
 
     private void Start()
     {
+        if(referencedObject==null) return;
         referencedObject.GetComponent<DefaultPreFabValues>().actualKeyword = this;
     }
 }
