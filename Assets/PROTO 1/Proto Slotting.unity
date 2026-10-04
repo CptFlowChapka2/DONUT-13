@@ -953,6 +953,10 @@ PrefabInstance:
       propertyPath: name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 7861990331827677764, guid: d1d6421f7f2defb41bbfbf988983ff40, type: 3}
+      propertyPath: test.Identification
+      value: Player
+      objectReference: {fileID: 0}
     - target: {fileID: 8212057099510109376, guid: d1d6421f7f2defb41bbfbf988983ff40, type: 3}
       propertyPath: m_Name
       value: PlayerKW
