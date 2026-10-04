@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 
@@ -6,10 +7,7 @@ public class Player : Verb
 {
     public Transform parent;
 
-    private void Start()
-    {
-        parent = GetComponentInParent<Transform>();
-    }
+    
 
     private void Update()
     {
@@ -19,9 +17,24 @@ public class Player : Verb
         }
     }
 
-    public override void ReplaceValue(Verb verb)
+    public override void AddValues(ref Dictionary<string, object> dic)
     {
-        if ((verb as Player) == null) throw new NullReferenceException("tried Replacing verb Player with a non Player Verb");
-        parent = (verb as Player).parent;
+        dic.TryAdd(CreateParamString<Player>(parent), GetComponentInParent<Transform>());
+        ReplaceValues(ref dic);
+    }
+
+    public override void RemoveValues(ref Dictionary<string, object> dic)
+    {
+        dic.Remove(CreateParamString<Player>(parent));
+    }
+
+    public override void ReplaceValues(ref Dictionary<string, object> dic)
+    {
+        parent = (Transform)dic[CreateParamString<Player>(parent)];
+    }
+
+    public override void UpdateValues(ref Dictionary<string, object> dic)
+    {
+        dic[CreateParamString<Player>(parent)] = parent;
     }
 }

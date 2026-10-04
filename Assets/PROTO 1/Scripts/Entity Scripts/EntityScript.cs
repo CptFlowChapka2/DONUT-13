@@ -8,25 +8,38 @@ public class EntityScript : MonoBehaviour
     private EntityPrefabHolder holder;
     private KeyWord currentKeyword;
     [SerializeField] private GameObject replacable;
+
+    public Dictionary<string, object> allVerbParams = new Dictionary<string, object>();
+    
     private void Start()
     {
         holder = FindAnyObjectByType<EntityPrefabHolder>();
         holder.allEntities.Add(this);
     }
 
+    private void OnDestroy()
+    {
+        holder.allEntities.Remove(this);
+    }
+
+    public bool AddVerb<T>() where T :Verb
+    {
+        if (TryGetComponent<T>(out var verb)) return false;
+        T component=gameObject.AddComponent<T>();
+        component.AddValues(ref allVerbParams);
+        return true;
+    }
+
     public void ReplaceIdentity(GameObject newIdentity)
     {
         var nI= Instantiate(newIdentity, this.transform);
         List<Verb> allComponentInNew=new List<Verb>();
-        List<Verb> allComponentInOld=new List<Verb>();
+        
         nI.GetComponents<Verb>(allComponentInNew);
-        replacable.GetComponents<Verb>(allComponentInOld);
-        List<Verb> sameVerbsInNew =allComponentInNew.Intersect(allComponentInOld).ToList();
-        List<Verb> sameVerbsInOld =allComponentInOld.Intersect(allComponentInNew).ToList();
 
-        for (int i = 0; i < sameVerbsInNew.Count; i++)
+        foreach (var verb in allComponentInNew)
         {
-            sameVerbsInNew[i].ReplaceValue(sameVerbsInOld[i]);
+            verb.ReplaceValues(ref allVerbParams);
         }
         
         Destroy(replacable);
