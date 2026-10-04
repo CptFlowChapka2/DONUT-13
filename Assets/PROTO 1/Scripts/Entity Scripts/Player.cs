@@ -19,22 +19,22 @@ public class Player : Verb
 
     public override void AddValues(ref Dictionary<string, object> dic)
     {
-        dic.TryAdd(CreateParamString<Player>(parent), GetComponentInParent<Transform>());
+        dic.TryAdd(nameof(Player) + "_" + nameof(parent), GetComponentInParent<Transform>());
         ReplaceValues(ref dic);
     }
 
     public override void RemoveValues(ref Dictionary<string, object> dic)
     {
-        dic.Remove(CreateParamString<Player>(parent));
+        dic.Remove(nameof(Player) + "_" + nameof(parent));
     }
 
     public override void ReplaceValues(ref Dictionary<string, object> dic)
     {
-        parent = (Transform)dic[CreateParamString<Player>(parent)];
+        parent = (Transform)dic[nameof(Player) + "_" + nameof(parent)];
     }
 
     public override void UpdateValues(ref Dictionary<string, object> dic)
     {
-        dic[CreateParamString<Player>(parent)] = parent;
+        dic[nameof(Player) + "_" + nameof(parent)] = parent;
     }
 }
