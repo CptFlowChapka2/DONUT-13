@@ -15,6 +15,7 @@ public class EntityScript : MonoBehaviour
     {
         holder = FindAnyObjectByType<EntityPrefabHolder>();
         holder.allEntities.Add(this);
+        replacable.GetComponents<Verb>().ToList().ForEach(x =>x.AddValues(ref allVerbParams));
     }
 
     private void OnDestroy()
@@ -39,7 +40,7 @@ public class EntityScript : MonoBehaviour
 
         foreach (var verb in allComponentInNew)
         {
-            verb.ReplaceValues(ref allVerbParams);
+            verb.AddValues(ref allVerbParams);
         }
         
         Destroy(replacable);
