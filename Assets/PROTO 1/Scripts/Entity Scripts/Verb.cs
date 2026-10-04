@@ -8,7 +8,7 @@ public abstract class Verb : MonoBehaviour
     public abstract void ReplaceValues(ref Dictionary<string, object> dic);
     public abstract void UpdateValues(ref Dictionary<string, object> dic);
 
-    protected string CreateParamString<T>( object param) where T : Verb
+    public static string CreateParamString<T>( object param) where T : Verb
     {
         string re = nameof(T) + "_" + nameof(param);
         Debug.Log(re);
