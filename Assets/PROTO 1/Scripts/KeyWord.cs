@@ -19,7 +19,7 @@ public class KeyWord : MonoBehaviour
     public KeyWordType type;
     public GameObject referencedObject;
     public (string, object) paramValuePair;
-    public SerializableType test;
+    public SerializableType<Verb> test;
 
     private void Start()
     {
