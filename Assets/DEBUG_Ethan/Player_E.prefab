@@ -139,9 +139,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerControler_E
   speed: 5
   rotSpeed: 7
-  inputDir: {x: 0, y: 0}
-  movementDir: {x: 0, y: 0, z: 0}
+  jumpForce: 0
   mesh: {fileID: 5157980724291431254}
+  cam: {fileID: 0}
+  isGrounded: 0
 --- !u!136 &1200174672136693078
 CapsuleCollider:
   m_ObjectHideFlags: 0
