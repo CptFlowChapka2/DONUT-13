@@ -18,7 +18,7 @@ public  class Entity : MonoBehaviour
     {
         foreach (Functionality component in gameObject.GetComponents<Functionality>())
         {
-            Debug.Log(allFunctionalitiesRefs.TryAdd(component.GetType(), component));
+           allFunctionalitiesRefs.TryAdd(component.GetType(), component);
         }
     }
 
@@ -34,7 +34,6 @@ public  class Entity : MonoBehaviour
     {
         foreach (var functionality in allFunctionalitiesRefs.Values)
         {
-            Debug.Log(functionality.enabled);
             if (functionality.enabled) functionality.OnUpdate();
         }
     }

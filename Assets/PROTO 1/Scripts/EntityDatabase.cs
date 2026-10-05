@@ -5,6 +5,7 @@ using UnityEngine;
 public class EntityDatabase : MonoBehaviour
 {
     public static EntityDatabase Instance;
+    public StateUpdater stateUpdater;
     public List<Entity> allEntities = new List<Entity>();
 
     private void Awake()

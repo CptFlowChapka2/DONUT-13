@@ -20,7 +20,6 @@ public class Control : Functionality
     public override void OnUpdate()
     {
         inputThisFrame = inputManager.inputsThisFrame;
-        Debug.Log(inputThisFrame);
         transform.Translate(inputThisFrame * (Time.deltaTime * moveSpeed));
     }
 }

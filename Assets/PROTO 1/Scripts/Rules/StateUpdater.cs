@@ -31,12 +31,10 @@ public class StateUpdater : MonoBehaviour
             {
                 foreach (Type type in entity.allFunctionalitiesRefs.Keys)
                 {
-                    Debug.Log(entity.allFunctionalitiesRefs[type]);
                     entity.SetComponentEnable(type, idFunctionalitiesPair.Value.Contains(type));
                 }
             } 
         }
-        Debug.Log("UpdateAllEntitiesFunctionalities");
     }
 }
 
