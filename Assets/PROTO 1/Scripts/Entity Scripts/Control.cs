@@ -3,13 +3,9 @@ using UnityEngine;
 
 public class Control : Functionality
 {
-    public InputManager inputManager;
+    private InputManager inputManager = InputManager.Instance;
     private Vector3 inputThisFrame;
     public float moveSpeed=10;
-    private void Start()
-    {
-        inputManager = FindAnyObjectByType<InputManager>();
-    }
 
     public override void OnActivate()
     {

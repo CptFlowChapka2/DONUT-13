@@ -1,10 +1,17 @@
+using System;
 using UnityEngine;
 using UnityEngine.Events;
 
 public class InputManager : MonoBehaviour
 {
+    public static InputManager Instance;
     public Vector3 inputsThisFrame;
-    
+
+    private void Awake()
+    {
+        Instance = this;
+    }
+
     void Update()
     {
         inputsThisFrame = Vector3.zero;

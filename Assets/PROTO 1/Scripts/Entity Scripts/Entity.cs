@@ -5,7 +5,8 @@ using UnityEngine;
 
 public  class Entity : MonoBehaviour
 {
-    private Dictionary<Type, Functionality> allFunctionalitiesRefs = new Dictionary<Type, Functionality>();
+    public IdentityName id;
+    public Dictionary<Type, Functionality> allFunctionalitiesRefs = new Dictionary<Type, Functionality>();
 
     private void Start()
     {
