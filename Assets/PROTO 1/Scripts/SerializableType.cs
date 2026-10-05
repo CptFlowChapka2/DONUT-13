@@ -139,7 +139,7 @@ internal class Tests
             typeof(List<>),
             typeof(Dictionary<,>),
             typeof(List<UnityEngine.Object>),
-            typeof(Dictionary<UnityEngine.Object, HashSet<Renderer>>),
+            typeof(Dictionary<UnityEngine.Object, HashSet<RendererAndPhysic>>),
             typeof(Component[])
         };
 

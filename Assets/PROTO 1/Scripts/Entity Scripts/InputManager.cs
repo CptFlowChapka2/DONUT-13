@@ -4,12 +4,12 @@ using UnityEngine.Events;
 
 public class InputManager : MonoBehaviour
 {
-    public static InputManager Instance;
+    public HolderOfSingleTon holderOfSingleTon;
     public Vector3 inputsThisFrame;
 
     private void Awake()
     {
-        Instance = this;
+        holderOfSingleTon.inputManager = this;
     }
 
     void Update()

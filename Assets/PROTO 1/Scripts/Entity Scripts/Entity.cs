@@ -6,12 +6,13 @@ using UnityEngine;
 public  class Entity : MonoBehaviour
 {
     public IdentityName id;
+    public RendererAndPhysic rendererAndPhysic;
+    public HolderOfSingleTon holderOfSingleTon;
     public Dictionary<Type, Functionality> allFunctionalitiesRefs = new Dictionary<Type, Functionality>();
-    public EntityDatabase db = EntityDatabase.Instance;
 
     private void Awake()
     {
-        db.allEntities.Add(this);
+        holderOfSingleTon.entityDatabase.allEntities.Add(this);
     }
 
     private void Start()
@@ -20,6 +21,7 @@ public  class Entity : MonoBehaviour
         {
            allFunctionalitiesRefs.TryAdd(component.GetType(), component);
         }
+        rendererAndPhysic.ForcefullUpdateOfRenderParms();
     }
 
     public void SetComponentEnable(Type t, bool b)

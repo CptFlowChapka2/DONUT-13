@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class Control : Functionality
 {
-    public InputManager inputManager = InputManager.Instance;
+    public HolderOfSingleTon holderOfSingleTon;
     private Vector3 inputThisFrame;
     public float moveSpeed = 10;
 
@@ -19,7 +19,7 @@ public class Control : Functionality
 
     public override void OnUpdate()
     {
-        inputThisFrame = inputManager.inputsThisFrame;
+        inputThisFrame = holderOfSingleTon.inputManager.inputsThisFrame;
         transform.Translate(inputThisFrame * (Time.deltaTime * moveSpeed));
     }
 }

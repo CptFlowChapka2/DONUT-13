@@ -7,14 +7,19 @@ using UnityEngine;
 public class StateUpdater : MonoBehaviour
 {
     [SerializeField] public Dictionary<Identity, List<SerializableType<Functionality>>> functionalityAffectationDictionary;
-    public EntityDatabase db = EntityDatabase.Instance;
-    
+    public HolderOfSingleTon holderOfSingleTon;
+
+    private void Awake()
+    {
+        holderOfSingleTon.stateUpdater = this;
+    }
+
     public void Start()
     {
         foreach (var idFunctionalitiesPair in functionalityAffectationDictionary)
         {
             Identity identity = idFunctionalitiesPair.Key;
-            foreach (Entity e in db.allEntities)
+            foreach (Entity e in holderOfSingleTon.entityDatabase.allEntities)
             {
                 if (e.id == identity.name) identity.linkedEntities.Add(e);
             }
