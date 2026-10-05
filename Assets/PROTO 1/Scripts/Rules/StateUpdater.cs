@@ -7,7 +7,7 @@ using UnityEngine;
 public class StateUpdater : MonoBehaviour
 {
     [SerializeField] public Dictionary<Identity, List<SerializableType<Functionality>>> functionalityAffectationDictionary;
-    private EntityDatabase db = EntityDatabase.Instance;
+    public EntityDatabase db = EntityDatabase.Instance;
     
     public void Start()
     {
@@ -19,6 +19,8 @@ public class StateUpdater : MonoBehaviour
                 if (e.id == identity.name) identity.linkedEntities.Add(e);
             }
         }
+        
+        UpdateAllEntitiesFunctionalities();
     }
     
     public void UpdateAllEntitiesFunctionalities()
@@ -29,11 +31,12 @@ public class StateUpdater : MonoBehaviour
             {
                 foreach (Type type in entity.allFunctionalitiesRefs.Keys)
                 {
-                    if (idFunctionalitiesPair.Value.Contains(type)) entity.SetComponentEnable(type, true);
-                    else entity.SetComponentEnable(type, false);
+                    Debug.Log(entity.allFunctionalitiesRefs[type]);
+                    entity.SetComponentEnable(type, idFunctionalitiesPair.Value.Contains(type));
                 }
             } 
         }
+        Debug.Log("UpdateAllEntitiesFunctionalities");
     }
 }
 

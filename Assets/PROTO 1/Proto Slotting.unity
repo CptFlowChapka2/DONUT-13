@@ -1884,9 +1884,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 736b45c5d8a5e1644b99d150ab6a5ec9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlaceHolderEntityDatabase
-  allEntities:
-  - {fileID: 1415732531}
-  - {fileID: 1964842020}
+  allEntities: []
 --- !u!4 &782864312
 Transform:
   m_ObjectHideFlags: 0
@@ -3628,7 +3626,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab90e0cca1f88dc42980341332e3ebeb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Control
-  moveSpeed: 10
+  moveSpeed: 5
 --- !u!114 &1415732531
 MonoBehaviour:
   m_ObjectHideFlags: 0

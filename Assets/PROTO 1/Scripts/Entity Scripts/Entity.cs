@@ -7,12 +7,18 @@ public  class Entity : MonoBehaviour
 {
     public IdentityName id;
     public Dictionary<Type, Functionality> allFunctionalitiesRefs = new Dictionary<Type, Functionality>();
+    public EntityDatabase db = EntityDatabase.Instance;
+
+    private void Awake()
+    {
+        db.allEntities.Add(this);
+    }
 
     private void Start()
     {
         foreach (Functionality component in gameObject.GetComponents<Functionality>())
         {
-            allFunctionalitiesRefs.TryAdd(component.GetType(),component);
+            Debug.Log(allFunctionalitiesRefs.TryAdd(component.GetType(), component));
         }
     }
 
@@ -28,6 +34,7 @@ public  class Entity : MonoBehaviour
     {
         foreach (var functionality in allFunctionalitiesRefs.Values)
         {
+            Debug.Log(functionality.enabled);
             if (functionality.enabled) functionality.OnUpdate();
         }
     }
