@@ -3,16 +3,18 @@ using UnityEngine;
 
 public class StateUpdater : MonoBehaviour
 {
-    [SerializeField]public Dictionary<SerializableType<Fonctionality>,Dictionary<Identity,bool>> AllMightyDictionary;
+    [SerializeField] private Identity[] allIdentities;
+    
+    [SerializeField] public Dictionary<Identity, Dictionary<SerializableType<Functionality>,bool>> allMightyDictionary;
 
     private void UpdateAllEntities()
     {
-        foreach (var foncDicPair in AllMightyDictionary)
+        foreach (var IdDicPair in allMightyDictionary)
         {
-            foreach (var identityActivationState in foncDicPair.Value)
+            foreach (var identityActivationState in IdDicPair.Key)
             {
                 //CRIME
-                identityActivationState.Key.linkedEntities.ForEach(x=>x.SetComponentEnable(foncDicPair.Key.type,identityActivationState.Value));
+                identityActivationState.Key.linkedEntities.ForEach(x=>x.SetComponentEnable(IdDicPair.Key.type,identityActivationState.Value));
             }
         }
     }

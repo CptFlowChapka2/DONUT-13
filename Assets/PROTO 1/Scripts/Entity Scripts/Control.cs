@@ -1,11 +1,11 @@
 using System;
 using UnityEngine;
 
-public class Control : Fonctionality
+public class Control : Functionality
 {
-    private InputManager inputManager;
+    public InputManager inputManager;
     private Vector3 inputThisFrame;
-    public float moveSpeed=3;
+    public float moveSpeed=10;
     private void Start()
     {
         inputManager = FindAnyObjectByType<InputManager>();
@@ -25,7 +25,6 @@ public class Control : Fonctionality
         inputThisFrame = inputManager.inputsThisFrame;
         
         transform.Translate(inputThisFrame * (Time.deltaTime * moveSpeed));
-
     }
 
     

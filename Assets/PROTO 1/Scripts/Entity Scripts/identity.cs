@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
-public  class Identity : MonoBehaviour
+[Serializable]
+public class Identity
 {
-    private const string nameE = "salut";
-    public List<Entity> linkedEntities = new List<Entity>();
+    public string name = "Placeholder";
+    [NonSerialized] public List<Entity> linkedEntities = new List<Entity>();
     //todo = + liste de param par default
 }

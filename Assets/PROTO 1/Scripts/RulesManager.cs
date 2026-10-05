@@ -7,7 +7,7 @@ public class RulesManager : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.A))
+        if (Input.GetKeyDown(KeyCode.Q))
         {
             Debug.Log("NE PAS SPAMMER PAR PITIER C'EST PAS OPTI");
             EvaluateAll();
