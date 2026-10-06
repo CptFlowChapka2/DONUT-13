@@ -153,13 +153,13 @@ MonoBehaviour:
       name: 2
       blue: 0
       red: 1
-    value: []
-  - key:
-      name: 1
-      blue: 1
-      red: 1
     value:
     - data: AE9Db250cm9sLCBBc3NlbWJseS1DU2hhcnAsIFZlcnNpb249MC4wLjAuMCwgQ3VsdHVyZT1uZXV0cmFsLCBQdWJsaWNLZXlUb2tlbj1udWxs
+  - key:
+      name: 1
+      blue: 0
+      red: 1
+    value: []
   holderOfSingleTon: {fileID: 11400000, guid: 18da847b7540bf840bdd5db29c869052, type: 2}
 --- !u!4 &3796726
 Transform:

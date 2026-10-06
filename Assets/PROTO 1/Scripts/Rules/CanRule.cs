@@ -3,19 +3,24 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class CanRule : Rule
+[Serializable]
+public class CanRule : KeywordRule
 {
-    public override void Evaluate()
+    public void Evaluate(int selfPose, List<Slot> slots,StateUpdater su)
     {
-        if(slots[0].slottedKeyWord.type==KeyWordType.None || slots[1].slottedKeyWord.type==KeyWordType.None) return;
-        switch (slots[0].slottedKeyWord.type,slots[1].slottedKeyWord.type)
+        su.UpdateIdentityFonctionality(slots[selfPose-1].slottedKeyWord.IdentityName,slots[selfPose+1].slottedKeyWord.functionality);
+        if (slots[selfPose + 1].slottedKeyWord.slotRestriction.authorizedRight.Length != 1)
         {
-            case (KeyWordType.Object,KeyWordType.Verb) :
-                slots[1].slottedKeyWord.referencedObject.gameObject.AddComponent(slots[0].slottedKeyWord.test.type);
-                break;
-            
+            su.UpdateActableIdentity(slots[selfPose-1].slottedKeyWord.IdentityName,slots[selfPose+1].slottedKeyWord.functionality,
+                slots[selfPose+2].slottedKeyWord.IdentityName);
         }
+         
     }
+}
+
+public interface  KeywordRule
+{
+    public void Evaluate(int selfPose,List<Slot> slots,StateUpdater su);
 }
 
 

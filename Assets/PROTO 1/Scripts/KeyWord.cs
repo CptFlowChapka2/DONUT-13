@@ -8,22 +8,27 @@ public enum KeyWordType
     None,
     Object,
     Parameter,
+    Fonctionality,
     Verb,
-    Control
+    Player
 }
 
 [Serializable]
 public class KeyWord : MonoBehaviour
 {
-    public string name;
+    
     public KeyWordType type;
-    public GameObject referencedObject;
+    public IdentityName IdentityName;
+    public KeywordRule verb;
+    public ModifySlotRestriction slotRestriction;
     public (string, object) paramValuePair;
-    public SerializableType<Verb> test;
+    public SerializableType<Functionality> functionality;
+    
+}
 
-    private void Start()
-    {
-        if(referencedObject==null) return;
-        referencedObject.GetComponent<DefaultPreFabValues>().actualKeyword = this;
-    }
+[Serializable]
+public struct ModifySlotRestriction
+{
+    public KeyWordType[] authorizedleft;
+    public KeyWordType[] authorizedRight;
 }

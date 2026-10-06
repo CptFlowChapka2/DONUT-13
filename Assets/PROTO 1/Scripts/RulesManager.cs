@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class RulesManager : MonoBehaviour
 {
+    public HolderOfSingleTon HolderOfSingleTon;
     public Rule[] allRules;
 
     private void Update()
@@ -16,15 +17,9 @@ public class RulesManager : MonoBehaviour
 
     public void EvaluateAll()
     {
-        foreach (var allRule in allRules)
-        {
-          allRule.Evaluate();  
-        }
-
-        var holder = FindAnyObjectByType<EntityPrefabHolder>();
+        HolderOfSingleTon.stateUpdater.ClearTruth();
         
-        holder.allEntities.ForEach(x=>
-            x.ReplaceIdentity(x.currentKeyword.referencedObject)
-        );
+        
+        
     }
 }
