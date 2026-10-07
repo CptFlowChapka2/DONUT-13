@@ -18,8 +18,10 @@ public class RulesManager : MonoBehaviour
     public void EvaluateAll()
     {
         HolderOfSingleTon.stateUpdater.ClearTruth();
-        
-        
-        
+
+        foreach (var rule in allRules)
+        {
+            rule.Evaluate(HolderOfSingleTon.stateUpdater);
+        }
     }
 }

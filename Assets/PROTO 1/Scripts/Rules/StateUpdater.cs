@@ -28,6 +28,17 @@ public class StateUpdater : MonoBehaviour
         
         UpdateAllEntitiesFunctionalities();
     }
+
+    public void TransformEntitiesToNewIdentity(IdentityName from,IdentityName to)
+    {
+        Identity fromKey =  functionalityAffectationDictionary.Keys.First(x=>x.name==from);
+        Identity toKey =  functionalityAffectationDictionary.Keys.First(x=>x.name==to);
+        
+        toKey.linkedEntities.AddRange(fromKey.linkedEntities);
+        fromKey.linkedEntities.Clear();
+        toKey.linkedEntities.ForEach(x=>x.id=toKey.name);
+        
+    }
     
     public void UpdateAllEntitiesFunctionalities()
     {

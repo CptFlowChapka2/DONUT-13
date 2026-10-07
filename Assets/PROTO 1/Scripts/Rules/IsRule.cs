@@ -1,27 +1,52 @@
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 
-public class IsRule : Rule
+public class IsRule : KeywordRule
 {
-    public override void Evaluate()
-    { 
-        if(slots[0].slottedKeyWord.type==KeyWordType.None || slots[1].slottedKeyWord.type==KeyWordType.None) return;
-        switch (slots[0].slottedKeyWord.type,slots[1].slottedKeyWord.type)
+    public void Evaluate(int selfPose, List<Slot> slots, StateUpdater su)
+    {
+        switch (slots[selfPose+1].slottedKeyWord.type)
         {
-          case (KeyWordType.Object,KeyWordType.Object) :
-              slots[0].slottedKeyWord.referencedObject = slots[1].slottedKeyWord.referencedObject;
-              slots[0].slottedKeyWord.referencedObject.gameObject.GetComponent<DefaultPreFabValues>().actualKeyword =
-                  slots[1].slottedKeyWord.referencedObject.gameObject.GetComponent<DefaultPreFabValues>().actualKeyword;
-              break;
-          case (KeyWordType.Control,KeyWordType.Object) :
-              slots[1].slottedKeyWord.referencedObject.gameObject.AddComponent<Player>();
-              break;
-          case (KeyWordType.Object,KeyWordType.Parameter) :
-              slots[0].slottedKeyWord.referencedObject.gameObject.GetComponent<DefaultPreFabValues>()
-                  .defaultVerbsParamsOverride
-                  .TryAdd(slots[1].slottedKeyWord.paramValuePair.Item1,slots[1].slottedKeyWord.paramValuePair.Item2);
-              break;
-            
+            case KeyWordType.Object:
+                EvaluateToObject(slots[selfPose-1].slottedKeyWord,slots[selfPose+1].slottedKeyWord,su);
+                break;
+            case KeyWordType.Parameter:
+                EvaluateToParam(slots[selfPose-1].slottedKeyWord,slots[selfPose+1].slottedKeyWord,su);
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
         }
         
+    }
+
+    private void EvaluateToObject(KeyWord left, KeyWord right, StateUpdater su)
+    {
+        switch (left.type)
+        {
+            case KeyWordType.Object:
+                su.TransformEntitiesToNewIdentity(left.IdentityName,right.IdentityName);
+                break;
+            case KeyWordType.Player:
+                throw new NotImplementedException();
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
+    }
+
+    private void EvaluateToParam(KeyWord left, KeyWord right,StateUpdater su)
+    {
+        switch (left.type)
+        {
+            case KeyWordType.Object:
+                su.UpdateParamField(left.IdentityName,right.paramValuePair.Item1,right.paramValuePair.Item2);
+                break;
+            case KeyWordType.Player:
+                throw new NotImplementedException();
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
     }
 }
