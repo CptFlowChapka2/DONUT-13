@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -29,13 +30,21 @@ public class InteractionManager : MonoBehaviour
             //Effets visuels et sonores de sélection
             return;
         }
+
+        if (!slot.authorizedType.Contains(currentSelectedKeyWord.type))
+        {
+            Debug.Log("This KeyWordIsInvalid in regard to restriction");
+            currentSelectedKeyWord = null;
+            currentSelectedSlot = null;
+            return;
+        }
         
         Swap(word, currentSelectedKeyWord, slot, currentSelectedSlot);
         currentSelectedKeyWord = null;
         currentSelectedSlot = null;
     }
 
-    public void Swap(KeyWord word1, KeyWord word2, Slot slot1, Slot slot2)
+    public void Swap(KeyWord word1, KeyWord word2, Slot slot1, Slot slot2) 
     {
         slot1.slottedKeyWord = word2;
         slot2.slottedKeyWord = word1;

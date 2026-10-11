@@ -6,7 +6,7 @@ using UnityEngine;
 [Serializable]
 public class CanRule : KeywordRule
 {
-    public void Evaluate(int selfPose, List<Slot> slots,StateUpdater su)
+    public override void Evaluate(int selfPose, List<Slot> slots,StateUpdater su)
     {
         su.UpdateIdentityFonctionality(slots[selfPose-1].slottedKeyWord.IdentityName,slots[selfPose+1].slottedKeyWord.functionality);
         if (slots[selfPose + 1].slottedKeyWord.slotRestriction.authorizedRight.Length != 1)
@@ -18,9 +18,9 @@ public class CanRule : KeywordRule
     }
 }
 
-public interface  KeywordRule
+public abstract class  KeywordRule : MonoBehaviour
 {
-    public void Evaluate(int selfPose,List<Slot> slots,StateUpdater su);
+    public abstract void Evaluate(int selfPose,List<Slot> slots,StateUpdater su);
 }
 
 

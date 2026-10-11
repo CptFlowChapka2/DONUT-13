@@ -6,6 +6,9 @@ public class RulesManager : MonoBehaviour
     public HolderOfSingleTon HolderOfSingleTon;
     public Rule[] allRules;
 
+    
+    
+    
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Q))
@@ -21,7 +24,9 @@ public class RulesManager : MonoBehaviour
 
         foreach (var rule in allRules)
         {
+            rule.CreateCuratedRestriction();
             rule.Evaluate(HolderOfSingleTon.stateUpdater);
         }
+        HolderOfSingleTon.stateUpdater.UpdateTruth();
     }
 }

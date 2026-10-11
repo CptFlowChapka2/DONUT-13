@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class IsRule : KeywordRule
 {
-    public void Evaluate(int selfPose, List<Slot> slots, StateUpdater su)
+    public override void Evaluate(int selfPose, List<Slot> slots, StateUpdater su)
     {
         switch (slots[selfPose+1].slottedKeyWord.type)
         {

@@ -5,6 +5,7 @@ using UnityEngine.UI;
 public class Slot : MonoBehaviour
 {
     public KeyWordType[] authorizedType;
+    public KeyWordType[] curatedAuthorizedTypes;
     public KeyWord slottedKeyWord;
 
     public GameObject anchorPoint;
@@ -14,6 +15,7 @@ public class Slot : MonoBehaviour
     private void Start()
     {
         interactionManager = FindAnyObjectByType<InteractionManager>();
+        
     }
 
     public void OnClick()

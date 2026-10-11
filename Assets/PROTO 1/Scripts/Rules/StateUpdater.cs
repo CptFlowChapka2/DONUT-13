@@ -75,6 +75,12 @@ public class StateUpdater : MonoBehaviour
         } 
     }
 
+    public void UpdateTruth()
+    {
+        UpdateAllEntitiesFunctionalities();
+        holderOfSingleTon.entityDatabase.allEntities.ForEach(x=>x.UpdateAfterRuleChange());
+    }
+
     public void UpdateParamField(IdentityName iname,string name, object value)
     {
         Identity key =  functionalityAffectationDictionary.Keys.First(x=>x.name==iname);
@@ -84,11 +90,7 @@ public class StateUpdater : MonoBehaviour
     public void UpdateActableIdentity(IdentityName iname,SerializableType<Functionality> func,IdentityName toAdd)
     {
         Identity key =  functionalityAffectationDictionary.Keys.First(x=>x.name==iname);
-        if (key.actableIdentity.TryAdd(func, new List<IdentityName>() ))
-        {
-            key.actableIdentity[func].Add(toAdd);
-            return;
-        }
+        key.actableIdentity.TryAdd(func, new List<IdentityName>());
         key.actableIdentity[func].Add(toAdd);
     }
 
