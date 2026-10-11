@@ -83,6 +83,7 @@ public class StateUpdater : MonoBehaviour
 
     public void UpdateParamField(IdentityName iname,string name, object value)
     {
+        if(name==null)return;
         Identity key =  functionalityAffectationDictionary.Keys.First(x=>x.name==iname);
         key.GetType().GetField(name).SetValue(key, value);
     }

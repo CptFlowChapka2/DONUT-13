@@ -24,6 +24,11 @@ public  class Entity : MonoBehaviour
         rendererAndPhysic.ForcefullUpdateOfRenderParms();
     }
 
+    public void UpdateAfterRuleChange()
+    {
+        rendererAndPhysic.ForcefullUpdateOfRenderParms();
+    }
+
     public void SetComponentEnable(Type t, bool b)
     {
         bool previouslyEnabled = allFunctionalitiesRefs[t].enabled;

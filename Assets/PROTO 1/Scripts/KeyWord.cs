@@ -21,7 +21,7 @@ public class KeyWord : MonoBehaviour
     public IdentityName IdentityName;
     public KeywordRule verb;
     public ModifySlotRestriction slotRestriction;
-    public (string, object) paramValuePair;
+    public ParamValuePair paramValuePair;
     public SerializableType<Functionality> functionality;
     
 }
@@ -32,3 +32,11 @@ public struct ModifySlotRestriction
     public KeyWordType[] authorizedleft;
     public KeyWordType[] authorizedRight;
 }
+
+[Serializable]
+public struct ParamValuePair
+{
+    public string name;
+    public bool value;
+}
+

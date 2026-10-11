@@ -40,7 +40,7 @@ public class IsRule : KeywordRule
         switch (left.type)
         {
             case KeyWordType.Object:
-                su.UpdateParamField(left.IdentityName,right.paramValuePair.Item1,right.paramValuePair.Item2);
+                su.UpdateParamField(left.IdentityName,right.paramValuePair.name,right.paramValuePair.value);
                 break;
             case KeyWordType.Player:
                 throw new NotImplementedException();
