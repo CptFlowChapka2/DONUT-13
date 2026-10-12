@@ -8,7 +8,7 @@ public class Slot : MonoBehaviour
     public KeyWordType[] curatedAuthorizedTypes;
     public KeyWord slottedKeyWord;
 
-    public GameObject anchorPoint;
+    public Vector2 anchorPoint;
     
     private InteractionManager interactionManager;
 

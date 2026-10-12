@@ -100,6 +100,10 @@ PrefabInstance:
       propertyPath: functionality.data
       value: AE9Db250cm9sLCBBc3NlbWJseS1DU2hhcnAsIFZlcnNpb249MC4wLjAuMCwgQ3VsdHVyZT1uZXV0cmFsLCBQdWJsaWNLZXlUb2tlbj1udWxs
       objectReference: {fileID: 0}
+    - target: {fileID: 5853018950844630564, guid: 790cc45ac8f3e134f9f65e01ad73f07b, type: 3}
+      propertyPath: slotRestriction.authorizedRight.Array.size
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7952006532738152098, guid: 790cc45ac8f3e134f9f65e01ad73f07b, type: 3}
       propertyPath: m_Color.b
       value: 0.672947

@@ -28,7 +28,7 @@ public class IsRule : KeywordRule
                 su.TransformEntitiesToNewIdentity(left.IdentityName,right.IdentityName);
                 break;
             case KeyWordType.Player:
-                throw new NotImplementedException();
+               su.AttributeIdentityToPlayer(right.IdentityName);
                 break;
             default:
                 throw new ArgumentOutOfRangeException();

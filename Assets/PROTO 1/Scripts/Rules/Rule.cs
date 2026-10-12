@@ -6,15 +6,12 @@ using UnityEngine;
 public class Rule : MonoBehaviour
 {
     public List<Slot> slots;
-
+    [SerializeField] public List<Vector2> slotsAnchors;
     
-
     public void Evaluate(StateUpdater su)
     {
         if (slots.Any(x => !x.curatedAuthorizedTypes.Contains(x.slottedKeyWord.type)))
         {
-            
-            
             Debug.Log("A Rule was not able to Evaluate , there was a type mismatch=");
             return;
         }
