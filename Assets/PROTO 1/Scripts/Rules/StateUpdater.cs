@@ -78,6 +78,7 @@ public class StateUpdater : MonoBehaviour
 
     public void ClearTruth()
     {
+        playerScript.ClearTruth();
         foreach (var idFunctionalitiesPair in functionalityAffectationDictionary)
         {
             functionalityAffectationDictionary[idFunctionalitiesPair.Key].Clear();
@@ -94,7 +95,11 @@ public class StateUpdater : MonoBehaviour
                 }
                 
             }
+
+            idFunctionalitiesPair.Key.actableIdentity =
+                new Dictionary<SerializableType<Functionality>, HashSet<IdentityName>>();
         } 
+        
     }
 
     public void UpdateTruth()
