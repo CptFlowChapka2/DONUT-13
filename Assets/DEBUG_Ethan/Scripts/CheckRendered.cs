@@ -1,30 +1,40 @@
+using System;
+using System.Linq;
 using UnityEngine;
 
 public class CheckRendered : MonoBehaviour
 {
-    public Renderer selfRenderer;
-    
-    void Start()
+    // public Renderer selfRenderer;
+    public Transform target;
+    private Camera playerCam;
+
+    private void Start()
     {
-        // selfRenderer = GetComponent<Renderer>();
+        playerCam = Camera.main;
     }
 
-    
     void Update()
     {
-        if (selfRenderer.isVisible)
+        if (IsVisible())
         {
-            Vector3 ptOnScreen = Camera.current.WorldToScreenPoint(selfRenderer.bounds.center);
+            if (Physics.Raycast(transform.position, target.position, out RaycastHit hit))
+            {
+                Debug.Log(hit.collider.tag);
+                Debug.DrawRay(transform.position, target.position, Color.blue);
+                
+                if(hit.collider.CompareTag("Target"))
+                    Debug.Log("Visible");
+                
+                else Debug.Log("VISIBLE BUT HIDED");
+            }
+        }
             
-            // if(ptOnScreen.z < 0)
-            if((ptOnScreen.x < 0) || (ptOnScreen.x > Screen.width) || (ptOnScreen.y < 0) || (ptOnScreen.y > Screen.height))
-                Debug.Log("i'm here, i'm late !!!");
-        }
+        else Debug.Log("NOT VISIBLE");
+    }
 
-        else
-        {
-            Debug.Log("... ...... ... ....");
-        }
-        
+    bool IsVisible()
+    {
+        Plane[] planes = GeometryUtility.CalculateFrustumPlanes(playerCam);
+        return planes.All(plane => plane.GetDistanceToPoint(target.position) >= 0);
     }
 }
