@@ -49,7 +49,7 @@ public class InteractionManager : MonoBehaviour
     {
         slot1.slottedKeyWord = word2;
         slot2.slottedKeyWord = word1;
-        word1.GetComponent<RectTransform>().anchoredPosition = slot2.anchorPoint.GetComponent<RectTransform>().anchoredPosition;
-        word2.GetComponent<RectTransform>().anchoredPosition = slot1.anchorPoint.GetComponent<RectTransform>().anchoredPosition;
+        word1.GetComponent<RectTransform>().anchoredPosition = slot2.anchorPoint;
+        word2.GetComponent<RectTransform>().anchoredPosition = slot1.anchorPoint;
     }
 }

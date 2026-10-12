@@ -196,6 +196,11 @@ MonoBehaviour:
   - {fileID: 1950645498087125559}
   - {fileID: 3926999554870259010}
   - {fileID: 1003540845711964922}
+  slotsAnchors:
+  - {x: -524, y: 0}
+  - {x: -270, y: 0}
+  - {x: 47, y: 0}
+  - {x: 369, y: 0}
 --- !u!1 &7591369995980690788
 GameObject:
   m_ObjectHideFlags: 0
