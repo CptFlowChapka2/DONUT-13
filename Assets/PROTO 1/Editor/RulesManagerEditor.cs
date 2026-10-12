@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Unity.Hierarchy;
 using UnityEditor;
 using UnityEditor.SceneManagement;
@@ -33,6 +34,7 @@ public class RulesManagerEditor : Editor
     
     public void OnUpdateInEditor(RulesManager instance)
     {
+        //Clear anciennes rules
         for (int i = 0; i < instance.allRules.Length; i++)
         {
             DestroyImmediate(instance.allRules[i].gameObject);
@@ -43,8 +45,18 @@ public class RulesManagerEditor : Editor
         //Création de Règle
         GameObject canvas = EditorSceneManager.GetActiveScene().GetRootGameObjects().ToList()
             .Find(x => x.CompareTag("Canvas"));
-        Debug.Log(canvas);
-        KeyWord emptyKW = canvas.GetComponentsInChildren<KeyWord>().ToList().Find(x => x.type == KeyWordType.None);
+        
+        List<KeyWord> keywords = canvas.GetComponentsInChildren<KeyWord>().ToList();
+        KeyWord emptyKW = keywords.Find(x => x.type == KeyWordType.None);
+
+        //Clear anciens keywords
+        for (int i = 0; i < keywords.Count; i++)
+        {
+            if (keywords[i] != emptyKW)
+            {
+                DestroyImmediate(keywords[i].gameObject);
+            }
+        }
         
         for (int i = 0; i < instance.fat.nbRules; i++)
         {
