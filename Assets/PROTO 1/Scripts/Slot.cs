@@ -15,13 +15,12 @@ public class Slot : MonoBehaviour
     
     private InteractionManager interactionManager;
     private Vector2 velocity = new Vector2(0, 2f);
-    private RectTransform parentRectTransform;
     private Vector2 parentPosition;
 
     private void Start()
     {
         interactionManager = FindAnyObjectByType<InteractionManager>();
-        parentRectTransform = transform.parent.GetComponent<RectTransform>();
+        RectTransform parentRectTransform = transform.parent.GetComponent<RectTransform>();
         if (parentRectTransform.gameObject.CompareTag("Rule"))
         {
             parentPosition = Vector2.zero;

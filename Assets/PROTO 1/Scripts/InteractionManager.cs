@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.InputSystem;
 
 public class InteractionManager : MonoBehaviour
 {
@@ -14,7 +15,14 @@ public class InteractionManager : MonoBehaviour
     public Slot currentSelectedSlot;
     
     public Slot highlightedSlot;
+    
+    private RectTransform keywordRectTransform;
 
+    private void Update()
+    {
+        if (!currentSelectedSlot) return;
+        currentSelectedSlot.slottedKeyWordTransform.anchoredPosition = Mouse.current.position.ReadValue() - new Vector2(1920f/2f, 1080f/2f);
+    }
 
     private void OnGUI()
     {
@@ -76,8 +84,8 @@ public class InteractionManager : MonoBehaviour
     public void Swap(KeyWord word1, KeyWord word2, Slot slot1, Slot slot2) 
     {
         slot1.slottedKeyWord = word2;
+        slot1.slottedKeyWordTransform = word2.GetComponent<RectTransform>();
         slot2.slottedKeyWord = word1;
-        word1.GetComponent<RectTransform>().anchoredPosition = slot2.anchorPoint;
-        word2.GetComponent<RectTransform>().anchoredPosition = slot1.anchorPoint;
+        slot2.slottedKeyWordTransform = word1.GetComponent<RectTransform>();
     }
 }
