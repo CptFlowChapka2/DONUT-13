@@ -52,7 +52,7 @@ MonoBehaviour:
   authorizedType: 
   curatedAuthorizedTypes: 
   slottedKeyWord: {fileID: 0}
-  anchorPoint: {fileID: 7347467768168804679}
+  anchorPoint: {x: 0, y: 0}
 --- !u!1 &7347467768168804679
 GameObject:
   m_ObjectHideFlags: 0
@@ -65,6 +65,7 @@ GameObject:
   - component: {fileID: 7977528300441523296}
   - component: {fileID: 1585490551023365790}
   - component: {fileID: 8065536456710327187}
+  - component: {fileID: 8732193059743926832}
   m_Layer: 5
   m_Name: SlotImage
   m_TagString: Untagged
@@ -185,3 +186,16 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &8732193059743926832
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7347467768168804679}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d8e6367355e9e834fb389150bf18b071, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MouseChecker
+  slot: {fileID: 1435510046692453006}

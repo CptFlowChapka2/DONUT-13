@@ -5,11 +5,11 @@ using UnityEngine;
 public class RulesManager : MonoBehaviour
 {
     public GameObject rulePrefab;
+    public GameObject inventorySlotsPrefab;
     public FunctionalityAffectationTable fat;
     public HolderOfSingleTon HolderOfSingleTon;
     public Rule[] allRules;
     public AllInventoryKeyWords inventoryKeywords;
-    public Slot[] inventorySlots;
     
     private void Update()
     {

@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Canvas
   - EmptyKW
+  - Rule
   layers:
   - Default
   - TransparentFX

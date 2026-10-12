@@ -6,44 +6,72 @@ using UnityEngine.Events;
 
 public class InteractionManager : MonoBehaviour
 {
-    public UnityEvent<KeyWord, Slot> onButtonPressed;
+    //public UnityEvent<KeyWord, Slot> onButtonPressed;
     
     public List<KeyWord> allUnlockedKeyWords;
 
-    private KeyWord currentSelectedKeyWord;
-    private Slot currentSelectedSlot;
+    public KeyWord currentSelectedKeyWord;
+    public Slot currentSelectedSlot;
+    
+    public Slot highlightedSlot;
 
-    public void WhenButtonPressed(KeyWord word, Slot slot)
+
+    private void OnGUI()
     {
-        if (!slot)
+        Event e = Event.current;
+        if (e.button != 0) return;
+        if (e.type == EventType.MouseDown)
         {
-            Debug.Log("No Slot Selected");
-            return;
-        }
-        
-        //Sélection du premier mot
-        if (!currentSelectedSlot)
-        {
-            currentSelectedKeyWord = word;
-            currentSelectedSlot = slot;
-            Debug.Log(currentSelectedKeyWord);
-            //Effets visuels et sonores de sélection
-            return;
+            if (highlightedSlot)
+            {
+                currentSelectedSlot = highlightedSlot;
+                currentSelectedKeyWord = highlightedSlot.slottedKeyWord;
+            }
         }
 
-        if (!slot.authorizedType.Contains(currentSelectedKeyWord.type))
+        if (e.type == EventType.MouseUp)
         {
-            Debug.Log("This KeyWordIsInvalid in regard to restriction");
+            if (highlightedSlot)
+            {
+                Swap(currentSelectedKeyWord, highlightedSlot.slottedKeyWord, currentSelectedSlot, highlightedSlot);
+            }
             currentSelectedKeyWord = null;
             currentSelectedSlot = null;
-            //todo feedback qui dis "non"
-            return;
+            Debug.Log("Up");
         }
-        
-        Swap(word, currentSelectedKeyWord, slot, currentSelectedSlot);
-        currentSelectedKeyWord = null;
-        currentSelectedSlot = null;
     }
+
+    // public void WhenButtonPressed(KeyWord word, Slot slot)
+    // {
+    //     if (!slot)
+    //     {
+    //         Debug.Log("No Slot Selected");
+    //         return;
+    //     }
+    //     
+    //     //Sélection du premier mot
+    //     if (!currentSelectedSlot)
+    //     {
+    //         currentSelectedKeyWord = word;
+    //         currentSelectedSlot = slot;
+    //         Debug.Log(currentSelectedKeyWord);
+    //         //Effets visuels et sonores de sélection
+    //         return;
+    //     }
+    //
+    //     if (!slot.authorizedType.Contains(currentSelectedKeyWord.type))
+    //     {
+    //         Debug.Log("This KeyWordIsInvalid in regard to restriction");
+    //         currentSelectedKeyWord = null;
+    //         currentSelectedSlot = null;
+    //         //todo feedback qui dis "non"
+    //         return;
+    //     }
+    //     
+    //     Swap(word, currentSelectedKeyWord, slot, currentSelectedSlot);
+    //     currentSelectedKeyWord = null;
+    //     currentSelectedSlot = null;
+    // }
 
     public void Swap(KeyWord word1, KeyWord word2, Slot slot1, Slot slot2) 
     {

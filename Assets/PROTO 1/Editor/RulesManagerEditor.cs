@@ -15,10 +15,10 @@ public class RulesManagerEditor : Editor
         RulesManager instance = (RulesManager)target;
         
         EditorGUILayout.PropertyField(serializedObject.FindProperty("rulePrefab"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("inventorySlotsPrefab"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("fat"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("HolderOfSingleTon"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("inventoryKeywords"));
-        EditorGUILayout.PropertyField(serializedObject.FindProperty("inventorySlots"));
         
         GUI.enabled = false;
         EditorGUILayout.PropertyField(serializedObject.FindProperty("allRules"));
@@ -44,7 +44,6 @@ public class RulesManagerEditor : Editor
         
         instance.allRules = new Rule[instance.fat.nbRules];
         
-        //Création de Règle
         GameObject canvas = EditorSceneManager.GetActiveScene().GetRootGameObjects().ToList()
             .Find(x => x.CompareTag("Canvas"));
         
@@ -60,14 +59,11 @@ public class RulesManagerEditor : Editor
             }
         }
         
-        //Créer Inventaire
-        for (int i = 0; i < instance.inventorySlots.Length; i++)
-        {
-            GameObject kw = Instantiate(instance.inventoryKeywords.inventoryKeyWordsPrefabs[i], canvas.transform, false);
-            kw.GetComponent<RectTransform>().anchoredPosition = instance.inventorySlots[i].anchorPoint - new Vector2(0, 262.5f);
-            instance.inventorySlots[i].slottedKeyWord = kw.GetComponent<KeyWord>();
-        }
+        //Clear inventaire
+        Inventory inv = canvas.GetComponentInChildren<Inventory>();
+        DestroyImmediate(inv.gameObject);
         
+        //Création de Règle
         for (int i = 0; i < instance.fat.nbRules; i++)
         {
             GameObject ruleObject = Instantiate(instance.rulePrefab, canvas.transform, false);
@@ -84,15 +80,25 @@ public class RulesManagerEditor : Editor
             instance.allRules[i] = rule;
         }
         
+        //Création d'Inventaire
+        GameObject inventorySlotsObject = Instantiate(instance.inventorySlotsPrefab, canvas.transform, false);
+        Inventory inventory = inventorySlotsObject.GetComponent<Inventory>();
+        
+        for (int i = 0; i < inventory.inventorySlots.Count; i++)
+        {
+            GameObject kw = Instantiate(instance.inventoryKeywords.inventoryKeyWordsPrefabs[i], canvas.transform, false);
+            Slot concernedSlot = inventory.inventorySlots[i];
+            concernedSlot.slottedKeyWord = kw.GetComponent<KeyWord>();
+            concernedSlot.slottedKeyWordTransform = kw.GetComponent<RectTransform>();
+        }
+        
         //Création de KW
         foreach (KeyWordInRule kw in instance.fat.keyWords)
         {
             GameObject kwObject = Instantiate(kw.keyWordPrefab, canvas.transform, false);
-            
             Slot concernedSlot = instance.allRules[kw.posInRule.x].slots[kw.posInRule.y];
-            concernedSlot.slottedKeyWord = kw.keyWordPrefab.GetComponent<KeyWord>();
-            
-            kwObject.GetComponent<RectTransform>().anchoredPosition = concernedSlot.anchorPoint;
+            concernedSlot.slottedKeyWord = kwObject.GetComponent<KeyWord>();
+            concernedSlot.slottedKeyWordTransform = kwObject.GetComponent<RectTransform>();
         }
     }
 }

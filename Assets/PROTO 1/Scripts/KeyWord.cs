@@ -16,14 +16,12 @@ public enum KeyWordType
 [Serializable]
 public class KeyWord : MonoBehaviour
 {
-    
     public KeyWordType type;
     public IdentityName IdentityName;
     public KeywordRule verb;
     public ModifySlotRestriction slotRestriction;
     public ParamValuePair paramValuePair;
     public SerializableType<Functionality> functionality;
-    
 }
 
 [Serializable]
