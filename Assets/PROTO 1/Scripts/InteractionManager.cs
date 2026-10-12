@@ -39,7 +39,7 @@ public class InteractionManager : MonoBehaviour
 
         if (e.type == EventType.MouseUp)
         {
-            if (highlightedSlot)
+            if (highlightedSlot && highlightedSlot.authorizedType.Contains(currentSelectedKeyWord.type))
             {
                 Swap(currentSelectedKeyWord, highlightedSlot.slottedKeyWord, currentSelectedSlot, highlightedSlot);
             }
