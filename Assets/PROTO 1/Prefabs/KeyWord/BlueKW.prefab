@@ -97,8 +97,28 @@ PrefabInstance:
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5853018950844630564, guid: 790cc45ac8f3e134f9f65e01ad73f07b, type: 3}
+      propertyPath: paramValuePair.name
+      value: blue
+      objectReference: {fileID: 0}
+    - target: {fileID: 5853018950844630564, guid: 790cc45ac8f3e134f9f65e01ad73f07b, type: 3}
+      propertyPath: paramValuePair.value
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5853018950844630564, guid: 790cc45ac8f3e134f9f65e01ad73f07b, type: 3}
+      propertyPath: slotRestriction.authorizedleft.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5853018950844630564, guid: 790cc45ac8f3e134f9f65e01ad73f07b, type: 3}
       propertyPath: slotRestriction.authorizedRight.Array.size
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5853018950844630564, guid: 790cc45ac8f3e134f9f65e01ad73f07b, type: 3}
+      propertyPath: 'slotRestriction.authorizedleft.Array.data[0]'
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5853018950844630564, guid: 790cc45ac8f3e134f9f65e01ad73f07b, type: 3}
+      propertyPath: 'slotRestriction.authorizedleft.Array.data[1]'
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 5853018950844630564, guid: 790cc45ac8f3e134f9f65e01ad73f07b, type: 3}
       propertyPath: 'slotRestriction.authorizedRight.Array.data[1]'

@@ -20,7 +20,7 @@ MonoBehaviour:
     posInRule: {x: 0, y: 1}
   - keyWordPrefab: {fileID: 7662214054775781574, guid: 3408ba772332fa941b87dd2ccbbfb18b, type: 3}
     posInRule: {x: 0, y: 2}
-  - keyWordPrefab: {fileID: 8212057099510109376, guid: d1d6421f7f2defb41bbfbf988983ff40, type: 3}
+  - keyWordPrefab: {fileID: 4005175882817704156, guid: bfb8e8d93bd1c2c4386ee51b3e27d878, type: 3}
     posInRule: {x: 1, y: 0}
   - keyWordPrefab: {fileID: 9052202851143928193, guid: a552f53a70075774385354bc4d6ac6e9, type: 3}
     posInRule: {x: 1, y: 1}

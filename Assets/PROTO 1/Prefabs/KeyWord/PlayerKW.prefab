@@ -94,6 +94,22 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5853018950844630564, guid: 790cc45ac8f3e134f9f65e01ad73f07b, type: 3}
       propertyPath: type
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5853018950844630564, guid: 790cc45ac8f3e134f9f65e01ad73f07b, type: 3}
+      propertyPath: slotRestriction.authorizedleft.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5853018950844630564, guid: 790cc45ac8f3e134f9f65e01ad73f07b, type: 3}
+      propertyPath: slotRestriction.authorizedRight.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5853018950844630564, guid: 790cc45ac8f3e134f9f65e01ad73f07b, type: 3}
+      propertyPath: 'slotRestriction.authorizedleft.Array.data[0]'
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5853018950844630564, guid: 790cc45ac8f3e134f9f65e01ad73f07b, type: 3}
+      propertyPath: 'slotRestriction.authorizedRight.Array.data[0]'
       value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 8234094717366400821, guid: 790cc45ac8f3e134f9f65e01ad73f07b, type: 3}
