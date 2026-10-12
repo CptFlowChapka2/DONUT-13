@@ -17,6 +17,8 @@ public class RulesManagerEditor : Editor
         EditorGUILayout.PropertyField(serializedObject.FindProperty("rulePrefab"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("fat"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("HolderOfSingleTon"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("inventoryKeywords"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("inventorySlots"));
         
         GUI.enabled = false;
         EditorGUILayout.PropertyField(serializedObject.FindProperty("allRules"));
@@ -56,6 +58,14 @@ public class RulesManagerEditor : Editor
             {
                 DestroyImmediate(keywords[i].gameObject);
             }
+        }
+        
+        //Créer Inventaire
+        for (int i = 0; i < instance.inventorySlots.Length; i++)
+        {
+            GameObject kw = Instantiate(instance.inventoryKeywords.inventoryKeyWordsPrefabs[i], canvas.transform, false);
+            kw.GetComponent<RectTransform>().anchoredPosition = instance.inventorySlots[i].anchorPoint - new Vector2(0, 262.5f);
+            instance.inventorySlots[i].slottedKeyWord = kw.GetComponent<KeyWord>();
         }
         
         for (int i = 0; i < instance.fat.nbRules; i++)

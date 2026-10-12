@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class RulesManager : MonoBehaviour
@@ -7,6 +8,8 @@ public class RulesManager : MonoBehaviour
     public FunctionalityAffectationTable fat;
     public HolderOfSingleTon HolderOfSingleTon;
     public Rule[] allRules;
+    public AllInventoryKeyWords inventoryKeywords;
+    public Slot[] inventorySlots;
     
     private void Update()
     {
