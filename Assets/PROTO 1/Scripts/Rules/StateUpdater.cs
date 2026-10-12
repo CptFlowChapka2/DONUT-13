@@ -9,6 +9,7 @@ public class StateUpdater : MonoBehaviour
 {
     [SerializeField] public Dictionary<Identity, List<SerializableType<Functionality>>> functionalityAffectationDictionary;
     public HolderOfSingleTon holderOfSingleTon;
+    public PlayerScript playerScript = new PlayerScript();
 
     private void Awake()
     {
@@ -36,8 +37,29 @@ public class StateUpdater : MonoBehaviour
         
         toKey.linkedEntities.AddRange(fromKey.linkedEntities);
         fromKey.linkedEntities.Clear();
-        toKey.linkedEntities.ForEach(x=>x.id=toKey.name);
+        foreach (var keyLinkedEntity in toKey.linkedEntities)
+        {
+            keyLinkedEntity.id = toKey.name;
+        }
         
+    }
+
+    public void AttributeIdentityToPlayer(IdentityName identityName)
+    {
+        playerScript.linkedIdentity.Add(identityName);
+        var e = functionalityAffectationDictionary.Keys.First(x => x.name == identityName).linkedEntities;
+        playerScript.linkedEntities.AddRange(e);
+        
+    }
+
+    public void AttributeFunctionalityToPlayer(SerializableType<Functionality> func)
+    {
+        playerScript.associatedFunc.Add(func);
+    }
+    public void AttributeActableIdendityToPlayer(SerializableType<Functionality> func,IdentityName name)
+    {
+        playerScript.actableIdentity.TryAdd(func, new HashSet<IdentityName>());
+        playerScript.actableIdentity[func].Add(name);
     }
     
     public void UpdateAllEntitiesFunctionalities()
@@ -78,6 +100,12 @@ public class StateUpdater : MonoBehaviour
     public void UpdateTruth()
     {
         UpdateAllEntitiesFunctionalities();
+        List<Type> types = new List<Type>();
+        playerScript.associatedFunc.ToList().ForEach(x=>types.Add(x));
+        foreach (var playerScriptLinkedEntity in playerScript.linkedEntities)
+        { 
+            types.Intersect(playerScriptLinkedEntity.allFunctionalitiesRefs.Keys.ToList()).ToList().ForEach(y=>playerScriptLinkedEntity.SetComponentEnable(y,true));
+        }
         holderOfSingleTon.entityDatabase.allEntities.ForEach(x=>x.UpdateAfterRuleChange());
     }
 
@@ -91,7 +119,7 @@ public class StateUpdater : MonoBehaviour
     public void UpdateActableIdentity(IdentityName iname,SerializableType<Functionality> func,IdentityName toAdd)
     {
         Identity key =  functionalityAffectationDictionary.Keys.First(x=>x.name==iname);
-        key.actableIdentity.TryAdd(func, new List<IdentityName>());
+        key.actableIdentity.TryAdd(func, new HashSet<IdentityName>());
         key.actableIdentity[func].Add(toAdd);
     }
 
