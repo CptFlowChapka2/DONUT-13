@@ -36,6 +36,7 @@ public class InteractionManager : MonoBehaviour
             Debug.Log("This KeyWordIsInvalid in regard to restriction");
             currentSelectedKeyWord = null;
             currentSelectedSlot = null;
+            //todo feedback qui dis "non"
             return;
         }
         
