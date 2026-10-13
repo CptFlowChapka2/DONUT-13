@@ -7,6 +7,7 @@ using UnityEngine;
 public class Identity
 {
     public IdentityName name = IdentityName.None;
+    [SerializeField] public GameObject appearence;
     
     [Header("Initial Parameters")]
     public bool blue = false;
