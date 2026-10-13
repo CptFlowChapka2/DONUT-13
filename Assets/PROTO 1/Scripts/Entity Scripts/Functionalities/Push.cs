@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Push : Functionality
 {
+    private float securityDist = 5.0f;
     public override void OnActivate()
     {
         return;
@@ -18,13 +19,14 @@ public class Push : Functionality
     {
         return;
     }
-
-    private void OnTriggerEnter(Collider other)
+    
+    private void OnTriggerStay(Collider other)
     {
-        HashSet<IdentityName> identities = GetIdsToActOn(this);
-        if (identities.Contains(other.gameObject.GetComponentInParent<Entity>().id))
+        if (AppliableOnTheTriggeringEntity(this, other))
         {
-            //push
+            Vector3 distBeetween = other.transform.position - transform.position;
+            //if il n'y a pas le bord de la map juste après l'objet:
+            other.gameObject.GetComponentInParent<Transform>().position = transform.position + distBeetween.normalized * securityDist;
         }
     }
 }

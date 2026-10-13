@@ -10,7 +10,7 @@ public abstract class Functionality : MonoBehaviour
     public abstract void OnDeActivate();
     public abstract void OnUpdate();
 
-    public HashSet<IdentityName> GetIdsToActOn(Functionality functionality)
+    protected HashSet<IdentityName> GetIdsToActOn(Functionality functionality)
     {
         Identity id =
             thisEntity.holderOfSingleTon.stateUpdater.functionalityAffectationDictionary.Keys.First(x =>
@@ -18,7 +18,7 @@ public abstract class Functionality : MonoBehaviour
         return id.actableIdentity[functionality.GetType()];
     }
 
-    public Vector3 GetNearestEntityToActOnPosition(Functionality functionality)
+    protected Vector3 GetPositionOfNearestEntityToActOn(Functionality functionality)
     {
         HashSet<IdentityName> identities = GetIdsToActOn(functionality);
         if (identities.Count == 0) return transform.position;
@@ -33,5 +33,11 @@ public abstract class Functionality : MonoBehaviour
             }
         }
         return target;
+    }
+
+    protected bool AppliableOnTheTriggeringEntity(Functionality functionality, Collider other)
+    {
+        HashSet<IdentityName> identities = GetIdsToActOn(functionality);
+        return identities.Contains(other.gameObject.GetComponentInParent<Entity>().id);
     }
 }

@@ -9,6 +9,8 @@ public  class Entity : MonoBehaviour
     public RendererAndPhysic rendererAndPhysic;
     public HolderOfSingleTon holderOfSingleTon;
     public Dictionary<Type, Functionality> allFunctionalitiesRefs = new Dictionary<Type, Functionality>();
+    
+    public bool isStunned = false;
 
     private void Awake()
     {
@@ -39,6 +41,7 @@ public  class Entity : MonoBehaviour
 
     private void Update()
     {
+        if (isStunned) return;
         foreach (var functionality in allFunctionalitiesRefs.Values)
         {
             if (functionality.enabled) functionality.OnUpdate();

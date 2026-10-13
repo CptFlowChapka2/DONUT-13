@@ -15,6 +15,6 @@ public class LookAt : Functionality
 
     public override void OnUpdate()
     {
-        transform.LookAt(GetNearestEntityToActOnPosition(this));
+        transform.LookAt(GetPositionOfNearestEntityToActOn(this));
     }
 }

@@ -15,7 +15,7 @@ public class Follow : Functionality
 
     public override void OnUpdate()
     {
-        Vector3 target = GetNearestEntityToActOnPosition(this);
+        Vector3 target = GetPositionOfNearestEntityToActOn(this);
         transform.Translate((target - transform.position).normalized * (Time.deltaTime * speed));
     }
 }

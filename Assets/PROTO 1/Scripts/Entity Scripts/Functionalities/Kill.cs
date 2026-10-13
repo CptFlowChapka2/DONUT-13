@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Kill : Functionality
@@ -20,10 +21,13 @@ public class Kill : Functionality
     
     private void OnTriggerEnter(Collider other)
     {
-        HashSet<IdentityName> identities = GetIdsToActOn(this);
-        if (identities.Contains(other.gameObject.GetComponentInParent<Entity>().id))
+        if (AppliableOnTheTriggeringEntity(this, other))
         {
-            //kill
+            Entity e = other.gameObject.GetComponent<Entity>();
+            Identity id = e.holderOfSingleTon.stateUpdater.functionalityAffectationDictionary.Keys.First(x => x.name == e.id);
+            id.linkedEntities.Remove(e);
+            thisEntity.holderOfSingleTon.entityDatabase.allEntities.Remove(e);
+            Destroy(e.gameObject);
         }
     }
 }

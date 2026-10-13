@@ -18,12 +18,19 @@ public class Stun : Functionality
         return;
     }
     
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerStay(Collider other)
     {
-        HashSet<IdentityName> identities = GetIdsToActOn(this);
-        if (identities.Contains(other.gameObject.GetComponentInParent<Entity>().id))
+        if (AppliableOnTheTriggeringEntity(this, other))
         {
-            //stun
+            other.gameObject.GetComponent<Entity>().isStunned = true;
+        }
+    }
+    
+    private void OnTriggerExit(Collider other)
+    {
+        if (AppliableOnTheTriggeringEntity(this, other))
+        {
+            other.gameObject.GetComponent<Entity>().isStunned = false;
         }
     }
 }
