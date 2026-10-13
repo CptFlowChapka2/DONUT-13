@@ -5,7 +5,7 @@ using UnityEngine;
 [Serializable]
 public class PlayerScript
 {
-    public List<IdentityName> linkedIdentity = new List<IdentityName>();
+    public HashSet<IdentityName> linkedIdentity = new HashSet<IdentityName>();
     [NonSerialized] public Dictionary<SerializableType<Functionality>, HashSet<IdentityName>> actableIdentity = 
         new Dictionary<SerializableType<Functionality>, HashSet<IdentityName>>();
 
@@ -15,7 +15,7 @@ public class PlayerScript
 
     public void ClearTruth()
     {
-        linkedIdentity = new List<IdentityName>();
+        linkedIdentity = new HashSet<IdentityName>();
         actableIdentity = new Dictionary<SerializableType<Functionality>, HashSet<IdentityName>>();
         associatedFunc = new HashSet<SerializableType<Functionality>>();
     }

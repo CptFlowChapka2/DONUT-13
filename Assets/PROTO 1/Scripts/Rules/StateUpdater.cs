@@ -41,7 +41,13 @@ public class StateUpdater : MonoBehaviour
         {
             keyLinkedEntity.id = toKey.name;
         }
-        
+
+        if (playerScript.linkedIdentity.Contains(from))
+        {
+            playerScript.linkedIdentity.Remove(from);
+            AttributeIdentityToPlayer(to);
+        }
+
     }
 
     public void AttributeIdentityToPlayer(IdentityName identityName)
