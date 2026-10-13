@@ -6,15 +6,20 @@ public class RulesManager : MonoBehaviour
 {
     public GameObject rulePrefab;
     public GameObject inventorySlotsPrefab;
+    public GameObject rulePagePrefab;
     public FunctionalityAffectationTable fat;
     public HolderOfSingleTon HolderOfSingleTon;
     public Rule[] allRules;
     public AllInventoryKeyWords inventoryKeywords;
     public List<GameObject> inventoryPages = new List<GameObject>();
+    public List<GameObject> rulePages = new List<GameObject>();
     [SerializeField] private GameObject canvas;
     
-    private int activeInventoryPage = 0;
     private bool isClosed = false;
+    
+    private int activeInventoryPage = 0;
+    private int activeRulePage = 0;
+    
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Q))
@@ -91,5 +96,44 @@ public class RulesManager : MonoBehaviour
         }
     }
     
-    
+    public void AdvanceInRules(int page)
+    {
+        int p = activeRulePage + page;
+        if (rulePages.Count == p)
+        {
+            foreach (GameObject rPage in rulePages)
+            {
+                rPage.GetComponent<RectTransform>().anchoredPosition += new Vector2(2000f * (rulePages.Count - 1), 0);
+                foreach (Slot slot in rPage.GetComponentsInChildren<Slot>())
+                {
+                    slot.anchorPoint += new Vector2(2000f * (rulePages.Count - 1), 0);
+                }
+            }
+            activeRulePage = 0;
+        }
+        else if (p == -1)
+        {
+            foreach (GameObject rPage in rulePages)
+            {
+                rPage.GetComponent<RectTransform>().anchoredPosition += new Vector2(-2000f * (rulePages.Count - 1), 0);
+                foreach (Slot slot in rPage.GetComponentsInChildren<Slot>())
+                {
+                    slot.anchorPoint += new Vector2(-2000f * (rulePages.Count - 1), 0);
+                }
+            }
+            activeRulePage = rulePages.Count - 1;
+        }
+        else
+        {
+            foreach (GameObject rPage in rulePages)
+            {
+                rPage.GetComponent<RectTransform>().anchoredPosition += new Vector2(-page * 2000f, 0);
+                foreach (Slot slot in rPage.GetComponentsInChildren<Slot>())
+                {
+                    slot.anchorPoint += new Vector2(-page * 2000f, 0);
+                }
+            }
+            activeRulePage = p;
+        }
+    }
 }

@@ -16,11 +16,13 @@ public class RulesManagerEditor : Editor
         
         EditorGUILayout.PropertyField(serializedObject.FindProperty("rulePrefab"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("inventorySlotsPrefab"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("rulePagePrefab"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("fat"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("HolderOfSingleTon"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("inventoryKeywords"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("inventoryPages"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("canvas"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("rulePages"));
         
         GUI.enabled = false;
         EditorGUILayout.PropertyField(serializedObject.FindProperty("allRules"));
@@ -43,13 +45,15 @@ public class RulesManagerEditor : Editor
         KeyWord emptyKW = keywords.Find(x => x.type == KeyWordType.None);
         
         //Clear anciennes rules
-        if (instance.allRules.Length != 0)
+        if (instance.allRules.Length != 0 && instance.rulePages.Count != 0)
         {
-            for (int i = 0; i < instance.allRules.Length; i++)
+            for (int i = 0; i < instance.rulePages.Count; i++)
             {
-                if (instance.allRules[i] == null) continue;
-                DestroyImmediate(instance.allRules[i].gameObject);
+                if (instance.rulePages[i].gameObject == null) continue;
+                DestroyImmediate(instance.rulePages[i]);
+                instance.rulePages.RemoveAt(i);
             }
+            instance.rulePages.Clear();
         }
         
         instance.allRules = new Rule[instance.fat.nbRules];
@@ -76,24 +80,30 @@ public class RulesManagerEditor : Editor
                 DestroyImmediate(instance.inventoryPages[i]);
                 instance.inventoryPages.RemoveAt(i);
             }
-            instance.inventoryPages = new List<GameObject>();
+            instance.inventoryPages.Clear();
         }
         
         //Création de Règle
-        for (int i = 0; i < instance.fat.nbRules; i++)
+        int nbRulePages = Mathf.CeilToInt((float)instance.fat.nbRules / 5f);
+        for (int i = 0; i < nbRulePages; i++)
         {
-            GameObject ruleObject = Instantiate(instance.rulePrefab, canvas.transform, false);
-            
-            ruleObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 384 - i * 100);
-            
-            Rule rule = ruleObject.GetComponent<Rule>();
-            for (int j = 0; j < rule.slots.Count; j++)
+            GameObject newRulePage = Instantiate(instance.rulePagePrefab, canvas.transform, false);
+            newRulePage.GetComponent<RectTransform>().anchoredPosition += new Vector2((2000f * i), 0);
+            instance.rulePages.Add(newRulePage);
+            for (int j = i * 5; j < 5 * (i + 1); j++)
             {
-                rule.slots[j].slottedKeyWord = emptyKW;
-                rule.slots[j].anchorPoint = new Vector2(0, 384 - i * 100) + rule.slotsAnchors[j];
+                if (instance.fat.nbRules <= j) break;
+                GameObject ruleObject = Instantiate(instance.rulePrefab, newRulePage.transform, false);
+                ruleObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 384 - (j - (5 * i)) * 100);
+                Rule rule = ruleObject.GetComponent<Rule>();
+                
+                for (int k = 0; k < rule.slots.Count; k++)
+                {
+                    rule.slots[k].slottedKeyWord = emptyKW;
+                    rule.slots[k].anchorPoint = new Vector2(2000f * i, 384 - (j - (5 * i)) * 100) + rule.slotsAnchors[k];
+                }
+                instance.allRules[j] = rule;
             }
-            
-            instance.allRules[i] = rule;
         }
         
         //Création d'Inventaire
