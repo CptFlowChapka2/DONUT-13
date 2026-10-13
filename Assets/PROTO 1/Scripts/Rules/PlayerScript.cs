@@ -18,5 +18,6 @@ public class PlayerScript
         linkedIdentity = new HashSet<IdentityName>();
         actableIdentity = new Dictionary<SerializableType<Functionality>, HashSet<IdentityName>>();
         associatedFunc = new HashSet<SerializableType<Functionality>>();
+        linkedEntities = new HashSet<Entity>();
     }
 }
