@@ -99,13 +99,10 @@ public class StateUpdater : MonoBehaviour
                 {
                     fieldInfo.SetValue(idFunctionalitiesPair.Key,new Dictionary<SerializableType<Functionality>, List<IdentityName>>());
                 }
-                
             }
-
             idFunctionalitiesPair.Key.actableIdentity =
                 new Dictionary<SerializableType<Functionality>, HashSet<IdentityName>>();
         } 
-        
     }
 
     public void UpdateTruth()
@@ -123,25 +120,22 @@ public class StateUpdater : MonoBehaviour
     public void UpdateParamField(IdentityName iname,string name, object value)
     {
         if(name==null)return;
-        Identity key =  functionalityAffectationDictionary.Keys.First(x=>x.name==iname);
+        Identity key = functionalityAffectationDictionary.Keys.First(x=>x.name==iname);
         key.GetType().GetField(name).SetValue(key, value);
     }
 
     public void UpdateActableIdentity(IdentityName iname,SerializableType<Functionality> func,IdentityName toAdd)
     {
-        Identity key =  functionalityAffectationDictionary.Keys.First(x=>x.name==iname);
+        Identity key = functionalityAffectationDictionary.Keys.First(x=>x.name==iname);
         key.actableIdentity.TryAdd(func, new HashSet<IdentityName>());
+        HashSet<IdentityName> beforeUpdate = key.actableIdentity[func];
         key.actableIdentity[func].Add(toAdd);
     }
 
     public void UpdateIdentityFonctionality(IdentityName identityName,Type t)
     {
-        
-          Identity key =  functionalityAffectationDictionary.Keys.First(x=>x.name==identityName);
-          functionalityAffectationDictionary[key].Add(t);
-          
-         
-         
+        Identity key = functionalityAffectationDictionary.Keys.First(x=>x.name==identityName);
+        functionalityAffectationDictionary[key].Add(t);
     }
 }
 

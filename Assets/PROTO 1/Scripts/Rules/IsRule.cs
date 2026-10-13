@@ -4,15 +4,15 @@ using UnityEngine;
 
 public class IsRule : KeywordRule
 {
-    public override void Evaluate(int selfPose, List<Slot> slots, StateUpdater su)
+    public override void Evaluate(int selfPosInRule, List<Slot> slots, StateUpdater su)
     {
-        switch (slots[selfPose+1].slottedKeyWord.type)
+        switch (slots[selfPosInRule+1].slottedKeyWord.type)
         {
             case KeyWordType.Object:
-                EvaluateToObject(slots[selfPose-1].slottedKeyWord,slots[selfPose+1].slottedKeyWord,su);
+                EvaluateToObject(slots[selfPosInRule-1].slottedKeyWord,slots[selfPosInRule+1].slottedKeyWord,su);
                 break;
             case KeyWordType.Parameter:
-                EvaluateToParam(slots[selfPose-1].slottedKeyWord,slots[selfPose+1].slottedKeyWord,su);
+                EvaluateToParam(slots[selfPosInRule-1].slottedKeyWord,slots[selfPosInRule+1].slottedKeyWord,su);
                 break;
             default:
                 throw new ArgumentOutOfRangeException();

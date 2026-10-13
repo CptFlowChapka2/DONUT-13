@@ -6,23 +6,23 @@ using UnityEngine;
 [Serializable]
 public class CanRule : KeywordRule
 {
-    public override void Evaluate(int selfPose, List<Slot> slots,StateUpdater su)
+    public override void Evaluate(int selfPosInRule, List<Slot> slots, StateUpdater su)
     {
-        if(slots[selfPose-1].slottedKeyWord.type==KeyWordType.Player)
+        if(slots[selfPosInRule-1].slottedKeyWord.type==KeyWordType.Player)
         {
-            su.AttributeFunctionalityToPlayer(slots[selfPose+1].slottedKeyWord.functionality);
-            if (slots[selfPose + 1].slottedKeyWord.slotRestriction.authorizedRight.Length != 1)
+            su.AttributeFunctionalityToPlayer(slots[selfPosInRule+1].slottedKeyWord.functionality);
+            if (slots[selfPosInRule + 1].slottedKeyWord.slotRestriction.authorizedRight.Length != 1)
             {
-                su.AttributeActableIdendityToPlayer(slots[selfPose+1].slottedKeyWord.functionality, slots[selfPose+2].slottedKeyWord.IdentityName);
+                su.AttributeActableIdendityToPlayer(slots[selfPosInRule+1].slottedKeyWord.functionality, slots[selfPosInRule+2].slottedKeyWord.IdentityName);
             }
             return;
         }
         
-        su.UpdateIdentityFonctionality(slots[selfPose-1].slottedKeyWord.IdentityName,slots[selfPose+1].slottedKeyWord.functionality);
-        if (slots[selfPose + 1].slottedKeyWord.slotRestriction.authorizedRight.Length != 1)
+        su.UpdateIdentityFonctionality(slots[selfPosInRule-1].slottedKeyWord.IdentityName,slots[selfPosInRule+1].slottedKeyWord.functionality);
+        if (slots[selfPosInRule + 1].slottedKeyWord.slotRestriction.authorizedRight.Length != 1)
         {
-            su.UpdateActableIdentity(slots[selfPose-1].slottedKeyWord.IdentityName,slots[selfPose+1].slottedKeyWord.functionality,
-                slots[selfPose+2].slottedKeyWord.IdentityName);
+            su.UpdateActableIdentity(slots[selfPosInRule-1].slottedKeyWord.IdentityName,slots[selfPosInRule+1].slottedKeyWord.functionality,
+                slots[selfPosInRule+2].slottedKeyWord.IdentityName);
         }
          
     }
@@ -30,7 +30,7 @@ public class CanRule : KeywordRule
 
 public abstract class  KeywordRule : MonoBehaviour
 {
-    public abstract void Evaluate(int selfPose,List<Slot> slots,StateUpdater su);
+    public abstract void Evaluate(int selfPosInRule,List<Slot> slots,StateUpdater su);
 }
 
 
