@@ -38,6 +38,10 @@ Material:
     m_Ints: []
     m_Floats:
     - _Cutoff: 0.5
+    - _FireAttenuation: 0.267
+    - _FlameHeight: 0.302
+    - _FlameStrenght: 0.169
+    - _Float0: 0.2174183
     - _QueueControl: 0
     - _QueueOffset: 0
     - _ReceiveShadows: 1
