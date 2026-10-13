@@ -17,4 +17,5 @@ public class Identity
     [NonSerialized] public HashSet<Entity> linkedEntities = new HashSet<Entity>();
 }
 
-public enum IdentityName{None, Hero, Stone}
+public enum IdentityName
+{None, Hero, Stone,Arrow,Wall,Fire,Monster,Tree}
