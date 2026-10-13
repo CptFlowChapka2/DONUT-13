@@ -12,35 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5335ee69a06eb648bcd47a40cd99175, type: 3}
   m_Name: Setup1
   m_EditorClassIdentifier: Assembly-CSharp::FunctionalityAffectationTable
-  nbRules: 5
+  nbRules: 22
   keyWords:
-  - keyWordPrefab: {fileID: 2489947317198795036, guid: bab1258bed466d74caa2ccb28e4931a4, type: 3}
+  - keyWordPrefab: {fileID: 8212057099510109376, guid: d1d6421f7f2defb41bbfbf988983ff40, type: 3}
     posInRule: {x: 0, y: 0}
   - keyWordPrefab: {fileID: 6694519177231668429, guid: 7ce6c7903cecaa649af5495aad4fa39c, type: 3}
     posInRule: {x: 0, y: 1}
-  - keyWordPrefab: {fileID: 7662214054775781574, guid: 3408ba772332fa941b87dd2ccbbfb18b, type: 3}
+  - keyWordPrefab: {fileID: 4005175882817704156, guid: bfb8e8d93bd1c2c4386ee51b3e27d878, type: 3}
     posInRule: {x: 0, y: 2}
-  - keyWordPrefab: {fileID: 4005175882817704156, guid: bfb8e8d93bd1c2c4386ee51b3e27d878, type: 3}
+  - keyWordPrefab: {fileID: 8212057099510109376, guid: d1d6421f7f2defb41bbfbf988983ff40, type: 3}
     posInRule: {x: 1, y: 0}
-  - keyWordPrefab: {fileID: 6694519177231668429, guid: 7ce6c7903cecaa649af5495aad4fa39c, type: 3}
-    posInRule: {x: 1, y: 1}
-  - keyWordPrefab: {fileID: 1176806059720207555, guid: ac107990dcdb9104c8ab9af01998b2c9, type: 3}
-    posInRule: {x: 1, y: 2}
-  - keyWordPrefab: {fileID: 2489947317198795036, guid: bab1258bed466d74caa2ccb28e4931a4, type: 3}
-    posInRule: {x: 2, y: 0}
-  - keyWordPrefab: {fileID: 6694519177231668429, guid: 7ce6c7903cecaa649af5495aad4fa39c, type: 3}
-    posInRule: {x: 2, y: 1}
-  - keyWordPrefab: {fileID: 1176806059720207555, guid: ac107990dcdb9104c8ab9af01998b2c9, type: 3}
-    posInRule: {x: 2, y: 2}
-  - keyWordPrefab: {fileID: 8212057099510109376, guid: d1d6421f7f2defb41bbfbf988983ff40, type: 3}
-    posInRule: {x: 3, y: 0}
   - keyWordPrefab: {fileID: 9052202851143928193, guid: a552f53a70075774385354bc4d6ac6e9, type: 3}
-    posInRule: {x: 3, y: 1}
+    posInRule: {x: 1, y: 1}
   - keyWordPrefab: {fileID: 4681678756299874669, guid: f2c56d6b222188e449248c9d4d8bb565, type: 3}
-    posInRule: {x: 3, y: 2}
-  - keyWordPrefab: {fileID: 8212057099510109376, guid: d1d6421f7f2defb41bbfbf988983ff40, type: 3}
-    posInRule: {x: 4, y: 0}
-  - keyWordPrefab: {fileID: 6694519177231668429, guid: 7ce6c7903cecaa649af5495aad4fa39c, type: 3}
-    posInRule: {x: 4, y: 1}
-  - keyWordPrefab: {fileID: 4005175882817704156, guid: bfb8e8d93bd1c2c4386ee51b3e27d878, type: 3}
-    posInRule: {x: 4, y: 2}
+    posInRule: {x: 1, y: 2}
