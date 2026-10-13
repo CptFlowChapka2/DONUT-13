@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class Stun : Functionality
 {
-    private float securityDist = 0.1f;
+    private float securityDist = 0.2f;
     public override void OnActivate()
     {
         thisEntity.entityTriggerEvent.AddListener(OnTriggerEvent);

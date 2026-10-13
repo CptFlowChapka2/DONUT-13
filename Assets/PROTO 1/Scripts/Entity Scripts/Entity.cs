@@ -14,6 +14,8 @@ public  class Entity : MonoBehaviour
    public Rigidbody rb;
     
     public bool isStunned = false;
+    private float stunTimerMax = 1f;
+    private float stunTimer = 0f;
 
     public void ReceiveTriggerEvent(int i ,Collider c)
     {
@@ -54,7 +56,17 @@ public  class Entity : MonoBehaviour
 
     private void Update()
     {
-        if (isStunned) return;
+        if (isStunned)
+        {
+            stunTimer += Time.deltaTime;
+            if (stunTimer >= stunTimerMax)
+            {
+                stunTimer = 0f;
+                stunTimerMax = 1f;
+                isStunned = false;
+            }
+            return;
+        }
         foreach (var functionality in allFunctionalitiesRefs.Values)
         {
             if (functionality.enabled) functionality.OnUpdate();
