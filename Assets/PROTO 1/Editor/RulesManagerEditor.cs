@@ -72,8 +72,8 @@ public class RulesManagerEditor : Editor
             for (int i = 0; i < instance.inventoryPages.Count; i++)
             {
                 if (instance.inventoryPages[i].gameObject == null) continue;
-                instance.inventoryPages.RemoveAt(i);
                 DestroyImmediate(instance.inventoryPages[i]);
+                instance.inventoryPages.RemoveAt(i);
             }
             instance.inventoryPages = new List<GameObject>();
         }
