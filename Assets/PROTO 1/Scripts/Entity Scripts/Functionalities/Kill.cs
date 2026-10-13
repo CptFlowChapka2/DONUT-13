@@ -27,6 +27,7 @@ public class Kill : Functionality
             Identity id = e.holderOfSingleTon.stateUpdater.functionalityAffectationDictionary.Keys.First(x => x.name == e.id);
             id.linkedEntities.Remove(e);
             thisEntity.holderOfSingleTon.entityDatabase.allEntities.Remove(e);
+            thisEntity.holderOfSingleTon.stateUpdater.playerScript.linkedEntities.Remove(e);
             Destroy(e.gameObject);
         }
     }

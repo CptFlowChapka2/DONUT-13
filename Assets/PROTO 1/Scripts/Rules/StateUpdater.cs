@@ -26,8 +26,6 @@ public class StateUpdater : MonoBehaviour
                 if (e.id == identity.name) identity.linkedEntities.Add(e);
             }
         }
-        
-        UpdateAllEntitiesFunctionalities();
     }
 
     public void TransformEntitiesToNewIdentity(IdentityName from,IdentityName to)

@@ -33,7 +33,8 @@ public class Spawn : Functionality
             e.id = identities.First();
             Identity id = e.holderOfSingleTon.stateUpdater.functionalityAffectationDictionary.Keys.First(x => x.name == e.id);
             id.linkedEntities.Add(e);
-            e.holderOfSingleTon.stateUpdater.UpdateAllEntitiesFunctionalities();
+            PlayerScript ps = e.holderOfSingleTon.stateUpdater.playerScript; 
+            if (ps.linkedIdentity.Contains(e.id)) ps.linkedEntities.Add(e);
         }
     }
 }

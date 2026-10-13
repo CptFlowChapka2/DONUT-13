@@ -16,5 +16,6 @@ public class Advance : Functionality
     public override void OnUpdate()
     {
         transform.Translate(transform.forward * (Time.deltaTime * speed));
+        //Check out of bounds
     }
 }

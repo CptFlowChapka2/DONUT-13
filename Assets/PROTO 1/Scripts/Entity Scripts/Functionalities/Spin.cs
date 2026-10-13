@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Spin : Functionality
 {
-    private float rotSpeed = 5.0f;
+    private float rotSpeed = 15.0f;
     public override void OnActivate()
     {
         return;

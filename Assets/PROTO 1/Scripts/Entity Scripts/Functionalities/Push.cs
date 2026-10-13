@@ -26,7 +26,7 @@ public class Push : Functionality
         {
             Vector3 distBeetween = other.transform.position - transform.position;
             //if il n'y a pas le bord de la map juste après l'objet:
-            other.gameObject.GetComponentInParent<Transform>().position = transform.position + distBeetween.normalized * securityDist;
+            other.gameObject.transform.parent.position = transform.position + distBeetween.normalized * securityDist;
         }
     }
 }

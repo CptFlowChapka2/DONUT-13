@@ -19,9 +19,14 @@ public  class Entity : MonoBehaviour
 
     private void Start()
     {
+        Identity identity = holderOfSingleTon.stateUpdater.functionalityAffectationDictionary.Keys.First(x => x.name == id);
         foreach (Functionality component in gameObject.GetComponents<Functionality>())
         {
            allFunctionalitiesRefs.TryAdd(component.GetType(), component);
+        }
+        foreach (Type type in allFunctionalitiesRefs.Keys)
+        {
+            SetComponentEnable(type, holderOfSingleTon.stateUpdater.functionalityAffectationDictionary[identity].Contains(type));
         }
         rendererAndPhysic.ForcefullUpdateOfRenderParms();
     }
