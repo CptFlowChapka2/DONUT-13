@@ -42,12 +42,6 @@ MonoBehaviour:
     posInRule: {x: 3, y: 2}
   - keyWordPrefab: {fileID: 2489947317198795036, guid: 1481289cb84349a458b2c147083d897d, type: 3}
     posInRule: {x: 3, y: 3}
-  - keyWordPrefab: {fileID: 4005175882817704156, guid: bfb8e8d93bd1c2c4386ee51b3e27d878, type: 3}
-    posInRule: {x: 4, y: 0}
-  - keyWordPrefab: {fileID: 9052202851143928193, guid: a552f53a70075774385354bc4d6ac6e9, type: 3}
-    posInRule: {x: 4, y: 1}
-  - keyWordPrefab: {fileID: 4681678756299874669, guid: 59d6688a43e5f8d41bf03f35a7c3ebb6, type: 3}
-    posInRule: {x: 4, y: 2}
   - keyWordPrefab: {fileID: 2489947317198795036, guid: 1481289cb84349a458b2c147083d897d, type: 3}
     posInRule: {x: 5, y: 0}
   - keyWordPrefab: {fileID: 9052202851143928193, guid: a552f53a70075774385354bc4d6ac6e9, type: 3}
@@ -166,9 +160,3 @@ MonoBehaviour:
     posInRule: {x: 20, y: 1}
   - keyWordPrefab: {fileID: 4681678756299874669, guid: 4ee7cb2a54ca21b409cff52431575358, type: 3}
     posInRule: {x: 20, y: 2}
-  - keyWordPrefab: {fileID: 2489947317198795036, guid: bab1258bed466d74caa2ccb28e4931a4, type: 3}
-    posInRule: {x: 21, y: 0}
-  - keyWordPrefab: {fileID: 9052202851143928193, guid: a552f53a70075774385354bc4d6ac6e9, type: 3}
-    posInRule: {x: 21, y: 1}
-  - keyWordPrefab: {fileID: 4681678756299874669, guid: 59d6688a43e5f8d41bf03f35a7c3ebb6, type: 3}
-    posInRule: {x: 21, y: 2}

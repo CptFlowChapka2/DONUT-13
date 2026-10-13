@@ -15,7 +15,7 @@ public class Advance : Functionality
 
     public override void OnUpdate()
     {
-        transform.Translate(transform.forward * (Time.deltaTime * speed));
+        thisEntity.rb.MovePosition(thisEntity.rb.position+ transform.forward * (Time.fixedDeltaTime * speed));
         //Check out of bounds
     }
 }

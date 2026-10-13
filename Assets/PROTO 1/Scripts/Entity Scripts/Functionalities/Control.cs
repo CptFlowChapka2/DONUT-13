@@ -20,6 +20,6 @@ public class Control : Functionality
     public override void OnUpdate()
     {
         inputThisFrame = holderOfSingleTon.inputManager.inputsThisFrame;
-        transform.Translate(inputThisFrame * (Time.deltaTime * moveSpeed));
+        thisEntity.rb.MovePosition(thisEntity.rb.position+inputThisFrame * (Time.fixedDeltaTime * moveSpeed));
     }
 }

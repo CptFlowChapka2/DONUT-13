@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Events;
 
 public  class Entity : MonoBehaviour
 {
@@ -9,9 +10,16 @@ public  class Entity : MonoBehaviour
     public RendererAndPhysic rendererAndPhysic;
     public HolderOfSingleTon holderOfSingleTon;
     public Dictionary<Type, Functionality> allFunctionalitiesRefs = new Dictionary<Type, Functionality>();
+   [NonSerialized]public UnityEvent<int,Collider> entityTriggerEvent = new UnityEvent<int,Collider>();
+   public Rigidbody rb;
     
     public bool isStunned = false;
 
+    public void ReceiveTriggerEvent(int i ,Collider c)
+    {
+        entityTriggerEvent.Invoke(i,c);
+    }
+    
     private void Awake()
     {
         holderOfSingleTon.entityDatabase.allEntities.Add(this);

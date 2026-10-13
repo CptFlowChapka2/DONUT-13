@@ -15,6 +15,7 @@ public class Spin : Functionality
 
     public override void OnUpdate()
     {
-        transform.Rotate(transform.up, Time.deltaTime * rotSpeed);
+       
+        thisEntity.rb.MoveRotation(thisEntity.rb.rotation * Quaternion.AngleAxis(Time.deltaTime * rotSpeed,transform.up));
     }
 }

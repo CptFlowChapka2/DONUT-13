@@ -15,5 +15,6 @@ public class RendererAndPhysic : MonoBehaviour
         DestroyImmediate(appearance.gameObject);
         appearance = Instantiate(id.appearence, transform, false);
         appearance.transform.localPosition = Vector3.zero;
+        appearance.GetComponent<ColiderScript>().colliderTriggerEvent.AddListener(thisEntity.ReceiveTriggerEvent);
     }
 }

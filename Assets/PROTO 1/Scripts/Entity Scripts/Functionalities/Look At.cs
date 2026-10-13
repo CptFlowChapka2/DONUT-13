@@ -15,6 +15,9 @@ public class LookAt : Functionality
 
     public override void OnUpdate()
     {
-        transform.LookAt(GetPositionOfNearestEntityToActOn(this));
+
+        Vector3 v = GetPositionOfNearestEntityToActOn(this);
+        if(v == transform.position)return;
+        transform.rotation= Quaternion.LookRotation((v - transform.position).normalized);
     }
 }

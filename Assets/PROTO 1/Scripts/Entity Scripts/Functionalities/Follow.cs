@@ -16,6 +16,7 @@ public class Follow : Functionality
     public override void OnUpdate()
     {
         Vector3 target = GetPositionOfNearestEntityToActOn(this);
-        transform.Translate((target - transform.position).normalized * (Time.deltaTime * speed));
+        if(target==Vector3.zero)return;
+        thisEntity.rb.MovePosition(thisEntity.rb.position+ (target - transform.position).normalized * (Time.deltaTime * speed));
     }
 }

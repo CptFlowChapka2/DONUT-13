@@ -28,6 +28,7 @@ public class Spawn : Functionality
             t = 0;
             //C'est si moche
             HashSet<IdentityName> identities = GetIdsToActOn(this);
+            if(identities == null) return;
             GameObject prefab = Instantiate(prefabToSpawn, transform.position + (transform.forward * distToSpawn), transform.rotation);
             Entity e = prefab.GetComponent<Entity>();
             e.id = identities.First();

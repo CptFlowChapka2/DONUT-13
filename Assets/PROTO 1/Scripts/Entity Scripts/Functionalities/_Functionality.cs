@@ -15,12 +15,17 @@ public abstract class Functionality : MonoBehaviour
         Identity id =
             thisEntity.holderOfSingleTon.stateUpdater.functionalityAffectationDictionary.Keys.First(x =>
                 x.name == thisEntity.id);
+        if (!id.actableIdentity.Keys.Contains(functionality.GetType()))
+        {
+            return null;
+        }
         return id.actableIdentity[functionality.GetType()];
     }
 
     protected Vector3 GetPositionOfNearestEntityToActOn(Functionality functionality)
     {
         HashSet<IdentityName> identities = GetIdsToActOn(functionality);
+        if(identities == null) return transform.position;
         if (identities.Count == 0) return transform.position;
         Vector3 target = new Vector3(Mathf.Infinity, 0, Mathf.Infinity);
         foreach (Entity e in thisEntity.holderOfSingleTon.entityDatabase.allEntities)
@@ -38,6 +43,7 @@ public abstract class Functionality : MonoBehaviour
     protected bool AppliableOnTheTriggeringEntity(Functionality functionality, Collider other)
     {
         HashSet<IdentityName> identities = GetIdsToActOn(functionality);
+        if(identities == null) return false;
         return identities.Contains(other.gameObject.GetComponentInParent<Entity>().id);
     }
 }

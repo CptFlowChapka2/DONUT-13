@@ -4,15 +4,15 @@ using UnityEngine;
 
 public class Push : Functionality
 {
-    private float securityDist = 5.0f;
+    private float securityDist = 0.1f;
     public override void OnActivate()
     {
-        return;
+        thisEntity.entityTriggerEvent.AddListener(OnTriggerEvent);
     }
 
     public override void OnDeActivate()
     {
-        return;
+        thisEntity.entityTriggerEvent.RemoveListener(OnTriggerEvent);
     }
 
     public override void OnUpdate()
@@ -20,13 +20,17 @@ public class Push : Functionality
         return;
     }
     
-    private void OnTriggerStay(Collider other)
+    
+    public void OnTriggerEvent(int i, Collider c)
     {
-        if (AppliableOnTheTriggeringEntity(this, other))
+        if (i == 1)
         {
-            Vector3 distBeetween = other.transform.position - transform.position;
-            //if il n'y a pas le bord de la map juste après l'objet:
-            other.gameObject.transform.parent.position = transform.position + distBeetween.normalized * securityDist;
+            if (AppliableOnTheTriggeringEntity(this, c))
+            {
+                Vector3 distBeetween = c.transform.position - transform.position;
+                //if il n'y a pas le bord de la map juste après l'objet:
+                c.attachedRigidbody.MovePosition(c.attachedRigidbody.position+ distBeetween.normalized * securityDist);
+            }
         }
     }
 }

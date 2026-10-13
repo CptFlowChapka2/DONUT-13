@@ -6,12 +6,12 @@ public class Kill : Functionality
 {
     public override void OnActivate()
     {
-        return;
+        thisEntity.entityTriggerEvent.AddListener(OnTriggerEvent);
     }
 
     public override void OnDeActivate()
     {
-        return;
+        thisEntity.entityTriggerEvent.RemoveListener(OnTriggerEvent);
     }
 
     public override void OnUpdate()
@@ -19,16 +19,22 @@ public class Kill : Functionality
         return;
     }
     
-    private void OnTriggerEnter(Collider other)
+    
+
+    public void OnTriggerEvent(int i, Collider c)
     {
-        if (AppliableOnTheTriggeringEntity(this, other))
+        if (i == 0)
         {
-            Entity e = other.gameObject.GetComponent<Entity>();
-            Identity id = e.holderOfSingleTon.stateUpdater.functionalityAffectationDictionary.Keys.First(x => x.name == e.id);
-            id.linkedEntities.Remove(e);
-            thisEntity.holderOfSingleTon.entityDatabase.allEntities.Remove(e);
-            thisEntity.holderOfSingleTon.stateUpdater.playerScript.linkedEntities.Remove(e);
-            Destroy(e.gameObject);
+            if (AppliableOnTheTriggeringEntity(this, c))
+            {
+               
+                Entity e = c.gameObject.GetComponentInParent<Entity>();
+                Identity id = e.holderOfSingleTon.stateUpdater.functionalityAffectationDictionary.Keys.First(x => x.name == e.id);
+                id.linkedEntities.Remove(e);
+                thisEntity.holderOfSingleTon.entityDatabase.allEntities.Remove(e);
+                thisEntity.holderOfSingleTon.stateUpdater.playerScript.linkedEntities.Remove(e);
+                Destroy(e.gameObject);
+            }
         }
     }
 }
