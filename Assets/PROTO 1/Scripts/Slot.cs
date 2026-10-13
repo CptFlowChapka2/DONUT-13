@@ -44,13 +44,11 @@ public class Slot : MonoBehaviour
 
     public void WhenMouseEnter()
     {
-        Debug.Log("Hi " + name);
         interactionManager.highlightedSlot = this;
     }
 
     public void WhenMouseExit()
     {
-        Debug.Log("Bye " + name);
         interactionManager.highlightedSlot = null;
     }
 }

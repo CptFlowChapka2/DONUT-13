@@ -12,6 +12,8 @@ public class RulesManager : MonoBehaviour
     public AllInventoryKeyWords inventoryKeywords;
     public List<GameObject> inventoryPages = new List<GameObject>();
     
+    private int activeInventoryPage = 0;
+    
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Q))
@@ -31,5 +33,46 @@ public class RulesManager : MonoBehaviour
             rule.Evaluate(HolderOfSingleTon.stateUpdater);
         }
         HolderOfSingleTon.stateUpdater.UpdateTruth();
+    }
+
+    public void AdvanceInInventory(int page)
+    {
+        int p = activeInventoryPage + page;
+        if (p == 3)
+        {
+            foreach (GameObject invPage in inventoryPages)
+            {
+                invPage.GetComponent<RectTransform>().anchoredPosition += new Vector2(page * 4000f, 0);
+                foreach (Slot slot in invPage.GetComponentsInChildren<Slot>())
+                {
+                    slot.anchorPoint += new Vector2(4000f, 0);
+                }
+            }
+            activeInventoryPage = 0;
+        }
+        else if (p == -1)
+        {
+            foreach (GameObject invPage in inventoryPages)
+            {
+                invPage.GetComponent<RectTransform>().anchoredPosition += new Vector2(-4000f, 0);
+                foreach (Slot slot in invPage.GetComponentsInChildren<Slot>())
+                {
+                    slot.anchorPoint += new Vector2(-4000f, 0);
+                }
+            }
+            activeInventoryPage = inventoryPages.Count - 1;
+        }
+        else
+        {
+            foreach (GameObject invPage in inventoryPages)
+            {
+                invPage.GetComponent<RectTransform>().anchoredPosition += new Vector2(-page * 2000f, 0);
+                foreach (Slot slot in invPage.GetComponentsInChildren<Slot>())
+                {
+                    slot.anchorPoint += new Vector2(-page * 2000f, 0);
+                }
+            }
+            activeInventoryPage = p;
+        }
     }
 }
