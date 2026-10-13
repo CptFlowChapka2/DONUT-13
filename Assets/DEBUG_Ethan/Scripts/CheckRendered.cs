@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class CheckRendered : MonoBehaviour
 {
-    // public Renderer selfRenderer;
     public Transform target;
     private Camera playerCam;
 
@@ -15,13 +14,12 @@ public class CheckRendered : MonoBehaviour
 
     void Update()
     {
+        Debug.DrawRay(transform.position, (target.position - transform.position), Color.blue);
+        
         if (IsVisible())
         {
-            if (Physics.Raycast(transform.position, target.position, out RaycastHit hit))
+            if (Physics.Raycast(transform.position, (target.position - transform.position), out RaycastHit hit))
             {
-                Debug.Log(hit.collider.tag);
-                Debug.DrawRay(transform.position, target.position, Color.blue);
-                
                 if(hit.collider.CompareTag("Target"))
                     Debug.Log("Visible");
                 
