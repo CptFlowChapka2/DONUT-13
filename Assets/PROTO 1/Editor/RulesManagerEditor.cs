@@ -20,6 +20,7 @@ public class RulesManagerEditor : Editor
         EditorGUILayout.PropertyField(serializedObject.FindProperty("HolderOfSingleTon"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("inventoryKeywords"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("inventoryPages"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("canvas"));
         
         GUI.enabled = false;
         EditorGUILayout.PropertyField(serializedObject.FindProperty("allRules"));

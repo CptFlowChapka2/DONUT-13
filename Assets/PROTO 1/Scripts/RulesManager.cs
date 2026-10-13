@@ -11,9 +11,10 @@ public class RulesManager : MonoBehaviour
     public Rule[] allRules;
     public AllInventoryKeyWords inventoryKeywords;
     public List<GameObject> inventoryPages = new List<GameObject>();
+    [SerializeField] private GameObject canvas;
     
     private int activeInventoryPage = 0;
-    
+    private bool isClosed = false;
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Q))
@@ -75,4 +76,20 @@ public class RulesManager : MonoBehaviour
             activeInventoryPage = p;
         }
     }
+
+    public void CloseCanvas()
+    {
+        if (!isClosed)
+        {
+            canvas.SetActive(false);
+            isClosed = true;
+        }
+        else
+        {
+            canvas.SetActive(true);
+            isClosed = false;
+        }
+    }
+    
+    
 }
