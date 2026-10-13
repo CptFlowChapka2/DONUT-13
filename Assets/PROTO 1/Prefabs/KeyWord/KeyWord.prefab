@@ -263,4 +263,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::KeyWord
   type: 0
-  referencedObjects: []
+  IdentityName: 0
+  verb: {fileID: 0}
+  slotRestriction:
+    authorizedleft: 
+    authorizedRight: 
+  paramValuePair:
+    name: 
+    value: 0
+  functionality:
+    data: /w==

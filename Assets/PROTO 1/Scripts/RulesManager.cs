@@ -10,6 +10,7 @@ public class RulesManager : MonoBehaviour
     public HolderOfSingleTon HolderOfSingleTon;
     public Rule[] allRules;
     public AllInventoryKeyWords inventoryKeywords;
+    public List<GameObject> inventoryPages = new List<GameObject>();
     
     private void Update()
     {

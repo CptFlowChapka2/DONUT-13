@@ -9,9 +9,6 @@ public class Identity
     public IdentityName name = IdentityName.None;
     [SerializeField] public GameObject appearence;
     
-    [Header("Initial Parameters")]
-    public bool blue = false;
-    public bool red = false;
     [NonSerialized] public Dictionary<SerializableType<Functionality>, HashSet<IdentityName>> actableIdentity = 
         new Dictionary<SerializableType<Functionality>, HashSet<IdentityName>>();
     

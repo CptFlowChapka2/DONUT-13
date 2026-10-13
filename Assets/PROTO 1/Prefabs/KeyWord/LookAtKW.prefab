@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1001 &3479465915176562977
+--- !u!1001 &949911384188312013
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -90,59 +90,39 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5608786216022177952, guid: 790cc45ac8f3e134f9f65e01ad73f07b, type: 3}
       propertyPath: m_Name
-      value: CanKW
+      value: LookAtKW
       objectReference: {fileID: 0}
     - target: {fileID: 5853018950844630564, guid: 790cc45ac8f3e134f9f65e01ad73f07b, type: 3}
       propertyPath: type
-      value: 4
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 5853018950844630564, guid: 790cc45ac8f3e134f9f65e01ad73f07b, type: 3}
-      propertyPath: verb
-      value: 
-      objectReference: {fileID: 3618278971758426680}
-    - target: {fileID: 5853018950844630564, guid: 790cc45ac8f3e134f9f65e01ad73f07b, type: 3}
-      propertyPath: slotRestriction.authorizedleft.Array.size
-      value: 3
+      propertyPath: functionality.data
+      value: AE5Mb29rQXQsIEFzc2VtYmx5LUNTaGFycCwgVmVyc2lvbj0wLjAuMC4wLCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPW51bGw=
       objectReference: {fileID: 0}
     - target: {fileID: 5853018950844630564, guid: 790cc45ac8f3e134f9f65e01ad73f07b, type: 3}
       propertyPath: slotRestriction.authorizedRight.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5853018950844630564, guid: 790cc45ac8f3e134f9f65e01ad73f07b, type: 3}
-      propertyPath: 'slotRestriction.authorizedleft.Array.data[0]'
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5853018950844630564, guid: 790cc45ac8f3e134f9f65e01ad73f07b, type: 3}
-      propertyPath: 'slotRestriction.authorizedleft.Array.data[1]'
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5853018950844630564, guid: 790cc45ac8f3e134f9f65e01ad73f07b, type: 3}
-      propertyPath: 'slotRestriction.authorizedleft.Array.data[2]'
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 5853018950844630564, guid: 790cc45ac8f3e134f9f65e01ad73f07b, type: 3}
-      propertyPath: 'slotRestriction.authorizedRight.Array.data[0]'
-      value: 3
+      propertyPath: 'slotRestriction.authorizedRight.Array.data[1]'
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7952006532738152098, guid: 790cc45ac8f3e134f9f65e01ad73f07b, type: 3}
       propertyPath: m_Color.b
-      value: 0.07523346
-      objectReference: {fileID: 0}
-    - target: {fileID: 7952006532738152098, guid: 790cc45ac8f3e134f9f65e01ad73f07b, type: 3}
-      propertyPath: m_Color.g
-      value: 0
+      value: 0.672947
       objectReference: {fileID: 0}
     - target: {fileID: 7952006532738152098, guid: 790cc45ac8f3e134f9f65e01ad73f07b, type: 3}
       propertyPath: m_Color.r
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8234094717366400821, guid: 790cc45ac8f3e134f9f65e01ad73f07b, type: 3}
       propertyPath: m_text
-      value: CAN
+      value: Look At
       objectReference: {fileID: 0}
     - target: {fileID: 8234094717366400821, guid: 790cc45ac8f3e134f9f65e01ad73f07b, type: 3}
       propertyPath: m_fontColor.b
-      value: 0
+      value: 0.038582325
       objectReference: {fileID: 0}
     - target: {fileID: 8234094717366400821, guid: 790cc45ac8f3e134f9f65e01ad73f07b, type: 3}
       propertyPath: m_fontColor.g
@@ -150,34 +130,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8234094717366400821, guid: 790cc45ac8f3e134f9f65e01ad73f07b, type: 3}
       propertyPath: m_fontColor.r
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8234094717366400821, guid: 790cc45ac8f3e134f9f65e01ad73f07b, type: 3}
       propertyPath: m_fontColor32.rgba
-      value: 4278190080
+      value: 4278845695
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 5608786216022177952, guid: 790cc45ac8f3e134f9f65e01ad73f07b, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 3618278971758426680}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 790cc45ac8f3e134f9f65e01ad73f07b, type: 3}
---- !u!1 &9052202851143928193 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5608786216022177952, guid: 790cc45ac8f3e134f9f65e01ad73f07b, type: 3}
-  m_PrefabInstance: {fileID: 3479465915176562977}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &3618278971758426680
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9052202851143928193}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 627358350da356146826a1c11d028f28, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CanRule
