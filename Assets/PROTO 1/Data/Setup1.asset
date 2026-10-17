@@ -160,3 +160,9 @@ MonoBehaviour:
     posInRule: {x: 20, y: 1}
   - keyWordPrefab: {fileID: 4681678756299874669, guid: 4ee7cb2a54ca21b409cff52431575358, type: 3}
     posInRule: {x: 20, y: 2}
+  - keyWordPrefab: {fileID: 2489947317198795036, guid: 1481289cb84349a458b2c147083d897d, type: 3}
+    posInRule: {x: 21, y: 0}
+  - keyWordPrefab: {fileID: 6694519177231668429, guid: 7ce6c7903cecaa649af5495aad4fa39c, type: 3}
+    posInRule: {x: 21, y: 1}
+  - keyWordPrefab: {fileID: 2489947317198795036, guid: 106cd9bc0ad05434cb73411457496d6d, type: 3}
+    posInRule: {x: 21, y: 2}
