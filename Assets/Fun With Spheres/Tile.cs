@@ -22,23 +22,36 @@ public class Tile : MonoBehaviour
         meshRenderer.enabled = false;
     }
 
-    // private void OnMouseEnter()
-    // {
-    //     if (isSingularity)
-    //     {
-    //         meshRenderer.enabled = true;
-    //     }
-    //     meshRenderer.material.color = Color.blue;
-    // }
-    //
-    // private void OnMouseExit()
-    // {
-    //     if (isSingularity)
-    //     {
-    //         meshRenderer.enabled = false;
-    //     }
-    //     meshRenderer.material.color = color;
-    // }
+    private void OnMouseEnter()
+    {
+        if (isSingularity) return;
+        latitude.worldGenerator.gameManager.hoveredTile = this;
+        Color meshColor = meshRenderer.material.color;
+        meshColor = new Color(meshColor.r, meshColor.g, 0, meshColor.a);
+        meshRenderer.material.color = meshColor;
+    }
+    
+    private void OnMouseExit()
+    {
+        if (isSingularity) return;
+        clicking = false;
+        latitude.worldGenerator.gameManager.hoveredTile = null;
+        Color meshColor = meshRenderer.material.color;
+        meshColor = new Color(meshColor.r, meshColor.g, 1, meshColor.a);
+        meshRenderer.material.color = meshColor;
+    }
+
+    private bool clicking = false;
+    private void OnMouseDown()
+    {
+        clicking = true;
+    }
+
+    private void OnMouseUp()
+    {
+        if (!clicking) return;
+        latitude.worldGenerator.gameManager.OnClick();
+    }
 }
 
 public struct RelativeTile

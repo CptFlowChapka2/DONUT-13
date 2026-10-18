@@ -1,34 +1,53 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class GameManager : MonoBehaviour
 {
     [SerializeField] private WorldGenerator worldGenerator;
     [SerializeField] private Vector2 testCoords;
+    
+    public Tile selectedTile;
+    public Tile hoveredTile;
 
-    private void Start()
+    #region Débug visuel des cases proches
+
+    public void DrawNearbyTiles(Vector2 coords, bool draw = true)
     {
-        HashSet<RelativeTile> tiles = new HashSet<RelativeTile>();
-        HashSet<RelativeTile> tiles2 = new HashSet<RelativeTile>();
+        HashSet<RelativeTile> tiles = GetTilesOnLatitude(coords);
+        HashSet<RelativeTile> tiles2 = GetTilesOnLongitude(coords);
         
-        tiles = GetTilesOnLatitude(testCoords);
-        foreach (RelativeTile tile in tiles)
+        foreach (RelativeTile rTile in tiles)
         {
-            tile.tile.meshRenderer.material.color = new Color(((float)tile.orthogonalDistance/10f), ((float)tile.orthogonalDistance/10f), 1, 1);
-            if (!tile.tile.isSingularity) continue;
-            tile.tile.meshRenderer.enabled = true;
+            DrawTile(draw, rTile);
         }
         
-        tiles2 = GetTilesOnLongitude(testCoords);
-        foreach (RelativeTile tile in tiles2)
+        foreach (RelativeTile rTile in tiles2)
         {
-            tile.tile.meshRenderer.material.color = new Color(((float)tile.orthogonalDistance/10f), ((float)tile.orthogonalDistance/10f), 1, 1);
-            if (!tile.tile.isSingularity) continue;
-            tile.tile.meshRenderer.enabled = true;
+            DrawTile(draw, rTile);
         }
     }
+
+    public void DrawTile(bool draw, RelativeTile rTile)
+    {
+        if (draw)
+        {
+            rTile.tile.meshRenderer.material.color = new Color(((float)rTile.orthogonalDistance/10f), ((float)rTile.orthogonalDistance/10f), 1, 1);
+            if (!rTile.tile.isSingularity) return;
+            rTile.tile.meshRenderer.enabled = true;
+        }
+        else
+        {
+            rTile.tile.meshRenderer.material.color = Color.white;
+            if (!rTile.tile.isSingularity) return;
+            rTile.tile.meshRenderer.enabled = false;
+        }
+    }
+
+    #endregion
 
     public HashSet<RelativeTile> GetTilesOnLatitude(Vector2 coordinates)
     {
@@ -38,7 +57,7 @@ public class GameManager : MonoBehaviour
             if ((int)pair.Key.y % 8 != (int)coordinates.y % 8) continue;
             RelativeTile rTiles = new RelativeTile();
             rTiles.tile = pair.Value;
-            rTiles.orthogonalDistance = GetOrthogonalDistanceToTile(testCoords, pair.Value);
+            rTiles.orthogonalDistance = GetOrthogonalDistanceToTile(coordinates, pair.Value);
             concernedTiles.Add(rTiles);
         }
         return concernedTiles;
@@ -52,7 +71,7 @@ public class GameManager : MonoBehaviour
             if ((int)pair.Key.x != (int)coordinates.x) continue;
             RelativeTile rTiles = new RelativeTile();
             rTiles.tile = pair.Value;
-            rTiles.orthogonalDistance = GetOrthogonalDistanceToTile(testCoords, pair.Value);
+            rTiles.orthogonalDistance = GetOrthogonalDistanceToTile(coordinates, pair.Value);
             concernedTiles.Add(rTiles);
         }
         return concernedTiles;
@@ -76,5 +95,17 @@ public class GameManager : MonoBehaviour
             
         Debug.Log("Invalid Tile! It's not orthogonally connected to the studied tile!");
         return -1;
-    }  
+    }
+
+    public void OnClick()
+    {
+        if (hoveredTile == null) return;
+        if (selectedTile != null)
+        {
+            DrawNearbyTiles(selectedTile.coords, false);
+        }
+
+        selectedTile = hoveredTile;
+        DrawNearbyTiles(selectedTile.coords);
+    }
 }
