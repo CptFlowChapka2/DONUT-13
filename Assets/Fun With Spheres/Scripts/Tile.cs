@@ -5,13 +5,20 @@ using UnityEngine;
 
 public class Tile : MonoBehaviour
 {
+    #region Setup
+
     public Latitude latitude;
     public Vector2 coords = new Vector2(0, 0);
     public Color color;
     public MeshRenderer meshRenderer;
-    private Vector3 center;
+    public Vector3 center;
     public bool isSingularity = false;
 
+    #endregion
+
+    public Pawn pawnOnThisTile;
+    public bool isSelectable = true;
+    
     private void Start()
     {
         meshRenderer = GetComponent<MeshRenderer>();
@@ -19,43 +26,42 @@ public class Tile : MonoBehaviour
         meshRenderer.material.color = color;
 
         if (!isSingularity) return;
+        isSelectable = false;
         meshRenderer.enabled = false;
     }
 
-    private void OnMouseEnter()
+    private void HoverColoring(bool on = true)
     {
-        if (isSingularity) return;
         latitude.worldGenerator.gameManager.hoveredTile = this;
         Color meshColor = meshRenderer.material.color;
-        meshColor = new Color(meshColor.r, meshColor.g, 0, meshColor.a);
+        if (on) meshColor = new Color(meshColor.r, meshColor.g, 0, meshColor.a);
+        else meshColor = new Color(meshColor.r, meshColor.g, 1, meshColor.a);
         meshRenderer.material.color = meshColor;
     }
     
+    private void OnMouseEnter()
+    {
+        if (!isSelectable) return;
+        HoverColoring();
+    }
+
     private void OnMouseExit()
     {
-        if (isSingularity) return;
+        if (!isSelectable) return;
         clicking = false;
-        latitude.worldGenerator.gameManager.hoveredTile = null;
-        Color meshColor = meshRenderer.material.color;
-        meshColor = new Color(meshColor.r, meshColor.g, 1, meshColor.a);
-        meshRenderer.material.color = meshColor;
+        HoverColoring(false);
     }
 
     private bool clicking = false;
     private void OnMouseDown()
     {
+        if (!isSelectable) return;
         clicking = true;
     }
 
     private void OnMouseUp()
     {
-        if (!clicking) return;
-        latitude.worldGenerator.gameManager.OnClick();
+        if (!clicking || !isSelectable) return;
+        latitude.worldGenerator.gameManager.OnClick(this);
     }
-}
-
-public struct RelativeTile
-{
-    public Tile tile;
-    public int orthogonalDistance;
 }

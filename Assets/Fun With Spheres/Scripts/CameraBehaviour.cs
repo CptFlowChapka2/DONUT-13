@@ -23,18 +23,18 @@ public class CameraBehaviour : MonoBehaviour
     
     private void Move()
     {
-        if (Input.GetMouseButtonDown(2))
+        if (Input.GetMouseButtonDown(2) || Input.GetMouseButtonDown(1))
         {
             previousPosition = Input.mousePosition;
             return;
         }
-        if (Input.GetMouseButtonUp(2))
+        if (Input.GetMouseButtonUp(2) || Input.GetMouseButtonUp(1))
         {
             previousPosition = Vector2.zero;
             return;
         }
 
-        if (Input.GetMouseButton(2))
+        if (Input.GetMouseButton(2) || Input.GetMouseButton(1))
         {
             Vector2 nextPosition = Input.mousePosition;
             Vector2 delta = nextPosition - previousPosition;
