@@ -20,29 +20,26 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        List<Tile> availableTiles = new List<Tile>();
+        SpawnXPawnsPerPlayer(3);
         foreach (Tile tile in worldGenerator.tiles.Values)
         {
-            if (!tile.isSingularity)
+            int rand = Random.Range(0, 4);
+            switch (rand)
             {
-                availableTiles.Add(tile);
+                case 0:
+                    tile.color = Color.aquamarine;
+                    break;
+                case 1:
+                    tile.color = Color.blanchedAlmond;
+                    break;
+                case 2:
+                    tile.color = Color.dodgerBlue;
+                    break;
+                case 3:
+                    tile.color = Color.indianRed;
+                    break;
             }
-        }
-        
-        for (int i = 0; i < 6; i++)
-        {
-            int rand = Random.Range(0, availableTiles.Count);
-            
-            if (i < 3)
-            {
-                SpawnPawnOnTile(testPawn1, availableTiles[rand]);
-            }
-            else
-            {
-                SpawnPawnOnTile(testPawn2, availableTiles[rand]);
-            }
-
-            availableTiles.Remove(availableTiles[rand]);
+            tile.ChangeColor(tile.color);
         }
     }
 
@@ -67,7 +64,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            tile.meshRenderer.material.color = Color.white;
+            tile.meshRenderer.material.color = tile.color;
             if (!tile.isSingularity) return;
             tile.meshRenderer.enabled = false;
         }
@@ -140,6 +137,54 @@ public class GameManager : MonoBehaviour
     
     #endregion
     
+    #region Management des pions
+
+    private void SpawnXPawnsPerPlayer(int number)
+    {
+        List<Tile> availableTiles = new List<Tile>();
+        foreach (Tile tile in worldGenerator.tiles.Values)
+        {
+            if (!tile.isSingularity)
+            {
+                availableTiles.Add(tile);
+            }
+        }
+        
+        for (int i = 0; i < number * 2; i++)
+        {
+            int rand = Random.Range(0, availableTiles.Count);
+            
+            if (i < number)
+            {
+                SpawnPawnOnTile(testPawn1, availableTiles[rand]);
+            }
+            else
+            {
+                SpawnPawnOnTile(testPawn2, availableTiles[rand]);
+            }
+
+            availableTiles.Remove(availableTiles[rand]);
+        }
+    }
+    
+    public void SpawnPawnOnTile(GameObject prefab, Tile tile)
+    {
+        GameObject pawn = Instantiate(prefab, tile.center, Quaternion.identity);
+        pawn.transform.up = tile.center.normalized;
+        tile.pawnOnThisTile = pawn.GetComponent<Pawn>();
+    }
+    
+    private void MovePawnToTile(Tile origin, Tile target)
+    {
+        target.pawnOnThisTile = origin.pawnOnThisTile;
+        origin.pawnOnThisTile = null;
+        Transform pawnTransform = target.pawnOnThisTile.gameObject.transform;
+        pawnTransform.position = target.center;
+        pawnTransform.up = target.center.normalized;
+    }
+
+    #endregion
+    
     public void OnClick(Tile tile)
     {
         if (hoveredTile == null) return;
@@ -182,20 +227,6 @@ public class GameManager : MonoBehaviour
         }
     }
     
-    public void SpawnPawnOnTile(GameObject prefab, Tile tile)
-    {
-        GameObject pawn = Instantiate(prefab, tile.center, Quaternion.identity);
-        pawn.transform.up = tile.center.normalized;
-        tile.pawnOnThisTile = pawn.GetComponent<Pawn>();
-    }
-    
-    private void MovePawnToTile(Tile origin, Tile target)
-    {
-        target.pawnOnThisTile = origin.pawnOnThisTile;
-        Transform pawnTransform = target.pawnOnThisTile.gameObject.transform;
-        pawnTransform.position = target.center;
-        pawnTransform.up = target.center.normalized;
-    }
     
     private void SwitchTurn()
     {

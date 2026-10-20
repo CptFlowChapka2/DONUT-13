@@ -10,7 +10,6 @@ public class CameraBehaviour : MonoBehaviour
     [SerializeField] private float sensibilityZoom = 1f;
     [SerializeField] private float sensibilityRotation = 1f;
     private float distanceToSphere = 18.0f;
-    private bool isDragging = false;
 
     private void Update()
     {

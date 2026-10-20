@@ -23,7 +23,6 @@ public class Tile : MonoBehaviour
     {
         meshRenderer = GetComponent<MeshRenderer>();
         center = GetComponent<MeshCollider>().bounds.center;
-        meshRenderer.material.color = color;
 
         if (!isSingularity) return;
         isSelectable = false;
@@ -33,10 +32,15 @@ public class Tile : MonoBehaviour
     private void HoverColoring(bool on = true)
     {
         latitude.worldGenerator.gameManager.hoveredTile = this;
-        Color meshColor = meshRenderer.material.color;
-        if (on) meshColor = new Color(meshColor.r, meshColor.g, 0, meshColor.a);
-        else meshColor = new Color(meshColor.r, meshColor.g, 1, meshColor.a);
-        meshRenderer.material.color = meshColor;
+        Color meshColor = new Color();
+        if (on) meshColor = Color.black;
+        else meshColor = color;
+        ChangeColor(meshColor);
+    }
+
+    public void ChangeColor(Color color)
+    {
+        meshRenderer.material.color = color;
     }
     
     private void OnMouseEnter()
