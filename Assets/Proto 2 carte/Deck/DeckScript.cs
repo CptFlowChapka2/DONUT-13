@@ -9,7 +9,7 @@ using Random = UnityEngine.Random;
 public class DeckScript : MonoBehaviour
 {
     [SerializeField] private GameObject cardPrefab;
-    [SerializeField] private Transform hand;
+    [SerializeField] private HandScript hand;
 
     private bool[,] possibleCards=new bool[4,12]
     {
@@ -62,7 +62,8 @@ public class DeckScript : MonoBehaviour
         }
 
         //crée la carte
-        var carteScript=Instantiate(cardPrefab, hand).GetComponent<carteScript>();
+        var carteScript=Instantiate(cardPrefab).GetComponent<carteScript>();
         carteScript.Create(answer);
+        hand.AddCarte(carteScript);
     }
 }
