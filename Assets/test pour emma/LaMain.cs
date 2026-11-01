@@ -39,6 +39,8 @@ public class LaMain : MonoBehaviour
             Vector2Int value = input.Value + lastCartePlayed.Value;
             if(value.magnitude>2) return;
             gm.MovePlayer(input.Value);
+            carteInHands.RemoveAll(x=>lastCartePlayed);
+            carteInHands.RemoveAll(x=>input);
             if (lastCartePlayed.Value == Vector2Int.zero )
             {
                 lastCartePlayed.Value = input.Value;
