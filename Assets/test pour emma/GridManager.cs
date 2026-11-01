@@ -9,6 +9,7 @@ public class GridManager : MonoBehaviour
     public GameObject player;
     public Vector2Int playerPos;
     public float prefabsize;
+    public Camera camera;
 
 
     private void Start()
@@ -24,12 +25,14 @@ public class GridManager : MonoBehaviour
         }
 
         player.transform.position = new Vector3(playerPos.x * prefabsize, 1, playerPos.y * prefabsize);
+
+        //camera.transform.position = new Vector3(gridSize.x * prefabsize, 15, gridSize.y * prefabsize);
     }
 
     public void MovePlayer(Vector2Int input)
     {
         playerPos += input;
-        playerPos = new Vector2Int(Mathf.Clamp(playerPos.x, 0, gridSize.x), Mathf.Clamp(playerPos.x, 0, gridSize.x));
-        player.transform.position = new Vector3(playerPos.x * prefabsize, 1, playerPos.y * prefabsize);
+        playerPos = new Vector2Int(Mathf.Clamp(playerPos.x, 0, gridSize.x), Mathf.Clamp(playerPos.y, 0, gridSize.y));
+        player.transform.position = new Vector3(playerPos.x * prefabsize , 1, playerPos.y * prefabsize );
     }
 }
