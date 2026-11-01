@@ -39,11 +39,11 @@ public class LaMain : MonoBehaviour
             Vector2Int value = input.Value + lastCartePlayed.Value;
             if(value.magnitude>2) return;
             gm.MovePlayer(input.Value);
-            carteInHands.RemoveAll(x=>lastCartePlayed);
-            carteInHands.RemoveAll(x=>input);
             if (lastCartePlayed.Value == Vector2Int.zero )
             {
                 lastCartePlayed.Value = input.Value;
+                carteInHands.Remove(lastCartePlayed);
+                carteInHands.Remove(input);
                 carteInHands.Add(lastCartePlayed);
                 carteInHands.Add(input);
                 lastCartePlayed = null;
@@ -52,12 +52,15 @@ public class LaMain : MonoBehaviour
             else if ( input.Value == Vector2Int.zero)
             {
                 input.Value = lastCartePlayed.Value;
+                carteInHands.Remove(lastCartePlayed);
+                carteInHands.Remove(input);
                 carteInHands.Add(lastCartePlayed);
                 carteInHands.Add(input);
                 lastCartePlayed = null;
             }
             else
             {
+                carteInHands.Remove(lastCartePlayed);
                 input.Value = value;
                 Destroy(lastCartePlayed.gameObject);
             }
