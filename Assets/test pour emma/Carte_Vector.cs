@@ -9,7 +9,9 @@ public class Carte_Vector : MonoBehaviour
    public Image image;
    public GameObject arrow;
    private Vector2Int value;
-
+   public TextMeshProUGUI texte;
+   
+   
    public Vector2Int Value
    {
       get => value;
@@ -17,6 +19,7 @@ public class Carte_Vector : MonoBehaviour
       {
          this.value = value;
          TurnArrow(value);
+         texte.text = value.magnitude.ToString();
       }
    }
 
