@@ -23,7 +23,7 @@ public class GridManager : MonoBehaviour
             {
                 var r = Random.value;
                 grid[i,j]=Instantiate(prefabCase, new Vector3(i * prefabsize, 0,j * prefabsize), Quaternion.identity).GetComponent<CaseScript>();
-                if (r > wallPropabilityOto100*0.1) grid[i, j].Mur = true;
+                if (r > wallPropabilityOto100*0.01) grid[i, j].Mur = true;
 
             }
         }

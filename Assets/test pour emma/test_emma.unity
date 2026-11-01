@@ -800,6 +800,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GridManager
   gridSize: {x: 10, y: 10}
+  wallPropabilityOto100: 60
   prefabCase: {fileID: 1114797195656475584, guid: e48fa6a25f7ca96488d8d6e6addf3a0d, type: 3}
   player: {fileID: 1441108529}
   playerPos: {x: 3, y: 3}
