@@ -29,6 +29,7 @@ public class LaMain : MonoBehaviour
     {
         if (lastCartePlayed == null)
         {
+            if(gm.VerifyNextPost(input.Value))return;
             lastCartePlayed = input;
             input.transform.localPosition = lastCard.localPosition;
             gm.MovePlayer(input.Value);
@@ -37,7 +38,7 @@ public class LaMain : MonoBehaviour
         else
         {
             Vector2Int value = input.Value + lastCartePlayed.Value;
-            if(value.magnitude>2) return;
+            if(value.magnitude>2|| gm.VerifyNextPost(input.Value)) return;
             gm.MovePlayer(input.Value);
             if (lastCartePlayed.Value == Vector2Int.zero )
             {
