@@ -308,23 +308,13 @@ MonoBehaviour:
   prefab: {fileID: 5610633406687878932, guid: 76aafc8295b96be478debde507e7dff7, type: 3}
   startingHand:
   - {x: 1, y: 0}
-  - {x: 0, y: 1}
-  - {x: 1, y: 1}
-  - {x: 0, y: 0}
-  - {x: -1, y: 0}
-  - {x: 0, y: -1}
-  - {x: -1, y: -1}
   - {x: 1, y: 0}
-  - {x: 0, y: 1}
-  - {x: -1, y: 0}
-  - {x: 0, y: -1}
-  - {x: 0, y: 0}
   carteInHands: []
   buttonPressed:
     m_PersistentCalls:
       m_Calls: []
   gm: {fileID: 1859658737}
-  distancePerCard: 100
+  distancePerCard: 80
   lastCartePlayed: {fileID: 0}
   lastCard: {fileID: 1509605709}
 --- !u!1 &1441108529
