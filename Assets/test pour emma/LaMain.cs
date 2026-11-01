@@ -62,9 +62,9 @@ public class LaMain : MonoBehaviour
                 Destroy(lastCartePlayed.gameObject);
             }
             
-            PositionHandInLocalSpace();
+            
         }
-       
+        PositionHandInLocalSpace();
     }
     
 

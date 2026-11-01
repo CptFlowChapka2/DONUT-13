@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class Carte_Vector : MonoBehaviour
 {
    public Image image;
-   public TextMeshProUGUI text;
+   public GameObject arrow;
    private Vector2Int value;
 
    public Vector2Int Value
@@ -16,7 +16,7 @@ public class Carte_Vector : MonoBehaviour
       set
       {
          this.value = value;
-         text.text = value.ToString();
+         TurnArrow(value);
       }
    }
 
@@ -25,5 +25,13 @@ public class Carte_Vector : MonoBehaviour
    public void butonPressed()
    {
       buttonPressed.Invoke(this);
+   }
+
+   private void TurnArrow(Vector2Int value)
+   {
+      arrow.gameObject.SetActive(true);
+      if(value==Vector2Int.zero)arrow.gameObject.SetActive(false);
+      float angle = Vector2.SignedAngle(Vector2Int.up, value);
+      arrow.transform.rotation=Quaternion.AngleAxis(angle,arrow.transform.forward);
    }
 }
