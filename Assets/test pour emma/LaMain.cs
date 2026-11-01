@@ -6,6 +6,7 @@ using UnityEngine.Events;
 public class LaMain : MonoBehaviour
 {
     public GameObject prefab;
+    public Vector2Int[] startingHand = new Vector2Int[]{};
     public List<Carte_Vector> carteInHands = new List<Carte_Vector> { };
     public UnityEvent<Carte_Vector> buttonPressed=new UnityEvent<Carte_Vector>();
     public GridManager gm;
@@ -16,10 +17,10 @@ public class LaMain : MonoBehaviour
     private void Start()
     {
         buttonPressed.AddListener(CartePlayed);
-        carteInHands.Add(CreateCard(new Vector2Int(0,-1)));
-        carteInHands.Add(CreateCard(new Vector2Int(0,1)));
-        carteInHands.Add(CreateCard(new Vector2Int(1,0)));
-        carteInHands.Add(CreateCard(new Vector2Int(-1,0)));
+        foreach (var vector2Int in startingHand)
+        {
+           carteInHands.Add(CreateCard(vector2Int)); 
+        }
         
         PositionHandInLocalSpace();
         
