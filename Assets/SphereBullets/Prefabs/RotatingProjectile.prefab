@@ -48,6 +48,38 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3867167077889850823, guid: 189e913132733fe4e8e6ab410c481154, type: 3}
+      propertyPath: m_Time
+      value: 2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3867167077889850823, guid: 189e913132733fe4e8e6ab410c481154, type: 3}
+      propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[0].value
+      value: 0.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 5117361087445996362, guid: 189e913132733fe4e8e6ab410c481154, type: 3}
+      propertyPath: m_Range
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 5117361087445996362, guid: 189e913132733fe4e8e6ab410c481154, type: 3}
+      propertyPath: m_Color.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5117361087445996362, guid: 189e913132733fe4e8e6ab410c481154, type: 3}
+      propertyPath: m_Color.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5117361087445996362, guid: 189e913132733fe4e8e6ab410c481154, type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5117361087445996362, guid: 189e913132733fe4e8e6ab410c481154, type: 3}
+      propertyPath: m_Intensity
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5726751499972110009, guid: 189e913132733fe4e8e6ab410c481154, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 9da5cd3d38e3e6946825e4180be1228a, type: 2}
     - target: {fileID: 7758570954859774956, guid: 189e913132733fe4e8e6ab410c481154, type: 3}
       propertyPath: m_Name
       value: RotatingProjectile

@@ -110,10 +110,38 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3867167077889850823, guid: 189e913132733fe4e8e6ab410c481154, type: 3}
+      propertyPath: m_Time
+      value: 2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3867167077889850823, guid: 189e913132733fe4e8e6ab410c481154, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 362028ad32e30b545a2853076d9d2668, type: 2}
+    - target: {fileID: 5117361087445996362, guid: 189e913132733fe4e8e6ab410c481154, type: 3}
+      propertyPath: m_Range
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 5117361087445996362, guid: 189e913132733fe4e8e6ab410c481154, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5117361087445996362, guid: 189e913132733fe4e8e6ab410c481154, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5117361087445996362, guid: 189e913132733fe4e8e6ab410c481154, type: 3}
+      propertyPath: m_Color.r
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5117361087445996362, guid: 189e913132733fe4e8e6ab410c481154, type: 3}
+      propertyPath: m_Intensity
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 5726751499972110009, guid: 189e913132733fe4e8e6ab410c481154, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 9f45744391bc9ca44932b8fb3930ae86, type: 2}
+      objectReference: {fileID: 2100000, guid: 12da129161a86b64da2891366a567c07, type: 2}
     - target: {fileID: 7758570954859774956, guid: 189e913132733fe4e8e6ab410c481154, type: 3}
       propertyPath: m_Name
       value: TangentProjectile
@@ -156,8 +184,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TangentProjectile
   rb: {fileID: 0}
   speed: 7
-  gravity: 0
-  naturalRotationSpeed: 0
   distanceToSphere: 0
   projectilesToSpawn: {fileID: 4396312148883902403, guid: 7cbf1bcc8a3fc864e833188a2eed8d58, type: 3}
   maxTimer: 2

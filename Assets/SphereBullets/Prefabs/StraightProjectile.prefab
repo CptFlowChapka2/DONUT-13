@@ -48,10 +48,42 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3867167077889850823, guid: 189e913132733fe4e8e6ab410c481154, type: 3}
+      propertyPath: m_Time
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3867167077889850823, guid: 189e913132733fe4e8e6ab410c481154, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 98e1789d87bf92f449054006d77907ea, type: 2}
+    - target: {fileID: 3867167077889850823, guid: 189e913132733fe4e8e6ab410c481154, type: 3}
+      propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[0].value
+      value: 0.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 5117361087445996362, guid: 189e913132733fe4e8e6ab410c481154, type: 3}
+      propertyPath: m_Range
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 5117361087445996362, guid: 189e913132733fe4e8e6ab410c481154, type: 3}
+      propertyPath: m_Color.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5117361087445996362, guid: 189e913132733fe4e8e6ab410c481154, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5117361087445996362, guid: 189e913132733fe4e8e6ab410c481154, type: 3}
+      propertyPath: m_Color.r
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5117361087445996362, guid: 189e913132733fe4e8e6ab410c481154, type: 3}
+      propertyPath: m_Intensity
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 5726751499972110009, guid: 189e913132733fe4e8e6ab410c481154, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 9f45744391bc9ca44932b8fb3930ae86, type: 2}
+      objectReference: {fileID: 2100000, guid: 3767fa8d8898dca498276ce76b521a26, type: 2}
     - target: {fileID: 7758570954859774956, guid: 189e913132733fe4e8e6ab410c481154, type: 3}
       propertyPath: m_Name
       value: StraightProjectile
@@ -83,6 +115,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::StraightProjectile
   rb: {fileID: 0}
   speed: 8
-  naturalRotationSpeed: 0
   distanceToSphere: 0
-  velocity: 0
