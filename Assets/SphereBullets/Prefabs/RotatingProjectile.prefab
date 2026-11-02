@@ -112,10 +112,7 @@ MonoBehaviour:
   personalCamera: {fileID: 6838562186956960183}
   rb: {fileID: 0}
   distanceToSphere: 0
-  speed: 8
-  rotationSpeed: 5
-  heightBounciness: 0
-  lengthBounciness: 0
+  projectileData: {fileID: 11400000, guid: eb73047b94d59354abc9788f8edccbac, type: 2}
 --- !u!20 &6838562186956960183 stripped
 Camera:
   m_CorrespondingSourceObject: {fileID: 1635030828241381047, guid: 189e913132733fe4e8e6ab410c481154, type: 3}

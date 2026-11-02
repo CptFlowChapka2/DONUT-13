@@ -80,10 +80,7 @@ MonoBehaviour:
   personalCamera: {fileID: 6417499116175603406}
   rb: {fileID: 0}
   distanceToSphere: 0
-  speed: 7
-  rotationSpeed: 0
-  heightBounciness: 0
-  lengthBounciness: 0
+  projectileData: {fileID: 11400000, guid: bee8f819b2e2dbb41ad434e59eefddea, type: 2}
   projectilesToSpawn: {fileID: 2593023209033667820, guid: 3b97ff8358c98ef4f92952d828638603, type: 3}
   maxTimer: 2
 --- !u!20 &6417499116175603406 stripped

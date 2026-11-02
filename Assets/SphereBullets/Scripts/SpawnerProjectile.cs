@@ -5,7 +5,7 @@ public class SpawnerProjectile : Projectile
     [Header("Spawner Properties")]
     [SerializeField] private GameObject projectilesToSpawn;
     [SerializeField] private float maxTimer;
-    private float t;
+    private float tSpawner;
     
     void Start()
     {
@@ -15,19 +15,23 @@ public class SpawnerProjectile : Projectile
     void FixedUpdate()
     {
         base.FixedUpdate();
-        rb.linearVelocity = transform.forward * speed;
-        t += Time.fixedDeltaTime;
-        if (t >= maxTimer)
+        SpawnProjectilesOnTwoSides(projectilesToSpawn);
+    }
+
+    private void SpawnProjectilesOnTwoSides(GameObject projectile)
+    {
+        tSpawner += Time.fixedDeltaTime;
+        if (tSpawner >= maxTimer)
         {
-            t = 0;
+            tSpawner = 0;
             Vector3 normal = transform.position.normalized;
             Vector3 rightDirection = Vector3.ProjectOnPlane(transform.right, normal).normalized;
             
-            InstantiateAndInitialize(projectilesToSpawn, transform.position, Quaternion.LookRotation(rightDirection, normal));
-            InstantiateAndInitialize(projectilesToSpawn, transform.position, Quaternion.LookRotation(-rightDirection, normal));
+            InstantiateAndInitialize(projectile, transform.position, Quaternion.LookRotation(rightDirection, normal));
+            InstantiateAndInitialize(projectile, transform.position, Quaternion.LookRotation(-rightDirection, normal));
         }
     }
-    
+
     private void InstantiateAndInitialize(GameObject prefab, Vector3 position, Quaternion rotation)
     {
         GameObject go = Instantiate(prefab, position, rotation);
