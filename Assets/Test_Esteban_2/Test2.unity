@@ -427,11 +427,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01bf1404d27d83e419d61e63962adb0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GridManager
-  gridSize: {x: 40, y: 40}
+  gridSize: {x: 100, y: 100}
   prefabCase: {fileID: 261041772038959799, guid: 33efd6261c18c5d438358ac81a51120d, type: 3}
   prefabsize: 1
   delay: 5
-  reDelay: 0.01
+  reDelay: 0.001
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
