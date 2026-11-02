@@ -85,7 +85,7 @@ public class ProjectileManager : MonoBehaviour
         return allSpawns;
     }
 
-    private GameObject InstantiateAndInitialize(GameObject prefab, Vector3 position, Quaternion rotation)
+    public GameObject InstantiateAndInitialize(GameObject prefab, Vector3 position, Quaternion rotation)
     {
         GameObject go = Instantiate(prefab, position, rotation);
         go.GetComponent<Projectile>().distanceToSphere = Mathf.Abs(spawnPoint.position.magnitude);
