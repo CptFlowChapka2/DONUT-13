@@ -52,8 +52,8 @@ public class ProjectileManager : MonoBehaviour
         {
             Projectile projectile = allSpawns[0].GetComponent<Projectile>();
             TakeControl(projectile.personalCamera);
-            sliderController.gameObject.SetActive(true);
             sliderController.toControl = projectile;
+            sliderController.gameObject.SetActive(true);
         }
 
         if (Input.GetKeyDown(KeyCode.Escape))
@@ -65,9 +65,11 @@ public class ProjectileManager : MonoBehaviour
 
     public void TakeControl(Camera toFollow)
     {
+        if (currentCam != mainCam.gameObject) currentCam.GetComponentInParent<Projectile>().isControlled = false;
         currentCam.SetActive(false);
         currentCam = toFollow.gameObject;
         currentCam.SetActive(true);
+        if (currentCam != mainCam.gameObject) currentCam.GetComponentInParent<Projectile>().isControlled = true;
     }
     
     private GameObject[] MultiInstantiateAndInitialize(GameObject prefab, int nbOfInstances)

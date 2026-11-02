@@ -1,5 +1,8 @@
 using System;
+using UnityEditor.Build.Reporting;
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.UI;
 
 public abstract class Projectile : MonoBehaviour
 {
@@ -12,8 +15,17 @@ public abstract class Projectile : MonoBehaviour
     public float rotationSpeed;
     private float heightBounciness;
     private float lengthBounciness;
+
+    public float maxSpeed;
+    public float dashingLength;
+
+    public bool isControlled = false;
+    public bool dashing = false;
     
-    protected float t;
+    protected float tBounciness;
+    protected float tDashing;
+
+    private bool dashBufferInput = false;
 
     protected virtual void Start()
     {
@@ -24,12 +36,44 @@ public abstract class Projectile : MonoBehaviour
         lengthBounciness = projectileData.lengthBounciness;
     }
 
+    protected virtual void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space)) dashBufferInput = true;
+    }
+    
     protected virtual void FixedUpdate()
     {
         RecalculateForward();
         ApplyMoveForward();
         ApplyRotation();
         ApplyBounciness();
+        ApplyControls();
+    }
+
+    private void ApplyControls()
+    {
+        if (!isControlled) return;
+
+        if (dashBufferInput)
+        {
+            dashBufferInput = false;
+            if (!dashing)
+            {
+                speed = maxSpeed;
+                dashing = true;
+                tDashing = dashingLength;
+            }
+        }
+
+        if (dashing)
+        {
+            tDashing -= Time.fixedDeltaTime;
+            if (tDashing <= 0)
+            {
+                dashing = false;
+                speed = projectileData.speed;
+            }
+        }
     }
 
     private void RecalculateForward()
@@ -45,10 +89,10 @@ public abstract class Projectile : MonoBehaviour
     {
         if (heightBounciness <= 0 || lengthBounciness <= 0) return;
         
-        t += Time.fixedDeltaTime;
-        if (t >= lengthBounciness) t = 0;
-        distanceToSphere = 5 + ((4 * heightBounciness) / (lengthBounciness * lengthBounciness)) * t *
-            (lengthBounciness - t);
+        tBounciness += Time.fixedDeltaTime;
+        if (tBounciness >= lengthBounciness) tBounciness = 0;
+        distanceToSphere = 5 + ((4 * heightBounciness) / (lengthBounciness * lengthBounciness)) * tBounciness *
+            (lengthBounciness - tBounciness);
     }
 
     protected void ApplyRotation()

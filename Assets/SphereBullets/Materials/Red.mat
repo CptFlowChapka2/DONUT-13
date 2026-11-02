@@ -10,10 +10,11 @@ Material:
   m_Name: Red
   m_Shader: {fileID: 4800000, guid: 933532a4fcc9baf4fa0491de14d08ed7, type: 3}
   m_Parent: {fileID: 2100000, guid: ca24cb0c670c84c45bdfb83ee7d5dc5e, type: 2}
-  m_ModifiedSerializedProperties: 0
-  m_ValidKeywords: []
+  m_ModifiedSerializedProperties: 2
+  m_ValidKeywords:
+  - _EMISSION
   m_InvalidKeywords: []
-  m_LightmapFlags: 4
+  m_LightmapFlags: 2
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
@@ -30,6 +31,7 @@ Material:
     m_Colors:
     - _BaseColor: {r: 1, g: 0.2980392, b: 0.3497212, a: 1}
     - _Color: {r: 1, g: 0.29803917, b: 0.34972116, a: 1}
+    - _EmissionColor: {r: 0.645283, g: 0.023132695, b: 0.023132695, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
 --- !u!114 &588654853698593858

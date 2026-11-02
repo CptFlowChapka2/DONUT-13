@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a12b295fa5307248bd0f7c4cd85b197, type: 3}
   m_Name: StraightProjectile
   m_EditorClassIdentifier: Assembly-CSharp::ProjectileData
-  speed: 8
+  speed: 4
   rotationSpeed: 0
   heightBounciness: 0
   lengthBounciness: 0
