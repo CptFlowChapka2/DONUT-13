@@ -109,7 +109,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f8fca40fe6d85de469cca5caf15436c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RotatingProjectile
+  personalCamera: {fileID: 6838562186956960183}
   rb: {fileID: 0}
-  speed: 8
   distanceToSphere: 0
+  speed: 8
   rotationSpeed: 5
+  heightBounciness: 0
+  lengthBounciness: 0
+--- !u!20 &6838562186956960183 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 1635030828241381047, guid: 189e913132733fe4e8e6ab410c481154, type: 3}
+  m_PrefabInstance: {fileID: 5212846146348586752}
+  m_PrefabAsset: {fileID: 0}

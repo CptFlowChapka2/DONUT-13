@@ -144,7 +144,7 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 12da129161a86b64da2891366a567c07, type: 2}
     - target: {fileID: 7758570954859774956, guid: 189e913132733fe4e8e6ab410c481154, type: 3}
       propertyPath: m_Name
-      value: TangentProjectile
+      value: SpawnerBouncyProjectile
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -165,6 +165,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 282230389613659875, guid: 189e913132733fe4e8e6ab410c481154, type: 3}
   m_PrefabInstance: {fileID: 3345336758846055963}
   m_PrefabAsset: {fileID: 0}
+--- !u!20 &4097657662075863212 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 1635030828241381047, guid: 189e913132733fe4e8e6ab410c481154, type: 3}
+  m_PrefabInstance: {fileID: 3345336758846055963}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &5027984363120748023 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7758570954859774956, guid: 189e913132733fe4e8e6ab410c481154, type: 3}
@@ -182,11 +187,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 276d9f572d6ee5445a14f3a469762fa5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TangentProjectile
+  personalCamera: {fileID: 4097657662075863212}
   rb: {fileID: 0}
-  speed: 7
   distanceToSphere: 0
-  projectilesToSpawn: {fileID: 4396312148883902403, guid: 7cbf1bcc8a3fc864e833188a2eed8d58, type: 3}
+  speed: 7
+  rotationSpeed: 0
+  heightBounciness: 0
+  lengthBounciness: 0
+  projectilesToSpawn: {fileID: 4396312148883902403, guid: 7c11be3523e6b5c4988f98b38d1cfbe6, type: 3}
   maxTimer: 2
-  spawnPoints:
-  - {fileID: 8829113675456571556}
-  - {fileID: 3445724131322187762}

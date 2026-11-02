@@ -1,8 +1,8 @@
 using UnityEngine;
 
-public class RotatingProjectile : Projectile
+public class BasicProjectile : Projectile
 {
-    public float rotationSpeed;
+    private float t;
     
     protected override void Start()
     {
@@ -19,5 +19,12 @@ public class RotatingProjectile : Projectile
         Vector3 direction = Quaternion.AngleAxis(rotationSpeed, normal) * currentForward;
         if (direction.sqrMagnitude <= 0.0001f) return;
         transform.rotation = Quaternion.LookRotation(direction, normal);
+        
+        if (heightBounciness <= 0 || lengthBounciness <= 0) return;
+        
+        t += Time.fixedDeltaTime;
+        if (t >= lengthBounciness) t = 0;
+        distanceToSphere = 5 + ((4 * heightBounciness) / (lengthBounciness * lengthBounciness)) * t *
+            (lengthBounciness - t);
     }
 }

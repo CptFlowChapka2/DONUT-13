@@ -3,50 +3,85 @@ using UnityEngine;
 
 public class ProjectileManager : MonoBehaviour
 {
-    [SerializeField] private Projectile[] allProjectiles = new Projectile[5];
+    [SerializeField] private Camera mainCam;
+    [SerializeField] private SliderController sliderController;
+    [SerializeField] private Projectile[] allProjectiles = new Projectile[6];
     [SerializeField] private Transform spawnPoint;
+
+    private GameObject currentCam;
+
+    private void Start()
+    {
+        currentCam = mainCam.gameObject;
+    }
 
     private void Update()
     {
+        int nbInstances = 1;
+
+        if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift)) nbInstances = 8;
+
+        GameObject[] allSpawns = new GameObject[nbInstances];
+
         if (Input.GetKeyDown(KeyCode.Q))
-        {
-            InstantiateAndInitialize(allProjectiles[0].gameObject, spawnPoint.position, transform.rotation);
-        }
+            allSpawns = MultiInstantiateAndInitialize(allProjectiles[0].gameObject, nbInstances);
+
         if (Input.GetKeyDown(KeyCode.W))
-        {
-            InstantiateAndInitialize(allProjectiles[1].gameObject, spawnPoint.position, transform.rotation);
-        }
+            allSpawns = MultiInstantiateAndInitialize(allProjectiles[1].gameObject, nbInstances);
+
         if (Input.GetKeyDown(KeyCode.E))
-        {
-            Vector3 normal = transform.position.normalized;
-            Vector3 spawnDirection = Vector3.ProjectOnPlane(transform.forward, normal).normalized;
-            float deltaAngle = 360f / 8f;
-            for (int i = 0; i < 8; i++)
-            {
-                InstantiateAndInitialize(allProjectiles[2].gameObject, spawnPoint.position, Quaternion.LookRotation(spawnDirection, normal));
-                spawnDirection = Quaternion.AngleAxis(deltaAngle, normal) * spawnDirection;
-            }
-        }
+            allSpawns = MultiInstantiateAndInitialize(allProjectiles[2].gameObject, nbInstances);
+
         if (Input.GetKeyDown(KeyCode.R))
-        {
-            InstantiateAndInitialize(allProjectiles[3].gameObject, spawnPoint.position, transform.rotation);
-        }
+            allSpawns = MultiInstantiateAndInitialize(allProjectiles[3].gameObject, nbInstances);
+
         if (Input.GetKeyDown(KeyCode.T))
+            allSpawns = MultiInstantiateAndInitialize(allProjectiles[4].gameObject, nbInstances);
+
+        if (Input.GetKeyDown(KeyCode.Y))
+            allSpawns = MultiInstantiateAndInitialize(allProjectiles[5].gameObject, nbInstances);
+
+        if (Input.GetKey(KeyCode.Space) && allSpawns[0])
         {
-            Vector3 normal = transform.position.normalized;
-            Vector3 spawnDirection = Vector3.ProjectOnPlane(transform.forward, normal).normalized;
-            float deltaAngle = 360f / 8f;
-            for (int i = 0; i < 8; i++)
-            {
-                InstantiateAndInitialize(allProjectiles[4].gameObject, spawnPoint.position, Quaternion.LookRotation(spawnDirection, normal));
-                spawnDirection = Quaternion.AngleAxis(deltaAngle, normal) * spawnDirection;
-            }
+            Projectile projectile = allSpawns[0].GetComponent<Projectile>();
+            TakeControl(projectile.personalCamera);
+            sliderController.gameObject.SetActive(true);
+            sliderController.toControl = projectile;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            sliderController.gameObject.SetActive(false);
+            TakeControl(mainCam);
         }
     }
 
-    private void InstantiateAndInitialize(GameObject prefab, Vector3 position, Quaternion rotation)
+    public void TakeControl(Camera toFollow)
+    {
+        currentCam.SetActive(false);
+        currentCam = toFollow.gameObject;
+        currentCam.SetActive(true);
+    }
+    
+    private GameObject[] MultiInstantiateAndInitialize(GameObject prefab, int nbOfInstances)
+    {
+        GameObject[] allSpawns = new GameObject[nbOfInstances];
+        Vector3 normal = transform.position.normalized;
+        Vector3 spawnDirection = Vector3.ProjectOnPlane(transform.forward, normal).normalized;
+        float deltaAngle = 360f / (float)nbOfInstances;
+        for (int i = 0; i < nbOfInstances; i++)
+        {
+            GameObject go = InstantiateAndInitialize(prefab, spawnPoint.position, Quaternion.LookRotation(spawnDirection, normal));
+            allSpawns[i] = go;
+            spawnDirection = Quaternion.AngleAxis(deltaAngle, normal) * spawnDirection;
+        }
+        return allSpawns;
+    }
+
+    private GameObject InstantiateAndInitialize(GameObject prefab, Vector3 position, Quaternion rotation)
     {
         GameObject go = Instantiate(prefab, position, rotation);
         go.GetComponent<Projectile>().distanceToSphere = Mathf.Abs(spawnPoint.position.magnitude);
+        return go;
     }
 }

@@ -94,14 +94,14 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 7758570954859774956, guid: 189e913132733fe4e8e6ab410c481154, type: 3}
       insertIndex: -1
-      addedObject: {fileID: -5784649043174231765}
+      addedObject: {fileID: 6183770749797767167}
   m_SourcePrefab: {fileID: 100100000, guid: 189e913132733fe4e8e6ab410c481154, type: 3}
 --- !u!1 &4396312148883902403 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7758570954859774956, guid: 189e913132733fe4e8e6ab410c481154, type: 3}
   m_PrefabInstance: {fileID: 6244572618349939759}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &-5784649043174231765
+--- !u!114 &6183770749797767167
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -110,9 +110,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 4396312148883902403}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 00355b491720a1a4d98a86285fd4e6d0, type: 3}
+  m_Script: {fileID: 11500000, guid: f8fca40fe6d85de469cca5caf15436c4, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::StraightProjectile
+  m_EditorClassIdentifier: Assembly-CSharp::BasicProjectile
+  personalCamera: {fileID: 4618976150704810648}
   rb: {fileID: 0}
-  speed: 8
   distanceToSphere: 0
+  speed: 8
+  rotationSpeed: 0
+  heightBounciness: 0
+  lengthBounciness: 0
+--- !u!20 &4618976150704810648 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 1635030828241381047, guid: 189e913132733fe4e8e6ab410c481154, type: 3}
+  m_PrefabInstance: {fileID: 6244572618349939759}
+  m_PrefabAsset: {fileID: 0}

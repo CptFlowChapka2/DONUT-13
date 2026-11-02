@@ -3,9 +3,14 @@ using UnityEngine;
 
 public abstract class Projectile : MonoBehaviour
 {
+    public Camera personalCamera;
     public Rigidbody rb;
-    public float speed;
     public float distanceToSphere;
+    public float speed;
+    public float rotationSpeed;
+    [Header("Bounciness")]
+    public float heightBounciness;
+    public float lengthBounciness;
 
     protected virtual void Start()
     {

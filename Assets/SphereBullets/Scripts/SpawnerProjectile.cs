@@ -1,10 +1,10 @@
 using UnityEngine;
 
-public class TangentProjectile : Projectile
+public class SpawnerProjectile : Projectile
 {
+    [Header("Spawner Properties")]
     [SerializeField] private GameObject projectilesToSpawn;
     [SerializeField] private float maxTimer;
-    [SerializeField] private Transform[] spawnPoints;
     private float t;
     
     void Start()

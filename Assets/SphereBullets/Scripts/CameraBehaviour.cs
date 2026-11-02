@@ -11,14 +11,23 @@ public class CameraBehaviour : MonoBehaviour
     [SerializeField] private float sensibilityRotation = 1f;
     private float distanceToSphere = 18.0f;
 
+    public GameObject focus;
+
     private void Update()
     {
-        Move();
+        if (!focus) Move();
+        else Focus();
         Zoom();
-        camera.transform.position = transform.position + (camera.transform.position - transform.position).normalized * distanceToSphere;
     }
 
     private Vector2 previousPosition = Vector2.zero;
+
+    private void Focus()
+    {
+        camera.transform.position = focus.transform.position;
+        camera.transform.forward = -focus.transform.position.normalized;
+        camera.transform.up = focus.transform.forward;
+    }
     
     private void Move()
     {
@@ -50,5 +59,6 @@ public class CameraBehaviour : MonoBehaviour
             distanceToSphere -= Input.GetAxis("Mouse ScrollWheel") * sensibilityZoom;
             distanceToSphere = Mathf.Clamp(distanceToSphere, minDistanceToSphere, maxDistanceToSphere);
         }
+        camera.transform.position = transform.position + (camera.transform.position - transform.position).normalized * distanceToSphere;
     }
 }
