@@ -108,17 +108,44 @@ MonoBehaviour:
   - {fileID: 6219538616371169094}
   - {fileID: 7018512970330552243}
   EditorEvents:
-  - {fileID: -8909587832264539395}
+  - {fileID: 1083178447319318828}
   EditorParameters: []
   MasterBanks:
   - {fileID: 7018512970330552243}
   StringsBanks:
   - {fileID: 6219538616371169094}
   cacheVersion: 131861
-  cacheTime: 639292190679867361
+  cacheTime: 639292204711060357
   SerializableEventsDict:
   - key: event:/DeltaTest
     index: 0
+--- !u!114 &1083178447319318828
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/DeltaTest
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorEventRef
+  Path: event:/DeltaTest
+  Guid:
+    Data1: -1654192662
+    Data2: 1279858183
+    Data3: -1028954948
+    Data4: 2110934014
+  Banks:
+  - {fileID: 7018512970330552243}
+  IsStream: 1
+  Is3D: 0
+  IsOneShot: 0
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 176000
 --- !u!114 &6219538616371169094
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -134,7 +161,7 @@ MonoBehaviour:
   Path: Assets/BuildFMOD/Desktop/Master.strings.bank
   Name: Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 639292190679867361
+  lastModified: 639292204711060357
   FileSizes:
   - Name: 
     Value: 770
@@ -154,6 +181,6 @@ MonoBehaviour:
   Path: Assets/BuildFMOD/Desktop/Master.bank
   Name: Master
   StudioPath: bank:/Master
-  lastModified: 639292190679857086
+  lastModified: 639292204710994517
   FileSizes: []
   Exists: 1
