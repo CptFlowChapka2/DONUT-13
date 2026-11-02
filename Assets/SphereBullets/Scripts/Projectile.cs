@@ -7,12 +7,21 @@ public abstract class Projectile : MonoBehaviour
     public Rigidbody rb;
     public float distanceToSphere;
     public ProjectileData projectileData;
+
+    private float speed;
+    public float rotationSpeed;
+    private float heightBounciness;
+    private float lengthBounciness;
     
     protected float t;
 
     protected virtual void Start()
     {
         rb = GetComponent<Rigidbody>();
+        speed = projectileData.speed;
+        rotationSpeed = projectileData.rotationSpeed;
+        heightBounciness = projectileData.heightBounciness;
+        lengthBounciness = projectileData.lengthBounciness;
     }
 
     protected virtual void FixedUpdate()
@@ -34,26 +43,26 @@ public abstract class Projectile : MonoBehaviour
 
     protected void ApplyBounciness()
     {
-        if (projectileData.heightBounciness <= 0 || projectileData.lengthBounciness <= 0) return;
+        if (heightBounciness <= 0 || lengthBounciness <= 0) return;
         
         t += Time.fixedDeltaTime;
-        if (t >= projectileData.lengthBounciness) t = 0;
-        distanceToSphere = 5 + ((4 * projectileData.heightBounciness) / (projectileData.lengthBounciness * projectileData.lengthBounciness)) * t *
-            (projectileData.lengthBounciness - t);
+        if (t >= lengthBounciness) t = 0;
+        distanceToSphere = 5 + ((4 * heightBounciness) / (lengthBounciness * lengthBounciness)) * t *
+            (lengthBounciness - t);
     }
 
     protected void ApplyRotation()
     {
-        if (projectileData.rotationSpeed <= 0) return;
+        if (rotationSpeed == 0) return;
         
         Vector3 normal = transform.position.normalized;
         Vector3 currentForward = Vector3.ProjectOnPlane(transform.forward, normal).normalized;
-        Vector3 direction = Quaternion.AngleAxis(projectileData.rotationSpeed, normal) * currentForward;
+        Vector3 direction = Quaternion.AngleAxis(rotationSpeed, normal) * currentForward;
         if (direction.sqrMagnitude > 0.0001f) transform.rotation = Quaternion.LookRotation(direction, normal);
     }
     
     protected void ApplyMoveForward()
     {
-        rb.linearVelocity = transform.forward * projectileData.speed;
+        rb.linearVelocity = transform.forward * speed;
     }
 }

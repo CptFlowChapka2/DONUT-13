@@ -1,5 +1,32 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-8909587832264539395
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/DeltaTest
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorEventRef
+  Path: event:/DeltaTest
+  Guid:
+    Data1: -1654192662
+    Data2: 1279858183
+    Data3: -1028954948
+    Data4: 2110934014
+  Banks:
+  - {fileID: 7018512970330552243}
+  IsStream: 1
+  Is3D: 0
+  IsOneShot: 0
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 176000
 --- !u!114 &-7123072301870483991
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -81,16 +108,16 @@ MonoBehaviour:
   - {fileID: 6219538616371169094}
   - {fileID: 7018512970330552243}
   EditorEvents:
-  - {fileID: 8814561907327648713}
+  - {fileID: -8909587832264539395}
   EditorParameters: []
   MasterBanks:
   - {fileID: 7018512970330552243}
   StringsBanks:
   - {fileID: 6219538616371169094}
   cacheVersion: 131861
-  cacheTime: 639265373483391079
+  cacheTime: 639292190679867361
   SerializableEventsDict:
-  - key: event:/Test
+  - key: event:/DeltaTest
     index: 0
 --- !u!114 &6219538616371169094
 MonoBehaviour:
@@ -107,10 +134,10 @@ MonoBehaviour:
   Path: Assets/BuildFMOD/Desktop/Master.strings.bank
   Name: Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 639265373483391079
+  lastModified: 639292190679867361
   FileSizes:
   - Name: 
-    Value: 766
+    Value: 770
   Exists: 1
 --- !u!114 &7018512970330552243
 MonoBehaviour:
@@ -127,33 +154,6 @@ MonoBehaviour:
   Path: Assets/BuildFMOD/Desktop/Master.bank
   Name: Master
   StudioPath: bank:/Master
-  lastModified: 639265373483365922
+  lastModified: 639292190679857086
   FileSizes: []
   Exists: 1
---- !u!114 &8814561907327648713
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
-  m_Name: event:/Test
-  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorEventRef
-  Path: event:/Test
-  Guid:
-    Data1: -1654192662
-    Data2: 1279858183
-    Data3: -1028954948
-    Data4: 2110934014
-  Banks:
-  - {fileID: 7018512970330552243}
-  IsStream: 0
-  Is3D: 0
-  IsOneShot: 1
-  Parameters: []
-  MinDistance: 1
-  MaxDistance: 20
-  Length: 0

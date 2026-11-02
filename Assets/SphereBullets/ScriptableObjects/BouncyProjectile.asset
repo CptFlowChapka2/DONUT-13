@@ -15,4 +15,4 @@ MonoBehaviour:
   speed: 6
   rotationSpeed: 0
   heightBounciness: 1
-  lengthBounciness: 0.5
+  lengthBounciness: 0.45

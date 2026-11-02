@@ -6,6 +6,6 @@ public class SliderController : MonoBehaviour
 
     public void OnValueChanged(float value)
     {
-        toControl.projectileData.rotationSpeed = value;
+        toControl.rotationSpeed = value;
     }
 }

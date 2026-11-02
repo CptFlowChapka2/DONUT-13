@@ -30,8 +30,15 @@ public class ProjectileManager : MonoBehaviour
             allSpawns = MultiInstantiateAndInitialize(allProjectiles[1].gameObject, nbInstances);
 
         if (Input.GetKeyDown(KeyCode.E))
+        {
             allSpawns = MultiInstantiateAndInitialize(allProjectiles[2].gameObject, nbInstances);
-
+            // if (Input.GetKey(KeyCode.Space))
+            // {
+            //     SoundManager.instance.deltaTest.Stop();
+            //     SoundManager.instance.deltaTest.Play();
+            // }
+        }
+        
         if (Input.GetKeyDown(KeyCode.R))
             allSpawns = MultiInstantiateAndInitialize(allProjectiles[3].gameObject, nbInstances);
 
@@ -41,7 +48,7 @@ public class ProjectileManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Y))
             allSpawns = MultiInstantiateAndInitialize(allProjectiles[5].gameObject, nbInstances);
 
-        if (Input.GetKey(KeyCode.Space) && allSpawns[0])
+        if (Input.GetKey(KeyCode.LeftControl) && allSpawns[0])
         {
             Projectile projectile = allSpawns[0].GetComponent<Projectile>();
             TakeControl(projectile.personalCamera);
