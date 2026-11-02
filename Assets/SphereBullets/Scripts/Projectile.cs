@@ -12,7 +12,7 @@ public abstract class Projectile : MonoBehaviour
     public ProjectileData projectileData;
 
     private float speed;
-    public float rotationSpeed;
+    [NonSerialized] public float rotationSpeed;
     private float heightBounciness;
     private float lengthBounciness;
 

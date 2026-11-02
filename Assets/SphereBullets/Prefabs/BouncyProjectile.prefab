@@ -117,6 +117,11 @@ MonoBehaviour:
   rb: {fileID: 0}
   distanceToSphere: 0
   projectileData: {fileID: 11400000, guid: c17af344a877e8845adc269a31e66f7e, type: 2}
+  rotationSpeed: 0
+  maxSpeed: 8
+  dashingLength: 1
+  isControlled: 0
+  dashing: 0
 --- !u!20 &4618976150704810648 stripped
 Camera:
   m_CorrespondingSourceObject: {fileID: 1635030828241381047, guid: 189e913132733fe4e8e6ab410c481154, type: 3}
