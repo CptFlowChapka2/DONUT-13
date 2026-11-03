@@ -39,4 +39,6 @@ public class God : MonoBehaviour
                     .Add(interactable));
         }
     }
+
+    
 }
