@@ -8,7 +8,10 @@ public class ProjectileManager : MonoBehaviour
     [SerializeField] private Projectile[] allProjectiles = new Projectile[6];
     [SerializeField] private Transform spawnPoint;
 
+
     private GameObject currentCam;
+
+    public ControlInputType controlInputType;
 
     private void Start()
     {
@@ -38,7 +41,7 @@ public class ProjectileManager : MonoBehaviour
             //     SoundManager.instance.deltaTest.Play();
             // }
         }
-        
+
         if (Input.GetKeyDown(KeyCode.R))
             allSpawns = MultiInstantiateAndInitialize(allProjectiles[3].gameObject, nbInstances);
 
@@ -50,10 +53,19 @@ public class ProjectileManager : MonoBehaviour
 
         if (Input.GetKey(KeyCode.LeftControl) && allSpawns[0])
         {
-            Projectile projectile = allSpawns[0].GetComponent<Projectile>();
-            TakeControl(projectile.personalCamera);
-            sliderController.gameObject.SetActive(true);
-            sliderController.toControl = projectile;
+            if (controlInputType == ControlInputType.Slider)
+            {
+                Projectile projectile = allSpawns[0].GetComponent<Projectile>();
+                TakeControl(projectile.personalCamera);
+                sliderController.gameObject.SetActive(true);
+                sliderController.toControl = projectile;
+            }
+            else if (controlInputType == ControlInputType.Arrows)
+            {
+                Projectile projectile = allSpawns[0].GetComponent<Projectile>();
+                projectile.gameObject.AddComponent<ControlProjectileWithKeyboard>();
+                TakeControl(projectile.personalCamera);
+            }
         }
 
         if (Input.GetKeyDown(KeyCode.Escape))
@@ -69,7 +81,7 @@ public class ProjectileManager : MonoBehaviour
         currentCam = toFollow.gameObject;
         currentCam.SetActive(true);
     }
-    
+
     private GameObject[] MultiInstantiateAndInitialize(GameObject prefab, int nbOfInstances)
     {
         GameObject[] allSpawns = new GameObject[nbOfInstances];
@@ -78,10 +90,12 @@ public class ProjectileManager : MonoBehaviour
         float deltaAngle = 360f / (float)nbOfInstances;
         for (int i = 0; i < nbOfInstances; i++)
         {
-            GameObject go = InstantiateAndInitialize(prefab, spawnPoint.position, Quaternion.LookRotation(spawnDirection, normal));
+            GameObject go = InstantiateAndInitialize(prefab, spawnPoint.position,
+                Quaternion.LookRotation(spawnDirection, normal));
             allSpawns[i] = go;
             spawnDirection = Quaternion.AngleAxis(deltaAngle, normal) * spawnDirection;
         }
+
         return allSpawns;
     }
 
@@ -91,4 +105,10 @@ public class ProjectileManager : MonoBehaviour
         go.GetComponent<Projectile>().distanceToSphere = Mathf.Abs(spawnPoint.position.magnitude);
         return go;
     }
+}
+
+public enum ControlInputType
+{
+    Slider,
+    Arrows
 }

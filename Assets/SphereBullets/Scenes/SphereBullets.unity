@@ -880,6 +880,7 @@ MonoBehaviour:
   - {fileID: 8779201769810701906, guid: d84c4147f9a0aa5489b91d205390dc26, type: 3}
   - {fileID: 8667686754171613372, guid: 8bdaf25281e49604a91fb9056f9f4017, type: 3}
   spawnPoint: {fileID: 555600851}
+  controlInputType: 1
 --- !u!1 &1204556933
 GameObject:
   m_ObjectHideFlags: 0
@@ -1202,6 +1203,7 @@ MonoBehaviour:
   - {fileID: 8779201769810701906, guid: d84c4147f9a0aa5489b91d205390dc26, type: 3}
   - {fileID: 8667686754171613372, guid: 8bdaf25281e49604a91fb9056f9f4017, type: 3}
   spawnPoint: {fileID: 1715169680}
+  controlInputType: 0
 --- !u!1 &1974617301
 GameObject:
   m_ObjectHideFlags: 0

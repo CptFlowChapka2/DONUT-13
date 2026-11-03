@@ -8,7 +8,7 @@ public abstract class Projectile : MonoBehaviour
     public float distanceToSphere;
     public ProjectileData projectileData;
 
-    private float speed;
+    public float speed;
     public float rotationSpeed;
     private float heightBounciness;
     private float lengthBounciness;
