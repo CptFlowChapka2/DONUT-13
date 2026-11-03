@@ -51,9 +51,16 @@ public class ProjectileManager : MonoBehaviour
         if (Input.GetKey(KeyCode.LeftControl) && allSpawns[0])
         {
             Projectile projectile = allSpawns[0].GetComponent<Projectile>();
-            TakeControl(projectile.personalCamera);
+            TakeControl(projectile.personalCamera[0]);
             sliderController.toControl = projectile;
             sliderController.gameObject.SetActive(true);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha1) && sliderController.gameObject.activeSelf)
+        {
+            if (sliderController.toControl.personalCamera[0].gameObject.activeSelf) 
+                TakeControl(sliderController.toControl.personalCamera[1]);
+            else TakeControl(sliderController.toControl.personalCamera[0]);
         }
 
         if (Input.GetKeyDown(KeyCode.Escape))

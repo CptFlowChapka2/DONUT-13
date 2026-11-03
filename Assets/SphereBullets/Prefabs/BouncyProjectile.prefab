@@ -94,14 +94,19 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 7758570954859774956, guid: 189e913132733fe4e8e6ab410c481154, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 2054906891196317475}
+      addedObject: {fileID: 2597677977165695220}
   m_SourcePrefab: {fileID: 100100000, guid: 189e913132733fe4e8e6ab410c481154, type: 3}
+--- !u!54 &2798283188196084830 stripped
+Rigidbody:
+  m_CorrespondingSourceObject: {fileID: 8105443648495222897, guid: 189e913132733fe4e8e6ab410c481154, type: 3}
+  m_PrefabInstance: {fileID: 6244572618349939759}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &4396312148883902403 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7758570954859774956, guid: 189e913132733fe4e8e6ab410c481154, type: 3}
   m_PrefabInstance: {fileID: 6244572618349939759}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &2054906891196317475
+--- !u!114 &2597677977165695220
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -113,11 +118,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f8fca40fe6d85de469cca5caf15436c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BasicProjectile
-  personalCamera: {fileID: 4618976150704810648}
-  rb: {fileID: 0}
+  personalCamera:
+  - {fileID: 4618976150704810648}
+  - {fileID: 8719927891551267543}
+  rb: {fileID: 2798283188196084830}
   distanceToSphere: 0
   projectileData: {fileID: 11400000, guid: c17af344a877e8845adc269a31e66f7e, type: 2}
-  rotationSpeed: 0
   maxSpeed: 8
   dashingLength: 1
   isControlled: 0
@@ -125,5 +131,10 @@ MonoBehaviour:
 --- !u!20 &4618976150704810648 stripped
 Camera:
   m_CorrespondingSourceObject: {fileID: 1635030828241381047, guid: 189e913132733fe4e8e6ab410c481154, type: 3}
+  m_PrefabInstance: {fileID: 6244572618349939759}
+  m_PrefabAsset: {fileID: 0}
+--- !u!20 &8719927891551267543 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 3434634088459151096, guid: 189e913132733fe4e8e6ab410c481154, type: 3}
   m_PrefabInstance: {fileID: 6244572618349939759}
   m_PrefabAsset: {fileID: 0}

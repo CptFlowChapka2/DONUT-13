@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public abstract class Projectile : MonoBehaviour
 {
-    public Camera personalCamera;
+    public Camera[] personalCamera = new Camera[2];
     public Rigidbody rb;
     public float distanceToSphere;
     public ProjectileData projectileData;

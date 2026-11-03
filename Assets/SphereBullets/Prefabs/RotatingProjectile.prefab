@@ -109,12 +109,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f8fca40fe6d85de469cca5caf15436c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RotatingProjectile
-  personalCamera: {fileID: 6838562186956960183}
-  rb: {fileID: 0}
+  personalCamera:
+  - {fileID: 6838562186956960183}
+  - {fileID: 7493420722779402744}
+  rb: {fileID: 4047590366413461361}
   distanceToSphere: 0
   projectileData: {fileID: 11400000, guid: eb73047b94d59354abc9788f8edccbac, type: 2}
+  maxSpeed: 7
+  dashingLength: 1
+  isControlled: 0
+  dashing: 0
+--- !u!54 &4047590366413461361 stripped
+Rigidbody:
+  m_CorrespondingSourceObject: {fileID: 8105443648495222897, guid: 189e913132733fe4e8e6ab410c481154, type: 3}
+  m_PrefabInstance: {fileID: 5212846146348586752}
+  m_PrefabAsset: {fileID: 0}
 --- !u!20 &6838562186956960183 stripped
 Camera:
   m_CorrespondingSourceObject: {fileID: 1635030828241381047, guid: 189e913132733fe4e8e6ab410c481154, type: 3}
+  m_PrefabInstance: {fileID: 5212846146348586752}
+  m_PrefabAsset: {fileID: 0}
+--- !u!20 &7493420722779402744 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 3434634088459151096, guid: 189e913132733fe4e8e6ab410c481154, type: 3}
   m_PrefabInstance: {fileID: 5212846146348586752}
   m_PrefabAsset: {fileID: 0}

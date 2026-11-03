@@ -96,6 +96,11 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 6183770749797767167}
   m_SourcePrefab: {fileID: 100100000, guid: 189e913132733fe4e8e6ab410c481154, type: 3}
+--- !u!54 &2798283188196084830 stripped
+Rigidbody:
+  m_CorrespondingSourceObject: {fileID: 8105443648495222897, guid: 189e913132733fe4e8e6ab410c481154, type: 3}
+  m_PrefabInstance: {fileID: 6244572618349939759}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &4396312148883902403 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7758570954859774956, guid: 189e913132733fe4e8e6ab410c481154, type: 3}
@@ -113,20 +118,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f8fca40fe6d85de469cca5caf15436c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BasicProjectile
-  personalCamera: {fileID: 4618976150704810648}
-  rb: {fileID: 0}
+  personalCamera:
+  - {fileID: 4618976150704810648}
+  - {fileID: 8719927891551267543}
+  rb: {fileID: 2798283188196084830}
   distanceToSphere: 0
   projectileData: {fileID: 11400000, guid: bee8f819b2e2dbb41ad434e59eefddea, type: 2}
-  rotationSpeed: 0
   maxSpeed: 8
   dashingLength: 1
   isControlled: 0
   dashing: 0
-  dashingEvent:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!20 &4618976150704810648 stripped
 Camera:
   m_CorrespondingSourceObject: {fileID: 1635030828241381047, guid: 189e913132733fe4e8e6ab410c481154, type: 3}
+  m_PrefabInstance: {fileID: 6244572618349939759}
+  m_PrefabAsset: {fileID: 0}
+--- !u!20 &8719927891551267543 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 3434634088459151096, guid: 189e913132733fe4e8e6ab410c481154, type: 3}
   m_PrefabInstance: {fileID: 6244572618349939759}
   m_PrefabAsset: {fileID: 0}

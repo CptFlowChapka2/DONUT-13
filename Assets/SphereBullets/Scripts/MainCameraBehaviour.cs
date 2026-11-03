@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class CameraBehaviour : MonoBehaviour
+public class MainCameraBehaviour : MonoBehaviour
 {
     [SerializeField] private Transform camera;
     [SerializeField] private float maxDistanceToSphere = 20.0f;

@@ -1,67 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &6476473429782341945
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 8829113675456571556}
-  m_Layer: 0
-  m_Name: sp1
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &8829113675456571556
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6476473429782341945}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 3280776694795690232}
-  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
---- !u!1 &8747171743414149007
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 3445724131322187762}
-  m_Layer: 0
-  m_Name: sp2
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &3445724131322187762
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8747171743414149007}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 3280776694795690232}
-  m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
 --- !u!1001 &3345336758846055963
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -148,21 +86,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects:
-    - targetCorrespondingSourceObject: {fileID: 282230389613659875, guid: 189e913132733fe4e8e6ab410c481154, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 8829113675456571556}
-    - targetCorrespondingSourceObject: {fileID: 282230389613659875, guid: 189e913132733fe4e8e6ab410c481154, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 3445724131322187762}
+    m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 7758570954859774956, guid: 189e913132733fe4e8e6ab410c481154, type: 3}
       insertIndex: -1
       addedObject: {fileID: 8667686754171613372}
   m_SourcePrefab: {fileID: 100100000, guid: 189e913132733fe4e8e6ab410c481154, type: 3}
---- !u!4 &3280776694795690232 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 282230389613659875, guid: 189e913132733fe4e8e6ab410c481154, type: 3}
+--- !u!20 &128145397022277859 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 3434634088459151096, guid: 189e913132733fe4e8e6ab410c481154, type: 3}
   m_PrefabInstance: {fileID: 3345336758846055963}
   m_PrefabAsset: {fileID: 0}
 --- !u!20 &4097657662075863212 stripped
@@ -187,9 +119,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 276d9f572d6ee5445a14f3a469762fa5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TangentProjectile
-  personalCamera: {fileID: 4097657662075863212}
-  rb: {fileID: 0}
+  personalCamera:
+  - {fileID: 4097657662075863212}
+  - {fileID: 128145397022277859}
+  rb: {fileID: 6778291286208308842}
   distanceToSphere: 0
   projectileData: {fileID: 11400000, guid: bee8f819b2e2dbb41ad434e59eefddea, type: 2}
+  maxSpeed: 8
+  dashingLength: 1
+  isControlled: 0
+  dashing: 0
   projectilesToSpawn: {fileID: 4396312148883902403, guid: 7c11be3523e6b5c4988f98b38d1cfbe6, type: 3}
   maxTimer: 2
+--- !u!54 &6778291286208308842 stripped
+Rigidbody:
+  m_CorrespondingSourceObject: {fileID: 8105443648495222897, guid: 189e913132733fe4e8e6ab410c481154, type: 3}
+  m_PrefabInstance: {fileID: 3345336758846055963}
+  m_PrefabAsset: {fileID: 0}

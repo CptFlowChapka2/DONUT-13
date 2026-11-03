@@ -77,14 +77,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 276d9f572d6ee5445a14f3a469762fa5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpawnerProjectile
-  personalCamera: {fileID: 6417499116175603406}
-  rb: {fileID: 0}
+  personalCamera:
+  - {fileID: 6417499116175603406}
+  - {fileID: 6923447769401816705}
+  rb: {fileID: 4594534308049670152}
   distanceToSphere: 0
   projectileData: {fileID: 11400000, guid: bee8f819b2e2dbb41ad434e59eefddea, type: 2}
+  maxSpeed: 8
+  dashingLength: 1
+  isControlled: 0
+  dashing: 0
   projectilesToSpawn: {fileID: 2593023209033667820, guid: 3b97ff8358c98ef4f92952d828638603, type: 3}
   maxTimer: 2
+--- !u!54 &4594534308049670152 stripped
+Rigidbody:
+  m_CorrespondingSourceObject: {fileID: 8105443648495222897, guid: 189e913132733fe4e8e6ab410c481154, type: 3}
+  m_PrefabInstance: {fileID: 5746384844315971705}
+  m_PrefabAsset: {fileID: 0}
 --- !u!20 &6417499116175603406 stripped
 Camera:
   m_CorrespondingSourceObject: {fileID: 1635030828241381047, guid: 189e913132733fe4e8e6ab410c481154, type: 3}
+  m_PrefabInstance: {fileID: 5746384844315971705}
+  m_PrefabAsset: {fileID: 0}
+--- !u!20 &6923447769401816705 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 3434634088459151096, guid: 189e913132733fe4e8e6ab410c481154, type: 3}
   m_PrefabInstance: {fileID: 5746384844315971705}
   m_PrefabAsset: {fileID: 0}
