@@ -505,7 +505,7 @@ GameObject:
   - component: {fileID: 972308992}
   m_Layer: 0
   m_Name: World
-  m_TagString: Untagged
+  m_TagString: World
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1648,13 +1648,37 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2550714312533073972, guid: e4b5e0dbee95e9e40bba1183ac1c1ca4, type: 3}
+      propertyPath: onCollision.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2550714312533073972, guid: e4b5e0dbee95e9e40bba1183ac1c1ca4, type: 3}
+      propertyPath: onCollision.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2550714312533073972, guid: e4b5e0dbee95e9e40bba1183ac1c1ca4, type: 3}
+      propertyPath: onCollision.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2550714312533073972, guid: e4b5e0dbee95e9e40bba1183ac1c1ca4, type: 3}
+      propertyPath: onCollision.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnCollision
+      objectReference: {fileID: 0}
+    - target: {fileID: 2550714312533073972, guid: e4b5e0dbee95e9e40bba1183ac1c1ca4, type: 3}
+      propertyPath: onCollision.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: BallBehaviour, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 2550714312533073972, guid: e4b5e0dbee95e9e40bba1183ac1c1ca4, type: 3}
+      propertyPath: onCollision.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 3868233205771645585, guid: e4b5e0dbee95e9e40bba1183ac1c1ca4, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3868233205771645585, guid: e4b5e0dbee95e9e40bba1183ac1c1ca4, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 5.5
+      value: 8.09
       objectReference: {fileID: 0}
     - target: {fileID: 3868233205771645585, guid: e4b5e0dbee95e9e40bba1183ac1c1ca4, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1689,6 +1713,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4911969559250070093, guid: e4b5e0dbee95e9e40bba1183ac1c1ca4, type: 3}
+      propertyPath: gravity
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 4911969559250070093, guid: e4b5e0dbee95e9e40bba1183ac1c1ca4, type: 3}
       propertyPath: kickForce
       value: 3
       objectReference: {fileID: 0}
@@ -1699,6 +1727,10 @@ PrefabInstance:
     - target: {fileID: 9118943717515929381, guid: e4b5e0dbee95e9e40bba1183ac1c1ca4, type: 3}
       propertyPath: m_Name
       value: Ball
+      objectReference: {fileID: 0}
+    - target: {fileID: 9118943717515929381, guid: e4b5e0dbee95e9e40bba1183ac1c1ca4, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

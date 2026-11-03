@@ -8,6 +8,7 @@ TagManager:
   - EmptyKW
   - Rule
   - Projectile
+  - World
   layers:
   - Default
   - TransparentFX

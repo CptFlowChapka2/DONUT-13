@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3868233205771645585}
   - component: {fileID: 8173609409454453099}
   - component: {fileID: 2393780438561038601}
-  - component: {fileID: 4911969559250070093}
+  - component: {fileID: 8083672175272356683}
   m_Layer: 0
   m_Name: Ball
   m_TagString: Untagged
@@ -83,7 +83,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &4911969559250070093
+--- !u!114 &8083672175272356683
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -95,9 +95,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49e67a2252331a640acded8532c518bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BallBehaviour
-  gravity: 30
-  kickForce: 10
-  kickLengthBeforeStopping: 20
+  gravity: 12
+  kickForce: 3
+  bounceCoefficient: 0.7
+  frictionValue: 1
 --- !u!1001 &8407920696792495398
 PrefabInstance:
   m_ObjectHideFlags: 0
