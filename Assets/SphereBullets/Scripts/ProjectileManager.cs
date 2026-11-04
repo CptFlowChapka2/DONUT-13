@@ -5,7 +5,7 @@ public class ProjectileManager : MonoBehaviour
 {
     [SerializeField] private Camera mainCam;
     [SerializeField] private SliderController sliderController;
-    [SerializeField] private Projectile[] allProjectiles = new Projectile[6];
+    [SerializeField] private Projectile[] allProjectiles = new Projectile[1];
     [SerializeField] private Transform spawnPoint;
 
     private GameObject currentCam;
@@ -23,62 +23,57 @@ public class ProjectileManager : MonoBehaviour
 
         GameObject[] allSpawns = new GameObject[nbInstances];
 
-        if (Input.GetKeyDown(KeyCode.Q))
-            allSpawns = MultiInstantiateAndInitialize(allProjectiles[0].gameObject, nbInstances);
+        // if (Input.GetKeyDown(KeyCode.Q))
+        //     allSpawns = MultiInstantiateAndInitialize(allProjectiles[0].gameObject, nbInstances, transform.position);
+        //
+        // if (Input.GetKeyDown(KeyCode.W))
+        //     allSpawns = MultiInstantiateAndInitialize(allProjectiles[1].gameObject, nbInstances, transform.position);
 
-        if (Input.GetKeyDown(KeyCode.W))
-            allSpawns = MultiInstantiateAndInitialize(allProjectiles[1].gameObject, nbInstances);
-
-        if (Input.GetKeyDown(KeyCode.E))
+        if (Input.GetMouseButtonDown(0))
         {
-            allSpawns = MultiInstantiateAndInitialize(allProjectiles[2].gameObject, nbInstances);
-            // if (Input.GetKey(KeyCode.Space))
-            // {
-            //     SoundManager.instance.deltaTest.Stop();
-            //     SoundManager.instance.deltaTest.Play();
-            // }
+            allSpawns = MultiInstantiateAndInitialize(allProjectiles[0].gameObject, nbInstances, transform.position, transform.forward);
         }
         
-        if (Input.GetKeyDown(KeyCode.R))
-            allSpawns = MultiInstantiateAndInitialize(allProjectiles[3].gameObject, nbInstances);
+        // if (Input.GetKeyDown(KeyCode.R))
+        //     allSpawns = MultiInstantiateAndInitialize(allProjectiles[3].gameObject, nbInstances, transform.position);
+        //
+        // if (Input.GetKeyDown(KeyCode.T))
+        //     allSpawns = MultiInstantiateAndInitialize(allProjectiles[4].gameObject, nbInstances, transform.position);
 
-        if (Input.GetKeyDown(KeyCode.T))
-            allSpawns = MultiInstantiateAndInitialize(allProjectiles[4].gameObject, nbInstances);
+        // if (Input.GetKeyDown(KeyCode.Y))
+        //     allSpawns = MultiInstantiateAndInitialize(allProjectiles[5].gameObject, nbInstances, transform.position);
 
-        if (Input.GetKeyDown(KeyCode.Y))
-            allSpawns = MultiInstantiateAndInitialize(allProjectiles[5].gameObject, nbInstances);
+        // if (Input.GetKey(KeyCode.LeftControl) && allSpawns[0])
+        // {
+        //     Projectile projectile = allSpawns[0].GetComponent<Projectile>();
+        //     TakeControl(projectile.personalCamera);
+        //     sliderController.gameObject.SetActive(true);
+        //     sliderController.toControl = projectile;
+        // }
 
-        if (Input.GetKey(KeyCode.LeftControl) && allSpawns[0])
-        {
-            Projectile projectile = allSpawns[0].GetComponent<Projectile>();
-            TakeControl(projectile.personalCamera);
-            sliderController.gameObject.SetActive(true);
-            sliderController.toControl = projectile;
-        }
-
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            sliderController.gameObject.SetActive(false);
-            TakeControl(mainCam);
-        }
+        // if (Input.GetKeyDown(KeyCode.Escape))
+        // {
+        //     sliderController.gameObject.SetActive(false);
+        //     TakeControl(mainCam);
+        // }
     }
 
-    public void TakeControl(Camera toFollow)
-    {
-        currentCam.SetActive(false);
-        currentCam = toFollow.gameObject;
-        currentCam.SetActive(true);
-    }
+    // public void TakeControl(Camera toFollow)
+    // {
+    //     currentCam.SetActive(false);
+    //     currentCam = toFollow.gameObject;
+    //     currentCam.SetActive(true);
+    // }
     
-    private GameObject[] MultiInstantiateAndInitialize(GameObject prefab, int nbOfInstances)
+    public GameObject[] MultiInstantiateAndInitialize(GameObject prefab, int nbOfInstances, Vector3 position, Vector3 baseDir)
     {
         GameObject[] allSpawns = new GameObject[nbOfInstances];
-        Vector3 normal = transform.position.normalized;
-        Vector3 spawnDirection = Vector3.ProjectOnPlane(transform.forward, normal).normalized;
+        Vector3 normal = position.normalized;
+        Vector3 spawnDirection = Vector3.ProjectOnPlane(baseDir, normal).normalized;
         float deltaAngle = 360f / (float)nbOfInstances;
         for (int i = 0; i < nbOfInstances; i++)
         {
-            GameObject go = InstantiateAndInitialize(prefab, spawnPoint.position, Quaternion.LookRotation(spawnDirection, normal));
+            GameObject go = InstantiateAndInitialize(prefab, position, Quaternion.LookRotation(spawnDirection, normal));
             allSpawns[i] = go;
             spawnDirection = Quaternion.AngleAxis(deltaAngle, normal) * spawnDirection;
         }

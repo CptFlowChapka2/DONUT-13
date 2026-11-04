@@ -48,6 +48,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2310307364573500745, guid: 189e913132733fe4e8e6ab410c481154, type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3867167077889850823, guid: 189e913132733fe4e8e6ab410c481154, type: 3}
       propertyPath: m_Time
       value: 0.5
@@ -55,7 +59,7 @@ PrefabInstance:
     - target: {fileID: 3867167077889850823, guid: 189e913132733fe4e8e6ab410c481154, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: e076443a2084c8f43a46dce086a90395, type: 2}
+      objectReference: {fileID: 2100000, guid: 98e1789d87bf92f449054006d77907ea, type: 2}
     - target: {fileID: 3867167077889850823, guid: 189e913132733fe4e8e6ab410c481154, type: 3}
       propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[0].value
       value: 0.25
@@ -66,15 +70,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5117361087445996362, guid: 189e913132733fe4e8e6ab410c481154, type: 3}
       propertyPath: m_Color.b
-      value: 0.3579234
-      objectReference: {fileID: 0}
-    - target: {fileID: 5117361087445996362, guid: 189e913132733fe4e8e6ab410c481154, type: 3}
-      propertyPath: m_Color.g
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5117361087445996362, guid: 189e913132733fe4e8e6ab410c481154, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5117361087445996362, guid: 189e913132733fe4e8e6ab410c481154, type: 3}
       propertyPath: m_Color.r
-      value: 0.3962264
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5117361087445996362, guid: 189e913132733fe4e8e6ab410c481154, type: 3}
       propertyPath: m_Intensity
@@ -83,10 +87,10 @@ PrefabInstance:
     - target: {fileID: 5726751499972110009, guid: 189e913132733fe4e8e6ab410c481154, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 1f0667c058fcd5c4c8e509108f8440cc, type: 2}
+      objectReference: {fileID: 2100000, guid: 3767fa8d8898dca498276ce76b521a26, type: 2}
     - target: {fileID: 7758570954859774956, guid: 189e913132733fe4e8e6ab410c481154, type: 3}
       propertyPath: m_Name
-      value: BouncyProjectile
+      value: StraightProjectile
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -94,14 +98,14 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 7758570954859774956, guid: 189e913132733fe4e8e6ab410c481154, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 2054906891196317475}
+      addedObject: {fileID: 6183770749797767167}
   m_SourcePrefab: {fileID: 100100000, guid: 189e913132733fe4e8e6ab410c481154, type: 3}
 --- !u!1 &4396312148883902403 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7758570954859774956, guid: 189e913132733fe4e8e6ab410c481154, type: 3}
   m_PrefabInstance: {fileID: 6244572618349939759}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &2054906891196317475
+--- !u!114 &6183770749797767167
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -116,7 +120,8 @@ MonoBehaviour:
   personalCamera: {fileID: 4618976150704810648}
   rb: {fileID: 0}
   distanceToSphere: 0
-  projectileData: {fileID: 11400000, guid: c17af344a877e8845adc269a31e66f7e, type: 2}
+  projectileData: {fileID: 11400000, guid: bee8f819b2e2dbb41ad434e59eefddea, type: 2}
+  rotationSpeed: 0
 --- !u!20 &4618976150704810648 stripped
 Camera:
   m_CorrespondingSourceObject: {fileID: 1635030828241381047, guid: 189e913132733fe4e8e6ab410c481154, type: 3}
