@@ -1,4 +1,3 @@
-
 using System;
 using UnityEngine;
 using UnityEngine.Pool;
@@ -6,54 +5,42 @@ using UnityEngine.Pool;
 public class LinePooledScript : MonoBehaviour
 {
     [SerializeField] private float timerToNextPoint = 0.1f;
-     private float internalTimerToNextPoint = 0.1f;
+    private float internalTimerToNextPoint = 0.1f;
     public GameObject prefab;
     public Camera cam;
-    public ObjectPool<Points> points;
+    public CustomObjectPool<Points> points;
     private Vector3 lastPos;
+    public int maxCapacity = 15;
+    public float forwardDistanceBetweenPoints = 1;
+
+    public GameObject playerObject;
+    private LineRenderer lineRenderer;
 
     #region Pooling
 
     private void Awake()
     {
-        points= new ObjectPool<Points>(
-            createFunc: CreateItem,
-            actionOnGet: OnGet,
-            actionOnRelease: OnRelease,
-            actionOnDestroy: OnDestroyItem,
-            collectionCheck: true,   // helps catch double-release mistakes
-            defaultCapacity: 15,
-            maxSize: 15
+        points = new CustomObjectPool<Points>(
+            CreateItem, maxCapacity
         );
         lastPos = transform.position;
         internalTimerToNextPoint = timerToNextPoint;
+        
+        lineRenderer = GetComponent<LineRenderer>();
+        lineRenderer.positionCount = maxCapacity;
+
+        for (int i = 0; i < maxCapacity; i++)
+        {
+            points.Get();
+        }
     }
-    
+
     private Points CreateItem()
     {
         Points pooledObject = GameObject.Instantiate(prefab).GetComponent<Points>();
         pooledObject.name = "PooledPoint";
         pooledObject.mommy = this;
-        pooledObject.gameObject.SetActive(false);
         return pooledObject;
-    }
-
-    // Called when an item is taken from the pool.
-    private void OnGet(Points pooledObject)
-    {
-        pooledObject.gameObject.SetActive(true);
-    }
-
-    // Called when an item is returned to the pool.
-    private void OnRelease(Points pooledObject)
-    {
-        pooledObject.gameObject.SetActive(false);
-    }
-
-    // Called when the pool decides to destroy an item (e.g., above max size).
-    private void OnDestroyItem(Points pooledObject)
-    {
-        Destroy(pooledObject.gameObject);
     }
 
     #endregion
@@ -61,7 +48,6 @@ public class LinePooledScript : MonoBehaviour
 
     void Update()
     {
-        Debug.Log(points.CountAll);
         if (internalTimerToNextPoint > 0)
         {
             internalTimerToNextPoint -= Time.deltaTime;
@@ -71,10 +57,21 @@ public class LinePooledScript : MonoBehaviour
         {
             internalTimerToNextPoint = timerToNextPoint;
             Points nextPoint = points.Get();
-            nextPoint.transform.position =  lastPos + (Vector3.forward / 5) + new Vector3(Input.GetAxis("Horizontal") / 5, Input.GetAxis("Vertical") / 5, 0);
+            Vector3 inputPos = ((Vector3.forward * forwardDistanceBetweenPoints) / 5) +
+                               new Vector3(Input.GetAxis("Horizontal") / 5, Input.GetAxis("Vertical") / 5,
+                                   0);
+            nextPoint.transform.position = lastPos + inputPos;
             lastPos = nextPoint.transform.position;
-            cam.transform.position = new Vector3(0, 1.2f, nextPoint.transform.position.z - 3.5f);
+            cam.transform.position = new Vector3(0, 1.2f, nextPoint.transform.position.z - 4.5f);
         }
-        
+
+        for (int i = points.CountInactive; i > 0; i--)
+        {
+            
+            if (points.CountAll < maxCapacity)
+                return;
+            
+            lineRenderer.SetPosition(maxCapacity - i, points.unavailableObjects[i - 1].transform.position);
+        }
     }
 }
