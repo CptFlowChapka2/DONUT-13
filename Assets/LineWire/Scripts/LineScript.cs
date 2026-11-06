@@ -1,32 +1,51 @@
+using System;
+using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.Pool;
+using UnityEngine.Splines;
+using Object = System.Object;
 
 public class LineScript : MonoBehaviour
 {
     [SerializeField] private float timerToNextPoint = 0.1f;
-    public bool spawnNextPoint;
-    private bool enableSpawn = true;
+     private float timerToNextPointActual ;
+     private int startingPos = -1;
 
-    public Camera cam;
+    public SplineAnimate cam;
+
+    public SplineContainer splineContainer;
+    public SplineContainer CamsplineContainer;
+    public SplineAnimate visual;
+
+    private void Start()
+    {
+        timerToNextPointActual = timerToNextPoint;
+    }
 
     void Update()
     {
-        if (timerToNextPoint > 0)
+        if (timerToNextPointActual > 0)
         {
-            timerToNextPoint -= Time.deltaTime;
+            timerToNextPointActual -= Time.deltaTime;
         }
 
-        if (timerToNextPoint <= 0 && enableSpawn)
+        if (!(timerToNextPointActual <= 0)) return;
+        
+        
+        startingPos++;
+        timerToNextPointActual = timerToNextPoint;
+        splineContainer.Spline.Add(splineContainer.Spline[^1].Position +(float3)((Vector3.forward / 5) + new Vector3(Input.GetAxis("Horizontal") / 5, Input.GetAxis("Vertical") / 5 , 0)),TangentMode.AutoSmooth);
+        CamsplineContainer.Spline.Add(CamsplineContainer.Spline[^1].Position +(float3)((Vector3.forward / 5)),TangentMode.Linear);
+        if (startingPos >20&& !cam.IsPlaying)
         {
-            enableSpawn = false;
-
-            spawnNextPoint = true;
+            cam.Play();
         }
-
-        if (spawnNextPoint)
+        if (startingPos >0&& !visual.IsPlaying)
         {
-            spawnNextPoint = false;
-            GameObject nextPoint = Instantiate(this.gameObject, transform.position + (Vector3.forward / 5) + new Vector3(Input.GetAxis("Horizontal") / 5, Input.GetAxis("Vertical") / 5 , 0), Quaternion.identity);
-            cam.transform.position = new Vector3(0, 1.2f, nextPoint.transform.position.z - 3.5f);
+            visual.Play();
         }
+        
+        
+        
     }
 }
