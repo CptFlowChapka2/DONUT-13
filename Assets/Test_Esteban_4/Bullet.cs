@@ -3,15 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class Bullet : MonoBehaviour
+public abstract class Bullet : MonoBehaviour
 {
     public Rigidbody rb;
     public float speed;
+    public float maxSpeed;
     
     public Dictionary<ForceApplier, Vector3> forces = new Dictionary<ForceApplier, Vector3>();
     
     private void Start()
     {
+        rb.maxLinearVelocity = maxSpeed;
         CollidersHolder.instance.colliders.Add((this, this.GetComponent<Collider>()));
         rb.linearVelocity = transform.forward * speed;
     }
@@ -21,8 +23,11 @@ public class Bullet : MonoBehaviour
         Vector3 appliedForce = rb.linearVelocity;
         foreach (var force in forces.Values)
         {
-            appliedForce += force;
+            appliedForce += BiasAddition(force);
         }
         rb.linearVelocity = appliedForce;
     }
+
+    protected abstract Vector3 BiasAddition(Vector3 force);
+
 }

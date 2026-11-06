@@ -2,12 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class Accelerator : ForceApplier
 {
     private void Start()
     {
-        force = transform.forward;
+        force = Random.onUnitSphere;
     }
 
     private void OnTriggerEnter(Collider other)
