@@ -1,12 +1,37 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
-public class Accelerator : MonoBehaviour
+public class Accelerator : ForceApplier
 {
-
-    public float power = 10;
-    private void OnTriggerStay(Collider other)
+    private void Start()
     {
-        
-        other.attachedRigidbody ?.AddRelativeForce(transform.forward*power,ForceMode.Force);
+        force = transform.forward;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        CollidersHolder.FindBulletByCollider(other).forces
+            .TryAdd(this, force.normalized * power * Time.fixedDeltaTime);
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        CollidersHolder.FindBulletByCollider(other).forces.Remove(this);
+    }
+
+    public void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawRay(transform.position, force.normalized * power);
     }
 }
+
+// //other.attachedRigidbody ?.AddForce(transform.forward*power,ForceMode.Force);
+// var rota = Quaternion.RotateTowards(other.attachedRigidbody.rotation, 
+//     Quaternion.FromToRotation(other.attachedRigidbody.linearVelocity, transform.forward), 
+//     power * Time.fixedDeltaTime);
+//         
+// other.attachedRigidbody.linearVelocity = rota * other.attachedRigidbody.linearVelocity ;
+// //other.GetComponent<bullet>()
