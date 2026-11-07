@@ -1,6 +1,8 @@
 using System;
+using Unity.VectorGraphics;
 using UnityEngine;
 using UnityEngine.Pool;
+using UnityEngine.SceneManagement;
 
 public class LinePooledScript : MonoBehaviour
 {
@@ -12,9 +14,14 @@ public class LinePooledScript : MonoBehaviour
     private Vector3 lastPos;
     public int maxCapacity = 15;
     public float forwardDistanceBetweenPoints = 1;
+    public float cameraDistance = 7.5f;
+    public float cameraHeight = 1.2f;
+    public float cameraXRotation = 0f;
 
     public GameObject playerObject;
     private LineRenderer lineRenderer;
+    
+    public CameraParametersScriptableObject cameraParameters;
 
     #region Pooling
 
@@ -33,6 +40,15 @@ public class LinePooledScript : MonoBehaviour
         {
             points.Get();
         }
+
+        if (cameraParameters != null)
+        {
+            cam.fieldOfView = cameraParameters.fov;
+            cameraDistance = cameraParameters.cameraDistance;
+            cameraHeight = cameraParameters.cameraHeight;
+            cameraXRotation = cameraParameters.cameraXRotation;
+            cam.transform.rotation = Quaternion.Euler(cameraXRotation, 0, 0);
+        }
     }
 
     private Points CreateItem()
@@ -48,6 +64,8 @@ public class LinePooledScript : MonoBehaviour
 
     void Update()
     {
+        RestartScene();
+        
         if (internalTimerToNextPoint > 0)
         {
             internalTimerToNextPoint -= Time.deltaTime;
@@ -62,7 +80,7 @@ public class LinePooledScript : MonoBehaviour
                                    0);
             nextPoint.transform.position = lastPos + inputPos;
             lastPos = nextPoint.transform.position;
-            cam.transform.position = new Vector3(0, 1.2f, nextPoint.transform.position.z - 4.5f);
+            cam.transform.position = new Vector3(0, cameraHeight, nextPoint.transform.position.z - cameraDistance);
         }
 
         for (int i = points.CountInactive; i > 0; i--)
@@ -72,6 +90,14 @@ public class LinePooledScript : MonoBehaviour
                 return;
             
             lineRenderer.SetPosition(maxCapacity - i, points.unavailableObjects[i - 1].transform.position);
+        }
+    }
+
+    private void RestartScene()
+    {
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
     }
 }
