@@ -7,6 +7,9 @@ TagManager:
   - Canvas
   - EmptyKW
   - Rule
+  - DSurface
+  - DeformTrigger
+  - Cell
   layers:
   - Default
   - TransparentFX
