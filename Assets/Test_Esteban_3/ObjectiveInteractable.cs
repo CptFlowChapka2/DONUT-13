@@ -27,7 +27,7 @@ public class ObjectiveInteractable : Interactable
     }
 
     [InteractableEffect(new[] 
-        { InteractionEffect.modifySpace,InteractionEffect.GiveAgentTarget,
+        { InteractionEffect.GiveAgentTarget,
             InteractionEffect.ModifyAvailableInteractable,InteractionEffect.ChangeAgentState })]
     public (InteractionError, KeyValuePair<string, (Type,object)>[]) CollectAction(Agent agent)
     {

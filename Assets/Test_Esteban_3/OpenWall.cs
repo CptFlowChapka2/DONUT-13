@@ -49,11 +49,11 @@ public class OpenWall : Interactable
         switch (thisState.state["open"].Item2)
         {
             case true:
-                transform.position = new Vector3(transform.position.x, 10, transform.position.z);
+                transform.position = new Vector3(transform.position.x, 0, transform.position.z);
                 thisState.state["open"] = (typeof(bool), false);
                 break;
             case false:
-                transform.position = new Vector3(transform.position.x, 0, transform.position.z);
+                transform.position = new Vector3(transform.position.x, 15, transform.position.z);
                 thisState.state["open"] = (typeof(bool), true);
                 break;
             default:

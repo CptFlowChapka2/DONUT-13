@@ -613,6 +613,7 @@ GameObject:
   - component: {fileID: 1145504807}
   - component: {fileID: 1145504806}
   - component: {fileID: 1145504810}
+  - component: {fileID: 1145504811}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -629,8 +630,8 @@ Transform:
   m_GameObject: {fileID: 1145504804}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.55, y: 2, z: 0.28}
-  m_LocalScale: {x: 1, y: 1, z: 12.89}
+  m_LocalPosition: {x: 1.55, y: 0, z: 0.28}
+  m_LocalScale: {x: 1, y: 3.69, z: 12.89}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 857139701}
@@ -741,7 +742,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00e8fc257d0cf5c44a00b58b16edeb69, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::OpenWall
-  ownCollider: {fileID: 1145504807}
+  ownCollider: {fileID: 1145504811}
+--- !u!65 &1145504811
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1145504804}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 3.19, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1405439866
 GameObject:
   m_ObjectHideFlags: 0
@@ -772,7 +794,7 @@ Transform:
   m_GameObject: {fileID: 1405439866}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.78, y: 0.86, z: 3.74}
+  m_LocalPosition: {x: 4.71, y: 0.86, z: 1.99}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -797,7 +819,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 2
+  m_Radius: 1.63
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!135 &1405439869
 SphereCollider:
@@ -818,7 +840,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 0.5
+  m_Radius: 0.26
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!23 &1405439870
 MeshRenderer:

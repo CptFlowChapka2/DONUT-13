@@ -46,7 +46,7 @@ public class AgentBrain
         var toDo = wantedState.state.Except(thisState.state);
         if (toDo.Any())
         {
-            RecusivlyDoSomething(InteractionEffect.ChangeAgentState,0,out var attemptout);
+            Debug.Log(RecusivlyDoSomething(InteractionEffect.ChangeAgentState,0,out var attemptout));
         }
     }
 
@@ -55,11 +55,12 @@ public class AgentBrain
         attemptout = attemptin + 1;
         if (attemptout >= 5) return InteractionError.NoActionLeadToSolution;
         var taskAtHand = CreateTaskAtHand(effect);
+        Attempt :
         InteractionError[] errors = new InteractionError[taskAtHand.actions.Length];
         for (int i = 0; i < taskAtHand.actions.Length; i++)
         {
             InteractionError code = TryToDoSomething(taskAtHand.actions[i]);
-            ;
+            Debug.Log(effect+" "+code);
             if (code == InteractionError.Success)
             {
                 return InteractionError.Success;
@@ -89,10 +90,9 @@ public class AgentBrain
             InteractionError code = RecusivlyDoSomething(todo,attemptout, out int attemptouot);
             attemptout += attemptouot;
             if (attemptout >= 5) return InteractionError.NoActionLeadToSolution;
-            
             if (code == InteractionError.Success)
             {
-                return RecusivlyDoSomething(effect, attemptin, out attemptout);
+                goto Attempt;
             }
         }
 
