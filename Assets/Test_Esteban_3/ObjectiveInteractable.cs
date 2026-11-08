@@ -27,12 +27,15 @@ public class ObjectiveInteractable : Interactable
     }
 
     [InteractableEffect(new InteractionEffect[] 
-        { InteractionEffect.modifySpace,InteractionEffect.ChangeAgentState,InteractionEffect.ModifyAvailableInteractable })]
+        { InteractionEffect.modifySpace,InteractionEffect.GiveAgentTarget,InteractionEffect.ModifyAvailableInteractable })]
     public (InteractionError, KeyValuePair<string, (Type,object)>[]) CollectAction(Agent agent)
     {
         var rL = new List<KeyValuePair<string, (Type,object)>> { };
         if (!ownCollider.bounds.Intersects(agent.collider.bounds))
         {
+            KeyValuePair<string, (Type, object)> t =
+                new KeyValuePair<string, (Type, object)>("target", (typeof(Vector3), transform.position));
+            rL.Add(t);
             return (InteractionError.AgentAintCloseEnought, rL.ToArray());
         }
         Destroy(gameObject);

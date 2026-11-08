@@ -904,6 +904,7 @@ GameObject:
   - component: {fileID: 1438010317}
   - component: {fileID: 1438010316}
   - component: {fileID: 1438010321}
+  - component: {fileID: 1438010322}
   m_Layer: 0
   m_Name: IAsteban
   m_TagString: Untagged
@@ -1022,7 +1023,7 @@ Transform:
   m_GameObject: {fileID: 1438010315}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.21, y: 1.72, z: 2.45}
+  m_LocalPosition: {x: -2.5, y: 1.72, z: 2.45}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1041,6 +1042,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Agent
   collider: {fileID: 1438010317}
+--- !u!114 &1438010322
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1438010315}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d9a47cdc683f164889f1e7a1b588e4e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AgentMoover
+  ownCollider: {fileID: 1438010317}
+  navAgent: {fileID: 1438010316}
 --- !u!1 &1638293217
 GameObject:
   m_ObjectHideFlags: 0

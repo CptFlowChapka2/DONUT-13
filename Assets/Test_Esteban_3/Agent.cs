@@ -18,9 +18,8 @@ public class Agent : MonoBehaviour
     private void Update()
     {
         if (!Input.GetKeyDown(KeyCode.A)) return;
-        
         AskForCurrentVolume();
-        Debug.Log(brain.TryToDoSomething(InteractionEffect.ChangeAgentState));
+        brain.AttainObjective();
         
         
     }
@@ -40,16 +39,66 @@ public class AgentBrain
     public InternalState wantedState = InternalState.Create(("objective", (typeof(bool),true)));
     
     public List<InteractableVolume> currentVolume=new List<InteractableVolume>();
+    
 
-    private Stack<InteractionTask> tasks = new Stack<InteractionTask>();
 
-    
-    
-    
-    public InteractionError TryToDoSomething(InteractionEffect effect)
+    public void AttainObjective()
     {
-        var taskAtHand = CreateTaskAtHand(effect, out var set);
-        var monad = taskAtHand.actions[taskAtHand.actionIndexToGetBackTo];
+        var toDo=wantedState.state.Except(thisState.state);
+        if (toDo.Any())
+        {
+            RecusivlyDoSomething(InteractionEffect.ChangeAgentState);
+        }
+
+    }
+
+    private InteractionError RecusivlyDoSomething(InteractionEffect effect)
+    {
+        var taskAtHand = CreateTaskAtHand(effect);
+        InteractionError[] errors = new InteractionError[taskAtHand.actions.Length];
+        for (int i = 0; i < taskAtHand.actions.Length; i++)
+        {
+            InteractionError code = TryToDoSomething(taskAtHand.actions[i]);
+            if (code == InteractionError.Success)
+            {
+                return InteractionError.Success;
+            }
+
+            errors[i] = code;
+        }
+
+        for (int i = 0; i < errors.Length; i++)
+        {
+            InteractionEffect todo;
+            switch (errors[i])
+            {
+                case InteractionError.AgentAintCloseEnought:
+                    todo = InteractionEffect.ChangeAgentPosition;
+                    break;
+                case InteractionError.NoActionLeadToSolution:
+                    continue;
+                case InteractionError.NoPathToTarget:
+                    todo = InteractionEffect.modifySpace;
+                    break;
+                case InteractionError.Success:
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+
+            InteractionError code = RecusivlyDoSomething(todo);
+            if (code == InteractionError.Success)
+            {
+                return code;
+            }
+            
+        }
+
+        return InteractionError.NoActionLeadToSolution;
+    }
+    
+    
+    public InteractionError TryToDoSomething(InteractionMonad monad)
+    {
         
         var actionAttemped = monad.action.Invoke(MakeIV(monad));
         if (actionAttemped.values[0].GetType() == typeof(InteractionError) &&
@@ -60,6 +109,7 @@ public class AgentBrain
         }
         else
         {
+            PropagateSideEffect(monad,actionAttemped);
             return (InteractionError)actionAttemped.values[0];
         }
         
@@ -67,9 +117,9 @@ public class AgentBrain
 
     }
 
-    private InteractionTask CreateTaskAtHand(InteractionEffect effect, out HashSet<InteractionMonad> set)
+    private InteractionTask CreateTaskAtHand(InteractionEffect effect)
     {
-        set = new HashSet<InteractionMonad>();
+        HashSet<InteractionMonad> set = new HashSet<InteractionMonad>();
         foreach (var interactableVolume in currentVolume)
         {
             foreach (var interactableVolumeAllInteractable in interactableVolume.allInteractables)
@@ -99,33 +149,41 @@ public class AgentBrain
     {
         foreach (var interactionEffect in monad.Effects)
         {
-            switch (interactionEffect)
+            if (interactionEffect == InteractionEffect.modifySpace)
             {
-                case InteractionEffect.modifySpace:
-                    break;
-                case InteractionEffect.ChangeAgentState:
-                    int index = monad.outpoutGuide.Keys.ToList().Find(x =>
-                        monad.outpoutGuide[x] == typeof(KeyValuePair<string, (Type, object)>[]));
-                    object o = values.values[index];
-                    var cValues= Cast<KeyValuePair<string, (Type, object)>[]>(o);
-                    foreach (var keyValuePair in cValues)
-                    {
-                        if (thisState.state.ContainsKey(keyValuePair.Key))
-                        {
-                            thisState.state[keyValuePair.Key] = keyValuePair.Value;
-                        }
-                        else
-                        {
-                            thisState.state.Add(keyValuePair.Key, keyValuePair.Value);
-                        }
-                    }
-                    break;
-                case InteractionEffect.ChangeInteractableState:
-                    break;
-                case InteractionEffect.ModifyAvailableInteractable:
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
+            }
+
+            if (interactionEffect == InteractionEffect.GiveAgentTarget)
+            {
+                int index = monad.outpoutGuide.Keys.ToList().Find(x =>
+                    monad.outpoutGuide[x] == typeof(KeyValuePair<string, (Type, object)>[]));
+                object o = values.values[index];
+                var cValues = Cast<KeyValuePair<string, (Type, object)>[]>(o);
+                foreach (var keyValuePair in cValues)
+                {
+                    thisState.state[keyValuePair.Key] = keyValuePair.Value;
+                }
+            }
+            if (interactionEffect == InteractionEffect.ChangeAgentState)
+            {
+                int index = monad.outpoutGuide.Keys.ToList().Find(x =>
+                    monad.outpoutGuide[x] == typeof(KeyValuePair<string, (Type, object)>[]));
+                object o = values.values[index];
+                var cValues = Cast<KeyValuePair<string, (Type, object)>[]>(o);
+                foreach (var keyValuePair in cValues)
+                {
+                    thisState.state[keyValuePair.Key] = keyValuePair.Value;
+                }
+            }
+            if (interactionEffect == InteractionEffect.ChangeInteractableState)
+            {
+            }
+            if (interactionEffect == InteractionEffect.ModifyAvailableInteractable)
+            {
+            }
+            else
+            {
+                throw new ArgumentOutOfRangeException();
             }
         }
     }

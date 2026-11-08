@@ -30,20 +30,36 @@ public class OpenWall : Interactable
     }
     
     //une vrais action : par convention on retourne toujour un tuple qui as en premier object un bool indiquand le succé de l'opération ou non
-    [InteractableEffect(new InteractionEffect[] { InteractionEffect.modifySpace , InteractionEffect.ChangeInteractableState })]
+    [InteractableEffect(new InteractionEffect[]
+    {
+        InteractionEffect.modifySpace , InteractionEffect.ChangeInteractableState 
+        ,InteractionEffect.GiveAgentTarget
+    })]
     public (InteractionError,KeyValuePair<string,(Type,object)>[]) OpenAction(Agent agent)
     {
         var rL = new List<KeyValuePair<string, (Type,object)>> { };
         if (!ownCollider.bounds.Intersects(agent.collider.bounds))
         {
+            KeyValuePair<string, (Type, object)> t =
+                new KeyValuePair<string, (Type, object)>("target", (typeof(Vector3), transform.position));
+            rL.Add(t);
             return (InteractionError.AgentAintCloseEnought, rL.ToArray());
         }
 
-        transform.position = thisState.state["open"].Item2 switch
+        switch (thisState.state["open"].Item2)
         {
-            true => new Vector3(transform.position.x,10,transform.position.z),
-            false => new Vector3(transform.position.x,0,transform.position.z)
-        };
+            case true:
+                transform.position = new Vector3(transform.position.x, 10, transform.position.z);
+                thisState.state["open"] = (typeof(bool), false);
+                break;
+            case false:
+                transform.position = new Vector3(transform.position.x, 0, transform.position.z);
+                thisState.state["open"] = (typeof(bool), true);
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
+
         var d = thisState.state.First(x => x.Key == "open");
         rL.Add(d);
         return (InteractionError.Success,rL.ToArray());

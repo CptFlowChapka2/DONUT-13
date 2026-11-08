@@ -143,15 +143,19 @@ public class InteractableEffect : System.Attribute
 public enum InteractionError
 {
     Success,
-    AgentAintCloseEnought
+    AgentAintCloseEnought,
+    NoPathToTarget,
+    NoActionLeadToSolution
 }
 
 public enum InteractionEffect
 {
     modifySpace,
     ChangeAgentState,
+    GiveAgentTarget,
     ChangeInteractableState,
-    ModifyAvailableInteractable
+    ModifyAvailableInteractable,
+    ChangeAgentPosition
 }
 
 public struct InternalState
