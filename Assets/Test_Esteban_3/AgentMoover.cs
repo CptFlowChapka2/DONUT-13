@@ -1,11 +1,13 @@
 using System;
 using System.Collections.Generic;
+using Unity.AI.Navigation;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
 public class AgentMoover : Interactable
 {
-    public NavMeshAgent navAgent;
+    public NavMeshAgent navAgent; 
     private NavMeshPath _path;
     
     
@@ -14,10 +16,11 @@ public class AgentMoover : Interactable
         //on initialise les valeur meta de cette classe
         thisMeta = CreateMeta(this);
         thisState = InternalState.Create();
+        
     }
     
     [InteractableAction("MooveAction")]
-    public InteractionValues Collect(InteractionValues inputs)
+    public InteractionValues Moove(InteractionValues inputs)
     {
         //on performe l'action
         var returnTuple= MooveAction(Cast<Vector3>(inputs.values[0]));
@@ -33,8 +36,11 @@ public class AgentMoover : Interactable
         { InteractionEffect.ChangeAgentPosition})]
     public (InteractionError, KeyValuePair<string, (Type, object)>[]) MooveAction(Vector3 target)
     {
+        _path = new NavMeshPath();
         var rL = new List<KeyValuePair<string, (Type,object)>> { };
-        if (!navAgent.CalculatePath(target, _path))
+        NavMesh.SamplePosition(target, out NavMeshHit hit, ownCollider.bounds.extents.magnitude,NavMesh.AllAreas);
+        target = hit.position;
+        if (!hit.hit||!navAgent.CalculatePath(target, _path))
         {
             return (InteractionError.NoPathToTarget, rL.ToArray());
         }

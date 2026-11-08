@@ -26,8 +26,9 @@ public class ObjectiveInteractable : Interactable
         return toReturn;
     }
 
-    [InteractableEffect(new InteractionEffect[] 
-        { InteractionEffect.modifySpace,InteractionEffect.GiveAgentTarget,InteractionEffect.ModifyAvailableInteractable })]
+    [InteractableEffect(new[] 
+        { InteractionEffect.modifySpace,InteractionEffect.GiveAgentTarget,
+            InteractionEffect.ModifyAvailableInteractable,InteractionEffect.ChangeAgentState })]
     public (InteractionError, KeyValuePair<string, (Type,object)>[]) CollectAction(Agent agent)
     {
         var rL = new List<KeyValuePair<string, (Type,object)>> { };
