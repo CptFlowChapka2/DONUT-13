@@ -29,10 +29,14 @@ public class LinePooledScript : MonoBehaviour
     private PlayerInput playerInput;
     private InputAction leftStick;
     private InputAction rightStick;
+    private InputAction lineSwitch;
 
     public LineRenderer lineRenderer1;
     public LineRenderer lineRenderer2;
 
+    public GameObject playerPrefab;
+
+    private bool lineTwoBool;
 
     #region Pooling
 
@@ -44,8 +48,8 @@ public class LinePooledScript : MonoBehaviour
         points2 = new CustomObjectPool<Points>(
             CreateItem, maxCapacity
         );
-        lastPos1 = transform.position;
-        lastPos2 = transform.position;
+        lastPos1 = transform.position + Vector3.left;
+        lastPos2 = transform.position + Vector3.right;
         internalTimerToNextPoint = timerToNextPoint;
 
         lineRenderer1.positionCount = maxCapacity;
@@ -54,6 +58,7 @@ public class LinePooledScript : MonoBehaviour
         playerInput = GetComponent<PlayerInput>();
         leftStick = playerInput.actions["LeftStick"];
         rightStick = playerInput.actions["RightStick"];
+        lineSwitch = playerInput.actions["LineSwitch"];
 
         for (int i = 0; i < maxCapacity; i++)
         {
@@ -98,6 +103,20 @@ public class LinePooledScript : MonoBehaviour
             UpdatePooledObject(points2, rightStick, ref lastPos2);
             UpdateLineRenderer(lineRenderer1, points1);
             UpdateLineRenderer(lineRenderer2, points2);
+        }
+
+        if (!lineTwoBool)
+        {
+            playerPrefab.transform.position = points1.unavailableObjects[maxCapacity - 46].transform.position;
+        }
+        else
+        {
+            playerPrefab.transform.position = points2.unavailableObjects[maxCapacity - 46].transform.position;
+        }
+
+        if (lineSwitch.WasPerformedThisFrame())
+        {
+            lineTwoBool = !lineTwoBool;
         }
     }
 

@@ -25,6 +25,16 @@
                     "interactions": "",
                     "initialStateCheck": true,
                     "priority": 0
+                },
+                {
+                    "name": "LineSwitch",
+                    "type": "Button",
+                    "id": "70daaba1-a936-4a5d-8cbb-81acecf9e3e0",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false,
+                    "priority": 0
                 }
             ],
             "bindings": [
@@ -47,6 +57,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "RightStick",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "6ccff049-733c-42d2-a212-3edef4c9f148",
+                    "path": "<Gamepad>/rightShoulder",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "LineSwitch",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
