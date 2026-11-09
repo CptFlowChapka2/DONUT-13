@@ -115,7 +115,7 @@ MonoBehaviour:
   StringsBanks:
   - {fileID: 6219538616371169094}
   cacheVersion: 131861
-  cacheTime: 639294897819921132
+  cacheTime: 639298305007936586
   SerializableEventsDict:
   - key: event:/DeltaTest
     index: 0
@@ -134,7 +134,7 @@ MonoBehaviour:
   Path: Assets/BuildFMOD/Desktop/Master.strings.bank
   Name: Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 639294897819921132
+  lastModified: 639298305007936586
   FileSizes:
   - Name: 
     Value: 770
@@ -154,6 +154,6 @@ MonoBehaviour:
   Path: Assets/BuildFMOD/Desktop/Master.bank
   Name: Master
   StudioPath: bank:/Master
-  lastModified: 639294897819842334
+  lastModified: 639298305007881185
   FileSizes: []
   Exists: 1
