@@ -1,0 +1,57 @@
+{
+    "version": 1,
+    "name": "LineWireInputs",
+    "maps": [
+        {
+            "name": "LineWireInputs",
+            "id": "18185024-1fff-4eb3-b1b9-d60e563a35ae",
+            "actions": [
+                {
+                    "name": "LeftStick",
+                    "type": "Value",
+                    "id": "2db4a76f-7fd2-48c8-8eb6-035fd4988370",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true,
+                    "priority": 0
+                },
+                {
+                    "name": "RightStick",
+                    "type": "Value",
+                    "id": "4d170ed7-e574-4488-ba7c-b1ea0de27abc",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true,
+                    "priority": 0
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "b53a1faf-6922-4bd6-a8cb-b9738f43a5f3",
+                    "path": "<Gamepad>/leftStick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "LeftStick",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "3f4ee210-b25e-4cdd-98f4-15742065fb8a",
+                    "path": "<Gamepad>/rightStick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "RightStick",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}

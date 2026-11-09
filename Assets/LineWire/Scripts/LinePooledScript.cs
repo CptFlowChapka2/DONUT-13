@@ -1,6 +1,7 @@
 using System;
 using Unity.VectorGraphics;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.Pool;
 using UnityEngine.SceneManagement;
 
@@ -22,6 +23,11 @@ public class LinePooledScript : MonoBehaviour
     private LineRenderer lineRenderer;
     
     public CameraParametersScriptableObject cameraParameters;
+    
+    private PlayerInput playerInput;
+    private InputAction leftStick;
+    private InputAction rightStick;
+
 
     #region Pooling
 
@@ -35,6 +41,10 @@ public class LinePooledScript : MonoBehaviour
         
         lineRenderer = GetComponent<LineRenderer>();
         lineRenderer.positionCount = maxCapacity;
+        
+        playerInput = GetComponent<PlayerInput>();
+        leftStick = playerInput.actions["LeftStick"];
+        rightStick = playerInput.actions["RightStick"];
 
         for (int i = 0; i < maxCapacity; i++)
         {
@@ -75,9 +85,11 @@ public class LinePooledScript : MonoBehaviour
         {
             internalTimerToNextPoint = timerToNextPoint;
             Points nextPoint = points.Get();
+            
             Vector3 inputPos = ((Vector3.forward * forwardDistanceBetweenPoints) / 5) +
-                               new Vector3(Input.GetAxis("Horizontal") / 5, Input.GetAxis("Vertical") / 5,
+                               new Vector3(leftStick.ReadValue<Vector2>().x / 5, leftStick.ReadValue<Vector2>().y / 5,
                                    0);
+            
             nextPoint.transform.position = lastPos + inputPos;
             lastPos = nextPoint.transform.position;
             cam.transform.position = new Vector3(0, cameraHeight, nextPoint.transform.position.z - cameraDistance);
