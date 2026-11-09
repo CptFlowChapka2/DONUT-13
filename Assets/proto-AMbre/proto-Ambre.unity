@@ -412,7 +412,7 @@ TrailRenderer:
   m_PreviewTimeScale: 1
   m_Parameters:
     serializedVersion: 3
-    widthMultiplier: 1
+    widthMultiplier: 0.978373
     widthCurve:
       serializedVersion: 2
       m_Curve:
@@ -425,6 +425,24 @@ TrailRenderer:
         weightedMode: 0
         inWeight: 0.33333334
         outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 0.4705093
+        value: 0.49291784
+        inSlope: -1.0868471
+        outSlope: -1.0868471
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.15954417
+        outWeight: 0
+      - serializedVersion: 3
+        time: 0.9434314
+        value: 0.0464589
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
@@ -727,7 +745,7 @@ TrailRenderer:
   m_PreviewTimeScale: 1
   m_Parameters:
     serializedVersion: 3
-    widthMultiplier: 1
+    widthMultiplier: 0.978373
     widthCurve:
       serializedVersion: 2
       m_Curve:
@@ -740,6 +758,24 @@ TrailRenderer:
         weightedMode: 0
         inWeight: 0.33333334
         outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 0.4705093
+        value: 0.49291784
+        inSlope: -1.0868471
+        outSlope: -1.0868471
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.15954417
+        outWeight: 0
+      - serializedVersion: 3
+        time: 0.9434314
+        value: 0.0464589
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
@@ -945,11 +981,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CompasScript
   point1: {fileID: 753870852}
   point2: {fileID: 1304515133}
-  dist: 5
+  dist: 2
   speed: 5
   point2pos: {x: 0, y: 0, z: 0}
   maxDist: 10
-  maxAngle: 60
+  maxAngle: 180
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
