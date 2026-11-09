@@ -19,7 +19,7 @@ public class CompasScript : MonoBehaviour
     private void Update()
     {
         dist += Input.mouseScrollDelta.y;
-        dist = Mathf.Clamp(dist, 0, Mathf.Infinity);
+        dist = Mathf.Clamp(dist, 1, Mathf.Infinity);
         point2pos = Vector3.right * dist;
         
 
