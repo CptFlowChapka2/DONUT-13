@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: CAM_Topish
   m_EditorClassIdentifier: Assembly-CSharp::CameraParametersScriptableObject
   fov: 100
-  cameraDistance: 6
+  cameraDistance: 8
   cameraHeight: 3
   cameraXRotation: 20
