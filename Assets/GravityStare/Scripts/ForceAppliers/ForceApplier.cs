@@ -9,4 +9,12 @@ public abstract class ForceApplier : MonoBehaviour
     public Vector3 force;
     protected float influenceRadius;
     [SerializeField] protected Collider collider;
+
+    protected void ApplyForce(ForceReceiver receiver, Vector3 force)
+    {
+        if (!receiver.forces.TryAdd(this, force)) //Ajoute une fois, puis ensuite ne fait que changer la value
+        {
+            receiver.forces[this] = force;
+        }
+    }
 }

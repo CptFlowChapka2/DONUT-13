@@ -13,13 +13,13 @@ public class Accelerator : ForceApplier
 
     private void OnTriggerEnter(Collider other)
     {
-        CollidersHolder.FindBulletByCollider(other).forces
+        CollidersHolder.FindReceiverByCollider(other).forces
             .TryAdd(this, force.normalized * power * Time.fixedDeltaTime);
     }
 
     private void OnTriggerExit(Collider other)
     {
-        CollidersHolder.FindBulletByCollider(other).forces.Remove(this);
+        CollidersHolder.FindReceiverByCollider(other).forces.Remove(this);
     }
 
     public void OnDrawGizmos()

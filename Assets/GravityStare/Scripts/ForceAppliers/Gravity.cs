@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Gravity : ForceApplier
 {
-    private HashSet<ForceReceiver> bullets = new HashSet<ForceReceiver>();
+    private HashSet<ForceReceiver> receivers = new HashSet<ForceReceiver>();
 
     private void Start()
     {
@@ -15,25 +15,24 @@ public class Gravity : ForceApplier
 
     private void OnTriggerEnter(Collider other)
     {
-        bullets.Add(CollidersHolder.FindBulletByCollider(other));
+        if (other.CompareTag("Forceless")) return;
+        receivers.Add(CollidersHolder.FindReceiverByCollider(other));
     }
 
     private void FixedUpdate()
     {
-        foreach (ForceReceiver bullet in bullets)
+        foreach (ForceReceiver receiver in receivers)
         {
-            Vector3 direction = (transform.position - bullet.transform.position) * Time.fixedDeltaTime;
-            if (!bullet.forces.TryAdd(this, direction)) //Ajoute une fois, puis ensuite ne fait que changer la value
-            {
-                bullet.forces[this] = direction;
-            }
+            Vector3 direction = (transform.position - receiver.transform.position).normalized * (power * Time.fixedDeltaTime);
+            ApplyForce(receiver, direction);
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        CollidersHolder.FindBulletByCollider(other).forces.Remove(this);
-        bullets.Remove(CollidersHolder.FindBulletByCollider(other));
+        if (other.CompareTag("Forceless")) return;
+        CollidersHolder.FindReceiverByCollider(other).forces.Remove(this);
+        receivers.Remove(CollidersHolder.FindReceiverByCollider(other));
     }
 
     // private void OnTriggerStay(Collider other)
