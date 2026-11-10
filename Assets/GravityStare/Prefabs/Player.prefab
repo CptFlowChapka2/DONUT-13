@@ -131,7 +131,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62247d1fca8a9eb42bf5b6d475fa5d96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Player
-  movementSpeed: 0
   isGrounded: 0
 --- !u!114 &1682397818490072443
 MonoBehaviour:
@@ -182,6 +181,7 @@ MonoBehaviour:
   collider: {fileID: 2410323147755769984}
   rb: {fileID: 6998088576842970835}
   receiver: {fileID: 6880418058497624826}
+  ownMovement: {fileID: 1682397818490072443}
   player: {fileID: 7815128392679223594}
 --- !u!54 &6998088576842970835
 Rigidbody:

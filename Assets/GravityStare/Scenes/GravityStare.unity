@@ -798,9 +798,17 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1682397818490072443, guid: 347f290d9eaddc74b84f6ba0c0af9070, type: 3}
+      propertyPath: power
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 2943847033478289868, guid: 347f290d9eaddc74b84f6ba0c0af9070, type: 3}
       propertyPath: power
       value: 0.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 2943847033478289868, guid: 347f290d9eaddc74b84f6ba0c0af9070, type: 3}
+      propertyPath: percentMode
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7590836531520345733, guid: 347f290d9eaddc74b84f6ba0c0af9070, type: 3}
       propertyPath: m_Name

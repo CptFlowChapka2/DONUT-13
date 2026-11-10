@@ -8,11 +8,11 @@ public class PlayerMovement : ForceApplier
 
     private void FixedUpdate()
     {
-        Vector3 movement = Vector3.zero;
+        force = Vector3.zero;
         if (player.isGrounded)
         {
-            movement = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")) * (Time.deltaTime * power);
+            force = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")) * (Time.deltaTime * power);
         }
-        ApplyForce(receiver, movement);
+        ApplyForce(receiver, force);
     }
 }
