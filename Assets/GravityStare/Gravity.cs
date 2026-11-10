@@ -4,8 +4,15 @@ using UnityEngine;
 
 public class Gravity : ForceApplier
 {
-    private HashSet<Bullet> bullets = new HashSet<Bullet>();
-    
+    private HashSet<ForceReceiver> bullets = new HashSet<ForceReceiver>();
+
+    private void Start()
+    {
+        influenceRadius = 1 + 0.7f * power;
+        SphereCollider sphereCollider = collider as SphereCollider;
+        sphereCollider.radius = influenceRadius;
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         bullets.Add(CollidersHolder.FindBulletByCollider(other));
@@ -13,7 +20,7 @@ public class Gravity : ForceApplier
 
     private void FixedUpdate()
     {
-        foreach (Bullet bullet in bullets)
+        foreach (ForceReceiver bullet in bullets)
         {
             Vector3 direction = (transform.position - bullet.transform.position) * Time.fixedDeltaTime;
             if (!bullet.forces.TryAdd(this, direction)) //Ajoute une fois, puis ensuite ne fait que changer la value

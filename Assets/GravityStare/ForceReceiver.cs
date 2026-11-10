@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public abstract class Bullet : MonoBehaviour
+[RequireComponent(typeof(Rigidbody))]
+public abstract class ForceReceiver : MonoBehaviour
 {
     public Rigidbody rb;
     public float speed;

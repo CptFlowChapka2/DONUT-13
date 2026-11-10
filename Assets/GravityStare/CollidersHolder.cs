@@ -24,9 +24,9 @@ public class CollidersHolder : MonoBehaviour
 
     #endregion
     
-    public List<(Bullet bullet, Collider collider)> colliders = new List<(Bullet, Collider)>();
+    public List<(ForceReceiver bullet, Collider collider)> colliders = new List<(ForceReceiver, Collider)>();
 
-    public static Bullet FindBulletByCollider(Collider collider)
+    public static ForceReceiver FindBulletByCollider(Collider collider)
     {
         return instance.colliders.Find(x => x.collider == collider).bullet;
     }

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class FunkyBullet  : Bullet
+public class FunkyForceReceiver  : ForceReceiver
 {
     [Range(0,1)]public float strengh;
     protected override Vector3 BiasAddition(Vector3 force)
