@@ -8,9 +8,23 @@ public class Gravity : ForceApplier
 
     private void Start()
     {
-        influenceRadius = 1 + 0.7f * power;
+        influenceRadius = 1 + 5f;
         SphereCollider sphereCollider = collider as SphereCollider;
         sphereCollider.radius = influenceRadius;
+    }
+
+    public override void AddOrToggleReceiver(ForceReceiver r,bool toggleMode)
+    {
+        if (toggleMode)
+        {
+            //if(collider.bounds.Contains(r.transform.position))return;
+            if (receivers.Contains(r)) receivers.Remove(r);
+            else receivers.Add(r);
+        }
+        else
+        {
+            receivers.Add(r);
+        }
     }
 
     private void OnTriggerEnter(Collider other)
@@ -31,8 +45,9 @@ public class Gravity : ForceApplier
     private void OnTriggerExit(Collider other)
     {
         if (other.CompareTag("Forceless")) return;
-        CollidersHolder.FindReceiverByCollider(other).forces.Remove(this);
-        receivers.Remove(CollidersHolder.FindReceiverByCollider(other));
+        var r = CollidersHolder.FindReceiverByCollider(other);
+        r.forces.Remove(this);
+        receivers.Remove(r);
     }
 
     // private void OnTriggerStay(Collider other)

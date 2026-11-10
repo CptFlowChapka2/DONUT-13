@@ -17,4 +17,6 @@ public abstract class ForceApplier : MonoBehaviour
             receiver.forces[this] = force;
         }
     }
+
+    public virtual void AddOrToggleReceiver(ForceReceiver r,bool togleMode){}
 }
