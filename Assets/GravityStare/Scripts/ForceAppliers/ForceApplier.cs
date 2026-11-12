@@ -9,7 +9,7 @@ public abstract class ForceApplier : MonoBehaviour
     public float power;
     public Vector3 force;
     protected float influenceRadius;
-    [SerializeField] protected Collider collider;
+    [SerializeField] public Collider collider;
     
     protected HashSet<ForceReceiver> receivers = new HashSet<ForceReceiver>();
 
@@ -21,7 +21,7 @@ public abstract class ForceApplier : MonoBehaviour
         }
     }
 
-    public abstract void CreateAndApllyForce(ForceReceiver receiver);
+    public abstract void CreateAndApplyForce(ForceReceiver receiver);
 
     public virtual void AddOrToggleReceiver(ForceReceiver r,bool togleMode){}
 }
