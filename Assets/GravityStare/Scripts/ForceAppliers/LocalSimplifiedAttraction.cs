@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Gravity : ForceApplier
+public class LocalSimplifiedAttraction : ForceApplier
 {
 
     private void Start()
@@ -22,7 +22,7 @@ public class Gravity : ForceApplier
     {
         if (toggleMode)
         {
-            if(collider.bounds.Contains(r.transform.position))return;
+            //if(collider.bounds.Contains(r.transform.position))return;
             if (receivers.Contains(r)) receivers.Remove(r);
             else receivers.Add(r);
         }

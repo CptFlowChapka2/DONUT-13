@@ -26,7 +26,7 @@ public class Player : MonoBehaviour
         {
             Cursor.lockState = CursorLockMode.Locked;
         }
-        Debug.DrawRay(camera.transform.position,camera.transform.forward,Color.blueViolet);
+       
         if (Input.GetMouseButtonDown(0))
         {
             
@@ -35,6 +35,7 @@ public class Player : MonoBehaviour
             {
                 var raycastHit = hits[i];
                 if (!raycastHit.collider.CompareTag(handle)) continue;
+                Debug.Log("touché");
                 raycastHit.transform.gameObject.GetComponentInChildren<ForceApplier>().AddOrToggleReceiver(thisForceReceiver,true);
                 break;
             }
