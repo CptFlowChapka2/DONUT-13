@@ -8,6 +8,11 @@ public class PlayerMovement : ForceApplier
 
     private void FixedUpdate()
     {
+        CreateAndApllyForce(receiver);
+    }
+
+    public override void CreateAndApllyForce(ForceReceiver receiver)
+    {
         force = Vector3.zero;
         if (player.isGrounded)
         {

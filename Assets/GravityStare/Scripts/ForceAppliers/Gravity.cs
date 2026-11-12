@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Gravity : ForceApplier
 {
-    private HashSet<ForceReceiver> receivers = new HashSet<ForceReceiver>();
 
     private void Start()
     {
@@ -13,11 +12,17 @@ public class Gravity : ForceApplier
         sphereCollider.radius = influenceRadius;
     }
 
+    public override void CreateAndApllyForce(ForceReceiver receiver)
+    {
+        Vector3 direction = (transform.position - receiver.transform.position).normalized * (power * Time.fixedDeltaTime);
+        ApplyForce(receiver, direction);
+    }
+
     public override void AddOrToggleReceiver(ForceReceiver r,bool toggleMode)
     {
         if (toggleMode)
         {
-            //if(collider.bounds.Contains(r.transform.position))return;
+            if(collider.bounds.Contains(r.transform.position))return;
             if (receivers.Contains(r)) receivers.Remove(r);
             else receivers.Add(r);
         }
@@ -37,8 +42,7 @@ public class Gravity : ForceApplier
     {
         foreach (ForceReceiver receiver in receivers)
         {
-            Vector3 direction = (transform.position - receiver.transform.position).normalized * (power * Time.fixedDeltaTime);
-            ApplyForce(receiver, direction);
+            CreateAndApllyForce(receiver);
         }
     }
 

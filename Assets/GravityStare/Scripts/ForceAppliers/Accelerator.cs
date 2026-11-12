@@ -27,6 +27,11 @@ public class Accelerator : ForceApplier
         Gizmos.color = Color.red;
         Gizmos.DrawRay(transform.position, force.normalized * power);
     }
+
+    public override void CreateAndApllyForce(ForceReceiver receiver)
+    {
+        throw new NotImplementedException();
+    }
 }
 
 // //other.attachedRigidbody ?.AddForce(transform.forward*power,ForceMode.Force);

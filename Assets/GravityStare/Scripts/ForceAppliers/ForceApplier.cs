@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -9,6 +10,8 @@ public abstract class ForceApplier : MonoBehaviour
     public Vector3 force;
     protected float influenceRadius;
     [SerializeField] protected Collider collider;
+    
+    protected HashSet<ForceReceiver> receivers = new HashSet<ForceReceiver>();
 
     protected void ApplyForce(ForceReceiver receiver, Vector3 force)
     {
@@ -17,6 +20,8 @@ public abstract class ForceApplier : MonoBehaviour
             receiver.forces[this] = force;
         }
     }
+
+    public abstract void CreateAndApllyForce(ForceReceiver receiver);
 
     public virtual void AddOrToggleReceiver(ForceReceiver r,bool togleMode){}
 }

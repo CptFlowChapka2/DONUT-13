@@ -22,9 +22,7 @@ public class OnlyFeet : ForceApplier
         if (!other.collider.CompareTag("Ground")) return;
         rb.transform.up = other.contacts[0].normal.normalized;
         
-        force = -rb.linearVelocity * (Time.fixedDeltaTime * power);
-        if (ownMovement.force.magnitude <= 0) force *= staticForceMultplier;
-        ApplyForce(receiver, force);
+        CreateAndApllyForce(receiver);
     }
 
     private void OnCollisionExit(Collision other)
@@ -32,5 +30,12 @@ public class OnlyFeet : ForceApplier
         if (!other.collider.CompareTag("Ground")) return;
         player.isGrounded = false;
         receiver.forces.Remove(this);
+    }
+
+    public override void CreateAndApllyForce(ForceReceiver receiver)
+    {
+        force = -rb.linearVelocity * (Time.fixedDeltaTime * power);
+        if (ownMovement.force.magnitude <= 0) force *= staticForceMultplier;
+        ApplyForce(receiver, force);
     }
 }
