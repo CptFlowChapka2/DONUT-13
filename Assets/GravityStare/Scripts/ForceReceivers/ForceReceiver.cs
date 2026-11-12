@@ -22,13 +22,13 @@ public abstract class ForceReceiver : MonoBehaviour
     private void FixedUpdate()
     {
         Vector3 appliedForce = rb.linearVelocity;
-        foreach (var force in forces.Values)
+        foreach (var force in forces)
         {
             appliedForce += BiasAddition(force);
         }
         rb.linearVelocity = appliedForce;
     }
 
-    protected abstract Vector3 BiasAddition(Vector3 force);
+    protected abstract Vector3 BiasAddition(KeyValuePair<ForceApplier, Vector3> force);
 
 }

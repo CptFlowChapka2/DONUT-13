@@ -5,18 +5,18 @@ public class PlayerMovement : ForceApplier
 {
     [SerializeField] private Player player;
     [SerializeField] private ForceReceiver receiver;
-
+    
     private void FixedUpdate()
     {
-        CreateAndApllyForce(receiver);
+        CreateAndApplyForce(receiver);
     }
 
-    public override void CreateAndApllyForce(ForceReceiver receiver)
+    public override void CreateAndApplyForce(ForceReceiver receiver)
     {
         force = Vector3.zero;
         if (player.isGrounded)
         {
-            force = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")) * (Time.deltaTime * power);
+            force = new Vector3(Input.GetAxis("Horizontal") * transform.forward.x, 0, Input.GetAxis("Vertical") * transform.forward.z) * (Time.deltaTime * power);
         }
         ApplyForce(receiver, force);
     }

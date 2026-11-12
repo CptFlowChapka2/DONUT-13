@@ -7,7 +7,7 @@ public class OnlyFeet : ForceApplier
     [SerializeField] private ForceReceiver receiver;
     [SerializeField] private ForceApplier ownMovement;
     [SerializeField] private Player player;
-    [SerializeField] private float staticForceMultplier;
+    [SerializeField] private float staticForceMultiplier;
 
     private void OnCollisionEnter(Collision other)
     {
@@ -20,9 +20,8 @@ public class OnlyFeet : ForceApplier
     private void OnCollisionStay(Collision other)
     {
         if (!other.collider.CompareTag("Ground")) return;
-        rb.transform.up = other.contacts[0].normal.normalized;
-        
-        CreateAndApllyForce(receiver);
+        //rb.transform.up = other.contacts[0].normal.normalized;
+        CreateAndApplyForce(receiver);
     }
 
     private void OnCollisionExit(Collision other)
@@ -32,10 +31,10 @@ public class OnlyFeet : ForceApplier
         receiver.forces.Remove(this);
     }
 
-    public override void CreateAndApllyForce(ForceReceiver receiver)
+    public override void CreateAndApplyForce(ForceReceiver receiver)
     {
         force = -rb.linearVelocity * (Time.fixedDeltaTime * power);
-        if (ownMovement.force.magnitude <= 0) force *= staticForceMultplier;
+        if (ownMovement.force.magnitude <= 0) force *= staticForceMultiplier;
         ApplyForce(receiver, force);
     }
 }

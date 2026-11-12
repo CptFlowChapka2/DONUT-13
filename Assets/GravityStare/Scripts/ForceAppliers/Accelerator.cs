@@ -28,7 +28,7 @@ public class Accelerator : ForceApplier
         Gizmos.DrawRay(transform.position, force.normalized * power);
     }
 
-    public override void CreateAndApllyForce(ForceReceiver receiver)
+    public override void CreateAndApplyForce(ForceReceiver receiver)
     {
         throw new NotImplementedException();
     }

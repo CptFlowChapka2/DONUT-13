@@ -1,9 +1,10 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class StandardForceReceiver : ForceReceiver
 {
-    protected override Vector3 BiasAddition(Vector3 force)
+    protected override Vector3 BiasAddition(KeyValuePair<ForceApplier, Vector3> force)
     {
-        return force;
+        return force.Value;
     }
 }

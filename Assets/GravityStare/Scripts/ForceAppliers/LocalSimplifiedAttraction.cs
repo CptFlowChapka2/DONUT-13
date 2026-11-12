@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class LocalSimplifiedAttraction : ForceApplier
 {
-
     private void Start()
     {
         influenceRadius = 1 + 5f;
@@ -12,7 +11,7 @@ public class LocalSimplifiedAttraction : ForceApplier
         sphereCollider.radius = influenceRadius;
     }
 
-    public override void CreateAndApllyForce(ForceReceiver receiver)
+    public override void CreateAndApplyForce(ForceReceiver receiver)
     {
         Vector3 direction = (transform.position - receiver.transform.position).normalized * (power * Time.fixedDeltaTime);
         ApplyForce(receiver, direction);
@@ -42,7 +41,7 @@ public class LocalSimplifiedAttraction : ForceApplier
     {
         foreach (ForceReceiver receiver in receivers)
         {
-            CreateAndApllyForce(receiver);
+            CreateAndApplyForce(receiver);
         }
     }
 
