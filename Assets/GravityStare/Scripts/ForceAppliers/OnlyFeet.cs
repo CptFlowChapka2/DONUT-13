@@ -21,6 +21,7 @@ public class OnlyFeet : ForceApplier
     {
         if (!other.collider.CompareTag("Ground")) return;
         player.isGrounded = true;
+        Debug.DrawLine(other.contacts[0].point,other.contacts[0].normal*5,Color.red,Mathf.Infinity);
         rb.transform.up = other.contacts[0].normal;
         CreateAndApplyForce(receiver);
     }
