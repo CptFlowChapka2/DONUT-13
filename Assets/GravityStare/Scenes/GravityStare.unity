@@ -191,6 +191,10 @@ PrefabInstance:
       propertyPath: power
       value: 10
       objectReference: {fileID: 0}
+    - target: {fileID: 5303908537552822181, guid: edbffcedb85e5554fa33dae7cf42ca36, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: bf0c68d80dd0b2344a112fa5f22b3ea7, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -908,6 +912,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: Planet
       objectReference: {fileID: 0}
+    - target: {fileID: 5303908537552822181, guid: edbffcedb85e5554fa33dae7cf42ca36, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5303908537552822181, guid: edbffcedb85e5554fa33dae7cf42ca36, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: bf0c68d80dd0b2344a112fa5f22b3ea7, type: 2}
+    - target: {fileID: 5303908537552822181, guid: edbffcedb85e5554fa33dae7cf42ca36, type: 3}
+      propertyPath: 'm_Materials.Array.data[1]'
+      value: 
+      objectReference: {fileID: 2100000, guid: bf0c68d80dd0b2344a112fa5f22b3ea7, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -941,6 +957,10 @@ PrefabInstance:
       propertyPath: staticForceMultiplier
       value: 20
       objectReference: {fileID: 0}
+    - target: {fileID: 6961843855031825445, guid: 347f290d9eaddc74b84f6ba0c0af9070, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 6a31a437cecaf0d4a86f65b403404385, type: 2}
     - target: {fileID: 7590836531520345733, guid: 347f290d9eaddc74b84f6ba0c0af9070, type: 3}
       propertyPath: m_Name
       value: Player
