@@ -20,21 +20,21 @@ public class OnlyFeet : ForceApplier
     private void OnCollisionStay(Collision other)
     {
         if (!other.collider.CompareTag("Ground")) return;
-        //rb.transform.up = other.contacts[0].normal.normalized;
+        player.isGrounded = true;
+        rb.transform.up = other.contacts[0].normal;
         CreateAndApplyForce(receiver);
     }
 
     private void OnCollisionExit(Collision other)
     {
         if (!other.collider.CompareTag("Ground")) return;
-        player.isGrounded = false;
         receiver.forces.Remove(this);
     }
 
     public override void CreateAndApplyForce(ForceReceiver receiver)
     {
+        if (InputSystemManager.instance.movementAction.ReadValue<Vector2>() != Vector2.zero) return;
         force = -rb.linearVelocity * (Time.fixedDeltaTime * power);
-        if (ownMovement.force.magnitude <= 0) force *= staticForceMultiplier;
         ApplyForce(receiver, force);
     }
 

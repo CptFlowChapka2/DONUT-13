@@ -14,7 +14,7 @@ public class LocalSimplifiedReaction : ForceApplier
 
     private void OnCollisionStay(Collision other)
     {
-        other.transform.up = -other.contacts[0].normal;
+        // other.transform.up = -other.contacts[0].normal;
         // foreach (ForceReceiver receiver in receivers)
         // {
         //     CreateAndApplyForce(receiver);

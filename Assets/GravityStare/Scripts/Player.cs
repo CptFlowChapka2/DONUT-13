@@ -11,6 +11,8 @@ public class Player : MonoBehaviour
     private TagHandle handle;
     private Eyes _eyes;
     [SerializeField] private string[] tagsToSelect;
+
+    public Vector3 normalOfClosestPointOnClosestSurface;
     
     private void Start()
     {
@@ -44,6 +46,19 @@ public class Player : MonoBehaviour
            _eyes.SelectAttractors(input)?.AddOrToggleReceiver(thisForceReceiver,true);
         }
         
+    }
+
+    private void FixedUpdate()
+    {
+        if (!isGrounded) return;
+        if (Physics.Raycast(transform.position, -transform.up, out RaycastHit hit, 2f))
+        {
+            transform.up = hit.normal;
+        }
+        else
+        {
+            isGrounded = false;
+        }
     }
 }
 
