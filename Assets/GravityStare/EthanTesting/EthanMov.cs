@@ -31,9 +31,6 @@ public class EthanMov : MonoBehaviour
         rb.AddForce(-transform.up * gravity);
         
         if (Physics.SphereCast(transform.position,1f, -transform.up, out RaycastHit hit, 2f))
-        {
-            Debug.Log(hit.transform.gameObject.name);
             transform.up = hit.normal;
-        }
     }
 }
