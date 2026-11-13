@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -39,7 +40,8 @@ public class Player : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             Vector3Int input =Vector3Int.CeilToInt(Input.mousePosition);
-           _eyes.SelectAttractors(input).CreateAndApplyForce(thisForceReceiver);
+            var atrractor = _eyes.SelectAttractors(input);
+           _eyes.SelectAttractors(input)?.AddOrToggleReceiver(thisForceReceiver,true);
         }
         
     }
@@ -67,34 +69,34 @@ class Eyes
     public ForceApplier SelectAttractors(Vector3Int input)
     {
         var hits = LookForAttractors();
-        return hits.ToList()
+        return  hits.ToList()
             .FindAll(x =>
             (new Vector2Int(x.posInSceenSpace.x, x.posInSceenSpace.y) - new Vector2Int(input.x, input.y)).magnitude<=x.rangeForValidation)
             .OrderBy(x=>x.posInSceenSpace.z)
             .FirstOrDefault()._forceApplier;
     }
     
-    public AttractorViewData[] LookForAttractors()
+    public HashSet<AttractorViewData> LookForAttractors()
     {
         RaycastHit[] hits = new RaycastHit[maxBufferValue];
-        AttractorViewData[] hitViewData = new AttractorViewData[maxBufferValue];
-        int y = 0;
+        HashSet<AttractorViewData> hitViewData = new HashSet<AttractorViewData>(maxBufferValue);
         for (int i = 0; i < Physics.SphereCastNonAlloc(camera.transform.position,8,camera.transform.forward, hits); i++)
         {
             var raycastHit = hits[i];
             if (!valideTags.Contains(TagHandle.GetExistingTag(raycastHit.collider.tag))) continue;
-            y++;
-            hitViewData[y] = CreateAttractorViewDataFromRaycastHit(raycastHit);
+            
+            hitViewData.Add( CreateAttractorViewDataFromRaycastHit(raycastHit));
             
         }
-
+        
+        
         return hitViewData;
     }
 
     private AttractorViewData CreateAttractorViewDataFromRaycastHit(RaycastHit raycastHit)
     {
         AttractorViewData AVD = new AttractorViewData();
-        AVD._forceApplier = raycastHit.collider.GetComponent<ForceApplier>();
+        AVD._forceApplier = raycastHit.collider.GetComponentInChildren<ForceApplier>();
         AVD.posInWorldSpace = AVD._forceApplier.transform.position;
         AVD.boundPosInWorldSpace = AVD._forceApplier.collider.bounds.max;
         

@@ -23,5 +23,5 @@ public abstract class ForceApplier : MonoBehaviour
 
     public abstract void CreateAndApplyForce(ForceReceiver receiver);
 
-    public virtual void AddOrToggleReceiver(ForceReceiver r,bool togleMode){}
+    public abstract void AddOrToggleReceiver(ForceReceiver r, bool togleMode);
 }

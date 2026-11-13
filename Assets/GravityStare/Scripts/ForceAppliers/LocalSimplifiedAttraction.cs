@@ -14,6 +14,7 @@ public class LocalSimplifiedAttraction : ForceApplier
     public override void CreateAndApplyForce(ForceReceiver receiver)
     {
         Vector3 direction = (transform.position - receiver.transform.position).normalized * (power * Time.fixedDeltaTime);
+        
         ApplyForce(receiver, direction);
     }
 

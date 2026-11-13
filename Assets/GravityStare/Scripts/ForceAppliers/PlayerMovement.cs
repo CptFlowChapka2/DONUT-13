@@ -38,4 +38,9 @@ public class PlayerMovement : ForceApplier
         inputLastVerifiedUpdate = ism.movementAction.ReadValue<Vector2>();
         ApplyForce(receiver, force);
     }
+
+    public override void AddOrToggleReceiver(ForceReceiver r, bool togleMode)
+    {
+        throw new NotImplementedException();
+    }
 }

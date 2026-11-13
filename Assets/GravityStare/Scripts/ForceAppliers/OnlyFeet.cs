@@ -37,4 +37,9 @@ public class OnlyFeet : ForceApplier
         if (ownMovement.force.magnitude <= 0) force *= staticForceMultiplier;
         ApplyForce(receiver, force);
     }
+
+    public override void AddOrToggleReceiver(ForceReceiver r, bool togleMode)
+    {
+        throw new NotImplementedException();
+    }
 }

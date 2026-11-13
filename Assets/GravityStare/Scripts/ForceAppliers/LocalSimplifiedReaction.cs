@@ -35,4 +35,9 @@ public class LocalSimplifiedReaction : ForceApplier
         Vector3 reaction = -receiver.forces[simplifiedAttraction];
         ApplyForce(receiver, reaction);
     }
+
+    public override void AddOrToggleReceiver(ForceReceiver r, bool togleMode)
+    {
+        throw new NotImplementedException();
+    }
 }

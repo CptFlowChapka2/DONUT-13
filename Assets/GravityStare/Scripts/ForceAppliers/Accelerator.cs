@@ -32,6 +32,11 @@ public class Accelerator : ForceApplier
     {
         throw new NotImplementedException();
     }
+
+    public override void AddOrToggleReceiver(ForceReceiver r, bool togleMode)
+    {
+        throw new NotImplementedException();
+    }
 }
 
 // //other.attachedRigidbody ?.AddForce(transform.forward*power,ForceMode.Force);
