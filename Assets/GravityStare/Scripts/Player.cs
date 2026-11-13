@@ -39,7 +39,7 @@ public class Player : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             Vector3Int input =Vector3Int.CeilToInt(Input.mousePosition);
-           _eyes.SelectAttractors(input).CreateAndApllyForce(thisForceReceiver);
+           _eyes.SelectAttractors(input).CreateAndApplyForce(thisForceReceiver);
         }
         
     }
