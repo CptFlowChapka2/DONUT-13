@@ -104,7 +104,7 @@ class Eyes
         AVD.boundPosInWorldSpace = Vector3Int.CeilToInt(camera.WorldToScreenPoint(AVD.boundPosInWorldSpace));
 
         AVD.rangeForValidation =
-            Mathf.CeilToInt((AVD.posInSceenSpace - AVD.boundPosInScreenSpace).magnitude + AVD.rangeForValidation);
+            Mathf.CeilToInt((AVD.posInSceenSpace - AVD.boundPosInScreenSpace).magnitude + fixedPixelBuffer);
         return AVD;
     }
 }
