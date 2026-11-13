@@ -38,7 +38,7 @@ Material:
     m_Ints: []
     m_Floats:
     - _EnvironmentReflections: 1
-    - _OutlineScale: 0.05
+    - _OutlineScale: 0.5
     - _QueueControl: 0
     - _QueueOffset: 0
     - _ReceiveShadows: 1
