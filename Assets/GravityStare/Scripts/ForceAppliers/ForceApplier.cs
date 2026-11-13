@@ -10,6 +10,7 @@ public abstract class ForceApplier : MonoBehaviour
     public Vector3 force;
     protected float influenceRadius;
     [SerializeField] public Collider collider;
+    public MeshRenderer meshRenderer;
     
     protected HashSet<ForceReceiver> receivers = new HashSet<ForceReceiver>();
 

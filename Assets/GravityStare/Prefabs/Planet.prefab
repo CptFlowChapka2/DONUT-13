@@ -69,6 +69,7 @@ MonoBehaviour:
   power: 10
   force: {x: 0, y: 0, z: 0}
   collider: {fileID: 1104412798992393803}
+  meshRenderer: {fileID: 5303908537552822181}
 --- !u!1 &5027151887262516948
 GameObject:
   m_ObjectHideFlags: 0

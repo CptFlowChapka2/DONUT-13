@@ -12,6 +12,7 @@ public class Player : MonoBehaviour
     private Eyes _eyes;
     [SerializeField] private string[] tagsToSelect;
 
+    private HashSet<AttractorViewData> seenAplier;
     public Vector3 normalOfClosestPointOnClosestSurface;
     
     private void Start()
@@ -39,11 +40,17 @@ public class Player : MonoBehaviour
             Cursor.lockState = CursorLockMode.Locked;
         }
        
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(1))
         {
+            if(seenAplier is not null) foreach (var attractorViewData in seenAplier)
+            {
+                attractorViewData._forceApplier.meshRenderer.material.SetColor("_OL_Color", Color.indianRed);
+            }
             Vector3Int input =Vector3Int.CeilToInt(Input.mousePosition);
-            var atrractor = _eyes.SelectAttractors(input);
-           _eyes.SelectAttractors(input)?.AddOrToggleReceiver(thisForceReceiver,true);
+            seenAplier = _eyes.AimForAttractor(input,seenAplier);
+            var first = seenAplier.FirstOrDefault()._forceApplier;
+            first?.meshRenderer.material.SetColor("_OL_Color",Color.green);
+            first?.AddOrToggleReceiver(thisForceReceiver,true);
         }
         
     }
@@ -81,26 +88,32 @@ class Eyes
         fixedPixelBuffer = fpb;
     }
 
-    public ForceApplier SelectAttractors(Vector3Int input)
+    public HashSet<AttractorViewData> AimForAttractor(Vector3Int input,HashSet<AttractorViewData> set = null)
     {
-        var hits = LookForAttractors();
-        return  hits.ToList()
+        if (set is null) set = new HashSet<AttractorViewData>(maxBufferValue);
+        set.Clear();
+        set = LookForAttractors(input,set);
+        foreach (var attractorViewData in set)
+        {
+            attractorViewData._forceApplier.meshRenderer.material.SetColor("_OL_Color", Color.royalBlue);
+        }
+        return set.ToList()
             .FindAll(x =>
-            (new Vector2Int(x.posInSceenSpace.x, x.posInSceenSpace.y) - new Vector2Int(input.x, input.y)).magnitude<=x.rangeForValidation)
-            .OrderBy(x=>x.posInSceenSpace.z)
-            .FirstOrDefault()._forceApplier;
+                (new Vector2Int(x.posInSceenSpace.x, x.posInSceenSpace.y) - new Vector2Int(input.x, input.y))
+                .magnitude <= x.rangeForValidation && x.boundPosInScreenSpace.z >= 0)
+            .OrderBy(x => x.posInSceenSpace.z)
+            .ToHashSet();
     }
     
-    public HashSet<AttractorViewData> LookForAttractors()
+    public HashSet<AttractorViewData> LookForAttractors(Vector3Int input,HashSet<AttractorViewData> set)
     {
         RaycastHit[] hits = new RaycastHit[maxBufferValue];
-        HashSet<AttractorViewData> hitViewData = new HashSet<AttractorViewData>(maxBufferValue);
-        for (int i = 0; i < Physics.SphereCastNonAlloc(camera.transform.position,8,camera.transform.forward, hits); i++)
+        HashSet<AttractorViewData> hitViewData = set;
+        for (int i = 0; i < Physics.SphereCastNonAlloc(camera.transform.position,200,camera.transform.forward, hits); i++)
         {
             var raycastHit = hits[i];
             if (!valideTags.Contains(TagHandle.GetExistingTag(raycastHit.collider.tag))) continue;
-            
-            hitViewData.Add( CreateAttractorViewDataFromRaycastHit(raycastHit));
+            hitViewData.Add( CreateAttractorViewDataFromRaycastHit(raycastHit,input));
             
         }
         
@@ -108,18 +121,20 @@ class Eyes
         return hitViewData;
     }
 
-    private AttractorViewData CreateAttractorViewDataFromRaycastHit(RaycastHit raycastHit)
+    private AttractorViewData CreateAttractorViewDataFromRaycastHit(RaycastHit raycastHit,Vector3Int input)
     {
         AttractorViewData AVD = new AttractorViewData();
         AVD._forceApplier = raycastHit.collider.GetComponentInChildren<ForceApplier>();
-        AVD.posInWorldSpace = AVD._forceApplier.transform.position;
-        AVD.boundPosInWorldSpace = AVD._forceApplier.collider.bounds.max;
         
+        AVD.posInWorldSpace = AVD._forceApplier.transform.position;
         AVD.posInSceenSpace =Vector3Int.CeilToInt(camera.WorldToScreenPoint(AVD.posInWorldSpace));
-        AVD.boundPosInWorldSpace = Vector3Int.CeilToInt(camera.WorldToScreenPoint(AVD.boundPosInWorldSpace));
+        
+        AVD.boundPosInWorldSpace = raycastHit.collider.ClosestPointOnBounds(camera.ScreenToWorldPoint(new Vector3(input.x,input.y,AVD.posInSceenSpace.z)));
+        AVD.boundPosInScreenSpace = Vector3Int.CeilToInt(camera.WorldToScreenPoint(AVD.boundPosInWorldSpace));
 
+        int pixelBuffer = Mathf.CeilToInt(fixedPixelBuffer/(AVD.posInSceenSpace - AVD.boundPosInScreenSpace).magnitude);
         AVD.rangeForValidation =
-            Mathf.CeilToInt((AVD.posInSceenSpace - AVD.boundPosInScreenSpace).magnitude + fixedPixelBuffer);
+            Mathf.CeilToInt((AVD.posInSceenSpace - AVD.boundPosInScreenSpace).magnitude + pixelBuffer);
         return AVD;
     }
 }
