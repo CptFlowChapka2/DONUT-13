@@ -24,13 +24,16 @@ public class Player : MonoBehaviour
 
     #endregion
     
-    public PlayerState playerState = PlayerState.InSpace;
-    public bool isGrounded;
+    [NonSerialized]public PlayerState playerState = PlayerState.InSpace;
+    [NonSerialized]public bool isGrounded;
     public ForceReceiver thisForceReceiver;
     public Camera camera;
+    public GameObject ui;
     private TagHandle handle;
     private Eyes _eyes;
     [SerializeField] private string[] tagsToSelect;
+    
+    private bool isAimMode=false;
 
     private HashSet<AttractorViewData> seenAplier;
     public Vector3 normalOfClosestPointOnClosestSurface;
@@ -59,8 +62,18 @@ public class Player : MonoBehaviour
         {
             Cursor.lockState = CursorLockMode.Locked;
         }
+
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+            if(seenAplier is not null) foreach (var attractorViewData in seenAplier)
+            {
+                attractorViewData._forceApplier.meshRenderer.material.SetColor("_OL_Color", Color.indianRed);
+            }
+            isAimMode = !isAimMode;
+            ui.SetActive(!ui.activeSelf);
+        }
        
-        if (Input.GetMouseButton(1))
+        if (isAimMode)
         {
             Vector3Int input =Vector3Int.CeilToInt(Input.mousePosition);
             if(seenAplier is not null) foreach (var attractorViewData in seenAplier)
@@ -73,18 +86,15 @@ public class Player : MonoBehaviour
                 attractorViewData._forceApplier.meshRenderer.material.SetColor("_OL_Color", Color.royalBlue);
             }
             var first = seenAplier.FirstOrDefault()._forceApplier;
-            first?.meshRenderer.material.SetColor("_OL_Color",Color.green);
-            if(Input.GetMouseButton(0)) first?.AddOrToggleReceiver(thisForceReceiver,true);
+            if (first is not null)
+            {
+                first.meshRenderer.material.SetColor("_OL_Color",Color.green);
+                if(Input.GetMouseButton(1)) first.power=-first.power;
+                if(Input.GetMouseButton(0)) first.AddOrToggleReceiver(thisForceReceiver,true); 
+            }
             
         }
-
-        if (Input.GetMouseButtonUp(1))
-        {
-            if(seenAplier is not null) foreach (var attractorViewData in seenAplier)
-            {
-                attractorViewData._forceApplier.meshRenderer.material.SetColor("_OL_Color", Color.indianRed);
-            }
-        }
+        
         
     }
 
