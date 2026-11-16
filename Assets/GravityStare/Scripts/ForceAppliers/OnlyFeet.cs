@@ -29,7 +29,7 @@ public class OnlyFeet : ForceApplier
             normal += otherContact.normal;
         }
 
-        Debug.DrawLine(other.contacts[0].point,normal*5,Color.red,Mathf.Infinity);
+        //Debug.DrawLine(other.contacts[0].point,normal*5,Color.red,Mathf.Infinity);
         normal = normal / other.contactCount;
         rb.transform.up = normal.normalized;
         CreateAndApplyForce(receiver);

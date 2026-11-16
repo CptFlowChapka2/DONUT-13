@@ -6,7 +6,7 @@ public class CameraBehaviour : MonoBehaviour
 {
     private Player player;
     private CameraFocus cameraFocus;
-    
+
     [SerializeField] private float maxDistanceToAvatar = 20.0f;
     [SerializeField] private float minDistanceToAvatar = 12.0f;
     [SerializeField] private float sensibilityZoom = 1f;
@@ -26,67 +26,49 @@ public class CameraBehaviour : MonoBehaviour
     private void Update()
     {
         Vector3 deltaMousePosition = Input.mousePositionDelta;
-        Quaternion rotX = Quaternion.AngleAxis(deltaMousePosition.x * sensibilityRotation, Vector3.up);
-        Quaternion rotY = Quaternion.AngleAxis(-deltaMousePosition.y * sensibilityRotation, Vector3.right);
-        relativePosition = rotX * rotY * relativePosition;
+        Quaternion rotX = Quaternion.AngleAxis(deltaMousePosition.x * sensibilityRotation, transform.up);
+        Quaternion rotY = Quaternion.AngleAxis(-deltaMousePosition.y * sensibilityRotation, transform.right);
         
-        transform.position = cameraFocus.transform.position + (relativePosition * distanceToAvatar);
+        relativePosition = rotX * relativePosition;
+        relativePosition = rotY * relativePosition;
+
+        relativePosition = new Vector3(relativePosition.x, Mathf.Clamp(relativePosition.y, -0.70f, 0.70f),
+            relativePosition.z);
+
+        if (Physics.Raycast(cameraFocus.transform.position, relativePosition, out RaycastHit hit, maxDistanceToAvatar,
+                layerMask: 3))
+        {
+            distanceToAvatar = hit.distance;
+            distanceToAvatar = Mathf.Clamp(distanceToAvatar, minDistanceToAvatar, maxDistanceToAvatar);
+        }
+        else
+        {
+            distanceToAvatar = maxDistanceToAvatar;
+        }
         
+
+        transform.position = cameraFocus.transform.position + (relativePosition.normalized * distanceToAvatar);
+
         switch (player.playerState)
         {
             case PlayerState.InSpace:
                 break;
             case PlayerState.Grounded:
                 //Au mouvement de la souris:
-                  //Droite/Gauche/Haut/Bas: déplace la cam en orbite autour du camFocus
+                //Droite/Gauche/Haut/Bas: déplace la cam en orbite autour du camFocus
                 break;
             default:
                 break;
         }
-        
-        transform.LookAt(cameraFocus.transform.position);
-        Zoom();
+
+        RecalculateUp();
     }
 
-    private Vector2 previousPosition = Vector2.zero;
-
-    // private void Focus()
-    // {
-    //     camera.transform.position = focus.transform.position;
-    //     camera.transform.forward = -focus.transform.position.normalized;
-    //     camera.transform.up = focus.transform.forward;
-    // }
-    
-    private void Move()
+    private void RecalculateUp()
     {
-        if (Input.GetMouseButtonDown(2) || Input.GetMouseButtonDown(1))
-        {
-            previousPosition = Input.mousePosition;
-            return;
-        }
-        if (Input.GetMouseButtonUp(2) || Input.GetMouseButtonUp(1))
-        {
-            previousPosition = Vector2.zero;
-            return;
-        }
-
-        if (Input.GetMouseButton(2) || Input.GetMouseButton(1))
-        {
-            Vector2 nextPosition = Input.mousePosition;
-            Vector2 delta = nextPosition - previousPosition;
-            transform.Rotate(Vector3.up, delta.x * sensibilityRotation);
-            transform.Rotate(Vector3.right, -delta.y * sensibilityRotation);
-            previousPosition = nextPosition;
-        }
-    }
-    
-    private void Zoom()
-    {
-        if (Input.GetAxis("Mouse ScrollWheel") != 0f)
-        {
-            distanceToAvatar -= Input.GetAxis("Mouse ScrollWheel") * sensibilityZoom;
-            distanceToAvatar = Mathf.Clamp(distanceToAvatar, minDistanceToAvatar, maxDistanceToAvatar);
-        }
-        //camera.transform.position = transform.position + (camera.transform.position - transform.position).normalized * distanceToAvatar;
+        Vector3 dirToUp = Vector3.ProjectOnPlane(transform.up, -relativePosition).normalized;
+        if (dirToUp.sqrMagnitude <= 0.0001f) return;
+        transform.rotation = Quaternion.LookRotation(-relativePosition, dirToUp);
+        //transform.rotation = Quaternion.Euler(transform.rotation.x, transform.rotation.y, 0);
     }
 }
