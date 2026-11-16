@@ -909,8 +909,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CameraBehaviour
   maxDistanceToAvatar: 10
   minDistanceToAvatar: 5
-  sensibilityZoom: 1
-  sensibilityRotation: 1
+  sensibilityZoom: 5
+  sensibilityRotation: 0.5
 --- !u!1 &916320186 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7590836531520345733, guid: 347f290d9eaddc74b84f6ba0c0af9070, type: 3}
