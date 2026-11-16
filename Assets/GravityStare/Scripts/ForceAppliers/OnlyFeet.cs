@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using UnityEngine;
 
 public class OnlyFeet : ForceApplier
@@ -12,7 +13,7 @@ public class OnlyFeet : ForceApplier
     private void OnCollisionEnter(Collision other)
     {
         if (!other.collider.CompareTag("Ground")) return;
-        player.isGrounded = true;
+        player.playerState = PlayerState.Grounded;
         force = Vector3.zero;
         receiver.forces.Add(this, force);
     }
@@ -20,8 +21,17 @@ public class OnlyFeet : ForceApplier
     private void OnCollisionStay(Collision other)
     {
         if (!other.collider.CompareTag("Ground")) return;
-        player.isGrounded = true;
-        rb.transform.up = other.contacts[0].normal;
+        player.playerState = PlayerState.Grounded;
+        
+        var normal = Vector3.zero;
+        foreach (var otherContact in other.contacts)
+        {
+            normal += otherContact.normal;
+        }
+
+        //Debug.DrawLine(other.contacts[0].point,normal*5,Color.red,Mathf.Infinity);
+        normal = normal / other.contactCount;
+        rb.transform.up = normal.normalized;
         CreateAndApplyForce(receiver);
     }
 
@@ -33,7 +43,11 @@ public class OnlyFeet : ForceApplier
 
     public override void CreateAndApplyForce(ForceReceiver receiver)
     {
-        if (InputSystemManager.instance.movementAction.ReadValue<Vector2>() != Vector2.zero) return;
+        if (InputSystemManager.instance.movementAction.ReadValue<Vector2>() != Vector2.zero)
+        {
+            ApplyForce(receiver,Vector3.zero);
+            return;
+        }
         force = -rb.linearVelocity * (Time.fixedDeltaTime * power);
         ApplyForce(receiver, force);
     }

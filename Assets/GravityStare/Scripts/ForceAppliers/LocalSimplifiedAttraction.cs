@@ -23,8 +23,13 @@ public class LocalSimplifiedAttraction : ForceApplier
         if (toggleMode)
         {
             //if(collider.bounds.Contains(r.transform.position))return;
-            if (receivers.Contains(r)) receivers.Remove(r);
-            else receivers.Add(r);
+            if (!receivers.Add(r))
+
+            {
+                r.forces.Remove(this);
+                receivers.Remove(r);
+            }
+            
         }
         else
         {

@@ -6,7 +6,7 @@ Shader "OutlinableMat"
 {
 	Properties
 	{
-		_OutlineScale( "OutlineScale", Range( 0, 1 ) ) = 0
+		_OutlineScale( "OutlineScale", Range( 0, 255 ) ) = 0
 		_OL_Color( "OL_Color", Color ) = ( 1, 0, 0, 0 )
 		_BaseColor( "BaseColor", Color ) = ( 1, 1, 1, 0 )
 		[HideInInspector] __dirty( "", Int ) = 1
@@ -86,8 +86,8 @@ Shader "OutlinableMat"
 }
 /*ASEBEGIN
 Version=19912
-{"type":"AmplifyShaderEditor.RangedFloatNode, AmplifyShaderEditor","id":15,"pos":[-584,216],"params":["Inherit","False","InstancedProperty","_OutlineScale","OutlineScale","0","0","Create","True","0","0","0","False","0","False","Object","-1","","0","0.05","0","1","0","1","FLOAT","0"]}
 {"type":"AmplifyShaderEditor.ObjectScaleNode, AmplifyShaderEditor","id":55,"pos":[-536,312],"params":["Inherit","False","False","0","4","FLOAT3","0","FLOAT","1","FLOAT","2","FLOAT","3"]}
+{"type":"AmplifyShaderEditor.RangedFloatNode, AmplifyShaderEditor","id":15,"pos":[-584,216],"params":["Inherit","False","InstancedProperty","_OutlineScale","OutlineScale","0","0","Create","True","0","0","0","False","0","False","Object","-1","","0","0.5","0","255","0","1","FLOAT","0"]}
 {"type":"AmplifyShaderEditor.ColorNode, AmplifyShaderEditor","id":26,"pos":[-312,-56],"params":["Inherit","False","InstancedProperty","_OL_Color","OL_Color","1","0","Create","True","0","0","0","False","0","False","Object","-1","","1,0,0,0","1,0,0,0","True","True","0","6","COLOR","0","FLOAT","1","FLOAT","2","FLOAT","3","FLOAT","4","FLOAT3","5"]}
 {"type":"AmplifyShaderEditor.SimpleDivideOpNode, AmplifyShaderEditor","id":54,"pos":[-216,160],"params":["Inherit","False","2","0","FLOAT","0","False","1","FLOAT3","0,0,0","False","1","FLOAT3","0"]}
 {"type":"AmplifyShaderEditor.OutlineNode, AmplifyShaderEditor","id":51,"pos":[40,120],"params":["Inherit","False","0","True","None","0","0","Front","True","True","True","True","0","False","","0","3","0","FLOAT3","0,0,0","False","2","FLOAT","0","False","1","FLOAT","0","False","1","FLOAT3","0"]}
@@ -100,4 +100,4 @@ Version=19912
 {"wire":[52,0,53,0]}
 {"wire":[52,11,51,0]}
 ASEEND*/
-//CHKSM=FDAE71D1E1C4EDB46D49E5EF3F608CA7449B5F8E
+//CHKSM=42CCA26D83363B9AF629900D1F809FFDA7216443
