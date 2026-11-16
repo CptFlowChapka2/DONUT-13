@@ -65,13 +65,11 @@ public class Player : MonoBehaviour
             Vector3Int input =Vector3Int.CeilToInt(Input.mousePosition);
             if(seenAplier is not null) foreach (var attractorViewData in seenAplier)
             {
-                attractorViewData._forceApplier.meshRenderer.material.SetFloat("_OutlineScale",0.5f);
                 attractorViewData._forceApplier.meshRenderer.material.SetColor("_OL_Color", Color.indianRed);
             }
             seenAplier = _eyes.AimForAttractor(input,seenAplier);
             foreach (var attractorViewData in seenAplier)
             {
-                attractorViewData._forceApplier.meshRenderer.material.SetFloat("_OutlineScale",Mathf.Clamp(attractorViewData.rangeForValidation*0.5f,0.1f,255));
                 attractorViewData._forceApplier.meshRenderer.material.SetColor("_OL_Color", Color.royalBlue);
             }
             var first = seenAplier.FirstOrDefault()._forceApplier;
@@ -84,7 +82,6 @@ public class Player : MonoBehaviour
         {
             if(seenAplier is not null) foreach (var attractorViewData in seenAplier)
             {
-                attractorViewData._forceApplier.meshRenderer.material.SetFloat("_OutlineScale",0.5f);
                 attractorViewData._forceApplier.meshRenderer.material.SetColor("_OL_Color", Color.indianRed);
             }
         }
@@ -135,7 +132,8 @@ class Eyes
             .FindAll(x =>
                 (new Vector2Int(x.posInSceenSpace.x, x.posInSceenSpace.y) - new Vector2Int(input.x, input.y))
                 .magnitude <= x.rangeForValidation && x.boundPosInScreenSpace.z >= 0)
-            .OrderBy(x=>x.rangeForValidation-(new Vector2Int(x.posInSceenSpace.x, x.posInSceenSpace.y) 
+            .OrderBy(x=>x.rangeForValidation)
+            .ThenBy(x=>x.rangeForValidation-(new Vector2Int(x.posInSceenSpace.x, x.posInSceenSpace.y) 
                         - new Vector2Int(input.x, input.y)).magnitude)
             .ThenBy(x => x.posInSceenSpace.z)
             .ToHashSet();
@@ -170,7 +168,7 @@ class Eyes
 
         int pixelBuffer = Mathf.CeilToInt(fixedPixelBuffer/(AVD.posInSceenSpace - AVD.boundPosInScreenSpace).magnitude);
         AVD.rangeForValidation =
-            Mathf.CeilToInt((AVD.posInSceenSpace - AVD.boundPosInScreenSpace).magnitude + pixelBuffer);
+            Mathf.CeilToInt(((AVD.posInSceenSpace - AVD.boundPosInScreenSpace).magnitude) + pixelBuffer);
         return AVD;
     }
 }
