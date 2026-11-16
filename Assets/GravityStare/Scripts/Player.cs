@@ -45,11 +45,13 @@ public class Player : MonoBehaviour
             Vector3Int input =Vector3Int.CeilToInt(Input.mousePosition);
             if(seenAplier is not null) foreach (var attractorViewData in seenAplier)
             {
+                attractorViewData._forceApplier.meshRenderer.material.SetFloat("_OutlineScale",0.5f);
                 attractorViewData._forceApplier.meshRenderer.material.SetColor("_OL_Color", Color.indianRed);
             }
             seenAplier = _eyes.AimForAttractor(input,seenAplier);
             foreach (var attractorViewData in seenAplier)
             {
+                attractorViewData._forceApplier.meshRenderer.material.SetFloat("_OutlineScale",Mathf.Clamp(attractorViewData.rangeForValidation*0.5f,0.1f,255));
                 attractorViewData._forceApplier.meshRenderer.material.SetColor("_OL_Color", Color.royalBlue);
             }
             var first = seenAplier.FirstOrDefault()._forceApplier;
@@ -62,6 +64,7 @@ public class Player : MonoBehaviour
         {
             if(seenAplier is not null) foreach (var attractorViewData in seenAplier)
             {
+                attractorViewData._forceApplier.meshRenderer.material.SetFloat("_OutlineScale",0.5f);
                 attractorViewData._forceApplier.meshRenderer.material.SetColor("_OL_Color", Color.indianRed);
             }
         }
