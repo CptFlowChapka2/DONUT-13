@@ -1,11 +1,11 @@
 using System;
 using UnityEngine;
 
-public class CameraFocus : MonoBehaviour
+public class StableAnchor : MonoBehaviour
 {
     #region Singleton
 
-    public static CameraFocus instance;
+    public static StableAnchor instance;
 
     private void Awake()
     {
