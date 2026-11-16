@@ -25,9 +25,9 @@ public class CameraBehaviour : MonoBehaviour
 
     private void Update()
     {
-        Vector3 deltaMousePosition = -Input.mousePositionDelta;
+        Vector3 deltaMousePosition = Input.mousePositionDelta;
         Quaternion rotX = Quaternion.AngleAxis(deltaMousePosition.x * sensibilityRotation, Vector3.up);
-        Quaternion rotY = Quaternion.AngleAxis(deltaMousePosition.y * sensibilityRotation, Vector3.right);
+        Quaternion rotY = Quaternion.AngleAxis(-deltaMousePosition.y * sensibilityRotation, Vector3.right);
         relativePosition = rotX * rotY * relativePosition;
         
         transform.position = cameraFocus.transform.position + (relativePosition * distanceToAvatar);
