@@ -63,7 +63,7 @@ public class Player : MonoBehaviour
             Cursor.lockState = CursorLockMode.Locked;
         }
 
-        if (Input.GetKeyDown(KeyCode.A))
+        if (Input.GetKeyDown(KeyCode.Q))
         {
             if(seenAplier is not null) foreach (var attractorViewData in seenAplier)
             {
