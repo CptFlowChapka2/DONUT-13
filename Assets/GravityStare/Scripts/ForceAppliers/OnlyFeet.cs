@@ -46,7 +46,6 @@ public class OnlyFeet : ForceApplier
         if (InputSystemManager.instance.movementAction.ReadValue<Vector2>() != Vector2.zero) return;
         force = -rb.linearVelocity * (Time.fixedDeltaTime * power);
         ApplyForce(receiver, force);
-        Debug.Log(force);
     }
 
     public override void AddOrToggleReceiver(ForceReceiver r, bool togleMode)

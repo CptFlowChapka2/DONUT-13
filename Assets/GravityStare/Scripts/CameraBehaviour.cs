@@ -11,20 +11,27 @@ public class CameraBehaviour : MonoBehaviour
     [SerializeField] private float minDistanceToAvatar = 12.0f;
     [SerializeField] private float sensibilityZoom = 1f;
     [SerializeField] private float sensibilityRotation = 1f;
-    private float distanceToAvatar = 18.0f;
+    private float distanceToAvatar = 8.0f;
 
-    private Vector3 relativePosition;
+    private Vector3 relativePosition = -Vector3.forward;
 
     private void Start()
     {
         player = Player.instance;
         cameraFocus = CameraFocus.instance;
+        transform.position = cameraFocus.transform.position + (relativePosition * distanceToAvatar);
+        transform.LookAt(cameraFocus.transform.position);
     }
 
     private void Update()
     {
-        transform.LookAt(cameraFocus.transform.position);
-
+        Vector3 deltaMousePosition = -Input.mousePositionDelta;
+        Quaternion rotX = Quaternion.AngleAxis(deltaMousePosition.x, cameraFocus.transform.up);
+        Quaternion rotY = Quaternion.AngleAxis(deltaMousePosition.y, cameraFocus.transform.right);
+        relativePosition = rotX * rotY * relativePosition;
+        
+        transform.position = cameraFocus.transform.position + (relativePosition * distanceToAvatar);
+        
         switch (player.playerState)
         {
             case PlayerState.InSpace:
@@ -36,7 +43,8 @@ public class CameraBehaviour : MonoBehaviour
             default:
                 break;
         }
-        Move();
+        
+        transform.LookAt(cameraFocus.transform.position);
         Zoom();
     }
 
