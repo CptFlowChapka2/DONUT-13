@@ -40,17 +40,30 @@ public class Player : MonoBehaviour
             Cursor.lockState = CursorLockMode.Locked;
         }
        
-        if (Input.GetMouseButtonDown(1))
+        if (Input.GetMouseButton(1))
+        {
+            Vector3Int input =Vector3Int.CeilToInt(Input.mousePosition);
+            if(seenAplier is not null) foreach (var attractorViewData in seenAplier)
+            {
+                attractorViewData._forceApplier.meshRenderer.material.SetColor("_OL_Color", Color.indianRed);
+            }
+            seenAplier = _eyes.AimForAttractor(input,seenAplier);
+            foreach (var attractorViewData in seenAplier)
+            {
+                attractorViewData._forceApplier.meshRenderer.material.SetColor("_OL_Color", Color.royalBlue);
+            }
+            var first = seenAplier.FirstOrDefault()._forceApplier;
+            first?.meshRenderer.material.SetColor("_OL_Color",Color.green);
+            if(Input.GetMouseButton(0)) first?.AddOrToggleReceiver(thisForceReceiver,true);
+            
+        }
+
+        if (Input.GetMouseButtonUp(1))
         {
             if(seenAplier is not null) foreach (var attractorViewData in seenAplier)
             {
                 attractorViewData._forceApplier.meshRenderer.material.SetColor("_OL_Color", Color.indianRed);
             }
-            Vector3Int input =Vector3Int.CeilToInt(Input.mousePosition);
-            seenAplier = _eyes.AimForAttractor(input,seenAplier);
-            var first = seenAplier.FirstOrDefault()._forceApplier;
-            first?.meshRenderer.material.SetColor("_OL_Color",Color.green);
-            first?.AddOrToggleReceiver(thisForceReceiver,true);
         }
         
     }
@@ -76,16 +89,18 @@ class Eyes
     private TagHandle[] valideTags;
     private int maxBufferValue;
     private int fixedPixelBuffer;
+    private float checkSize;
 
     
     
-    public Eyes(Camera c , Transform t,TagHandle[] vt,int mbv =20,int fpb = 50)
+    public Eyes(Camera c , Transform t,TagHandle[] vt,int mbv =20,int fpb = 50,float cs=200)
     {
         camera = c;
         parentTransform = t;
         maxBufferValue = mbv;
         valideTags = vt;
         fixedPixelBuffer = fpb;
+        checkSize = cs;
     }
 
     public HashSet<AttractorViewData> AimForAttractor(Vector3Int input,HashSet<AttractorViewData> set = null)
@@ -93,15 +108,13 @@ class Eyes
         if (set is null) set = new HashSet<AttractorViewData>(maxBufferValue);
         set.Clear();
         set = LookForAttractors(input,set);
-        foreach (var attractorViewData in set)
-        {
-            attractorViewData._forceApplier.meshRenderer.material.SetColor("_OL_Color", Color.royalBlue);
-        }
         return set.ToList()
             .FindAll(x =>
                 (new Vector2Int(x.posInSceenSpace.x, x.posInSceenSpace.y) - new Vector2Int(input.x, input.y))
                 .magnitude <= x.rangeForValidation && x.boundPosInScreenSpace.z >= 0)
-            .OrderBy(x => x.posInSceenSpace.z)
+            .OrderBy(x=>x.rangeForValidation-(new Vector2Int(x.posInSceenSpace.x, x.posInSceenSpace.y) 
+                        - new Vector2Int(input.x, input.y)).magnitude)
+            .ThenBy(x => x.posInSceenSpace.z)
             .ToHashSet();
     }
     
@@ -109,7 +122,7 @@ class Eyes
     {
         RaycastHit[] hits = new RaycastHit[maxBufferValue];
         HashSet<AttractorViewData> hitViewData = set;
-        for (int i = 0; i < Physics.SphereCastNonAlloc(camera.transform.position,200,camera.transform.forward, hits); i++)
+        for (int i = 0; i < Physics.SphereCastNonAlloc(camera.transform.position+camera.transform.forward*checkSize,checkSize,camera.transform.forward, hits); i++)
         {
             var raycastHit = hits[i];
             if (!valideTags.Contains(TagHandle.GetExistingTag(raycastHit.collider.tag))) continue;

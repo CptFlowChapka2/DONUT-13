@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using UnityEngine;
 
 public class OnlyFeet : ForceApplier
@@ -21,8 +22,16 @@ public class OnlyFeet : ForceApplier
     {
         if (!other.collider.CompareTag("Ground")) return;
         player.isGrounded = true;
-        Debug.DrawLine(other.contacts[0].point,other.contacts[0].normal*5,Color.red,Mathf.Infinity);
-        rb.transform.up = other.contacts[0].normal;
+        
+        var normal = Vector3.zero;
+        foreach (var otherContact in other.contacts)
+        {
+            normal += otherContact.normal;
+        }
+
+        Debug.DrawLine(other.contacts[0].point,normal*5,Color.red,Mathf.Infinity);
+        normal = normal / other.contactCount;
+        rb.transform.up = normal.normalized;
         CreateAndApplyForce(receiver);
     }
 
