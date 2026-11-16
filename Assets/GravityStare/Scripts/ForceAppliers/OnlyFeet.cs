@@ -43,7 +43,11 @@ public class OnlyFeet : ForceApplier
 
     public override void CreateAndApplyForce(ForceReceiver receiver)
     {
-        if (InputSystemManager.instance.movementAction.ReadValue<Vector2>() != Vector2.zero) return;
+        if (InputSystemManager.instance.movementAction.ReadValue<Vector2>() != Vector2.zero)
+        {
+            ApplyForce(receiver,Vector3.zero);
+            return;
+        }
         force = -rb.linearVelocity * (Time.fixedDeltaTime * power);
         ApplyForce(receiver, force);
     }

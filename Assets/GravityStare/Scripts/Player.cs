@@ -96,7 +96,7 @@ public class Player : MonoBehaviour
         if (playerState == PlayerState.InSpace) return;
         if (Physics.Raycast(transform.position, -transform.up, out RaycastHit hit, 2f))
         {
-            transform.up = hit.normal;
+            //transform.up = hit.normal;
         }
         else
         {
