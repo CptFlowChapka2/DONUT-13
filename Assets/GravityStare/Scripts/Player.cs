@@ -5,6 +5,26 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    #region Singleton
+
+    public static Player instance;
+
+    private void Awake()
+    {
+        if (instance != null && instance != this)
+        {
+            Destroy(this.gameObject);
+            return;
+        }
+        else
+        {
+            instance = this;
+        }
+    }
+
+    #endregion
+    
+    public PlayerState playerState = PlayerState.InSpace;
     public bool isGrounded;
     public ForceReceiver thisForceReceiver;
     public Camera camera;
@@ -73,14 +93,14 @@ public class Player : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (!isGrounded) return;
+        if (playerState == PlayerState.InSpace) return;
         if (Physics.Raycast(transform.position, -transform.up, out RaycastHit hit, 2f))
         {
             transform.up = hit.normal;
         }
         else
         {
-            isGrounded = false;
+            playerState = PlayerState.InSpace;
         }
     }
 }
@@ -153,6 +173,13 @@ class Eyes
             Mathf.CeilToInt((AVD.posInSceenSpace - AVD.boundPosInScreenSpace).magnitude + pixelBuffer);
         return AVD;
     }
+}
+
+public enum PlayerState
+{
+    None,
+    Grounded,
+    InSpace
 }
 
 struct AttractorViewData

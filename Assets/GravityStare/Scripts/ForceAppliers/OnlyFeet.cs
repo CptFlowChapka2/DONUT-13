@@ -13,7 +13,7 @@ public class OnlyFeet : ForceApplier
     private void OnCollisionEnter(Collision other)
     {
         if (!other.collider.CompareTag("Ground")) return;
-        player.isGrounded = true;
+        player.playerState = PlayerState.Grounded;
         force = Vector3.zero;
         receiver.forces.Add(this, force);
     }
@@ -21,7 +21,7 @@ public class OnlyFeet : ForceApplier
     private void OnCollisionStay(Collision other)
     {
         if (!other.collider.CompareTag("Ground")) return;
-        player.isGrounded = true;
+        player.playerState = PlayerState.Grounded;
         
         var normal = Vector3.zero;
         foreach (var otherContact in other.contacts)
@@ -46,6 +46,7 @@ public class OnlyFeet : ForceApplier
         if (InputSystemManager.instance.movementAction.ReadValue<Vector2>() != Vector2.zero) return;
         force = -rb.linearVelocity * (Time.fixedDeltaTime * power);
         ApplyForce(receiver, force);
+        Debug.Log(force);
     }
 
     public override void AddOrToggleReceiver(ForceReceiver r, bool togleMode)
