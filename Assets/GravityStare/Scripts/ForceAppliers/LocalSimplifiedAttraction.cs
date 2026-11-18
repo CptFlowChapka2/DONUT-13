@@ -41,12 +41,12 @@ public class LocalSimplifiedAttraction : ForceApplier
         }
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("Forceless")) return;
-        receivers.Add(CollidersHolder.FindReceiverByCollider(other));
-        meshRenderer.material.SetColor("_BaseColor",activeColor);
-    }
+    // private void OnTriggerEnter(Collider other)
+    // {
+    //     if (other.CompareTag("Forceless")) return;
+    //     receivers.Add(CollidersHolder.FindReceiverByCollider(other));
+    //     meshRenderer.material.SetColor("_BaseColor",activeColor);
+    // }
 
     private void FixedUpdate()
     {
@@ -56,15 +56,15 @@ public class LocalSimplifiedAttraction : ForceApplier
         }
     }
 
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.CompareTag("Forceless")) return;
-        var r = CollidersHolder.FindReceiverByCollider(other);
-        r.forces.Remove(this);
-        receivers.Remove(r);
-        meshRenderer.material.SetColor("_BaseColor",noColor);
-        
-    }
+    // private void OnTriggerExit(Collider other)
+    // {
+    //     if (other.CompareTag("Forceless")) return;
+    //     var r = CollidersHolder.FindReceiverByCollider(other);
+    //     r.forces.Remove(this);
+    //     receivers.Remove(r);
+    //     meshRenderer.material.SetColor("_BaseColor",noColor);
+    //     
+    // }
 
     // private void OnTriggerStay(Collider other)
     // {
