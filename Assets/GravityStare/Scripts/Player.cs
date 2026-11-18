@@ -91,14 +91,14 @@ public class Player : MonoBehaviour
                 first.meshRenderer.material.SetColor("_OL_Color",Color.green);
                 if(Input.GetMouseButtonDown(1))
                 {
-                    // if (first.activeColor == Color.darkRed)
-                    // {
-                    //     first.activeColor = Color.greenYellow;
-                    // }
-                    // else
-                    // {
-                    //     first.activeColor = Color.darkRed;
-                    // }
+                    if (first.ActiveColor == Color.darkRed)
+                    {
+                        first.ActiveColor = Color.greenYellow;
+                    }
+                    else
+                    {
+                        first.ActiveColor = Color.darkRed;
+                    }
                     first.power = -first.power;
                 }
                 if(Input.GetMouseButtonDown(0)) first.AddOrToggleReceiver(thisForceReceiver,true); 
@@ -168,7 +168,9 @@ class Eyes
         {
             var raycastHit = hits[i];
             if (!valideTags.Contains(TagHandle.GetExistingTag(raycastHit.collider.tag))) continue;
-            hitViewData.Add( CreateAttractorViewDataFromRaycastHit(raycastHit,input));
+            var temp = CreateAttractorViewDataFromRaycastHit(raycastHit, input);
+            if(temp._forceApplier is null) continue;
+            hitViewData.Add( temp);
             
         }
         
@@ -180,6 +182,7 @@ class Eyes
     {
         AttractorViewData AVD = new AttractorViewData();
         AVD._forceApplier = raycastHit.collider.GetComponentInChildren<ForceApplier>();
+        if (AVD._forceApplier is null) return AVD;
         
         AVD.posInWorldSpace = AVD._forceApplier.transform.position;
         AVD.posInSceenSpace =Vector3Int.CeilToInt(camera.WorldToScreenPoint(AVD.posInWorldSpace));

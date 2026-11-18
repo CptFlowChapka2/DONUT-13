@@ -13,7 +13,17 @@ public abstract class ForceApplier : MonoBehaviour
     public MeshRenderer meshRenderer;
     public Color activeColor = Color.greenYellow;
     public Color noColor = Color.antiqueWhite;
-    
+
+    public Color ActiveColor
+    {
+        get => activeColor;
+        set
+        {
+            activeColor = value;
+            if(receivers.Count>0)meshRenderer.material.SetColor("_BaseColor",activeColor);
+        }
+    }
+
     protected HashSet<ForceReceiver> receivers = new HashSet<ForceReceiver>();
 
     protected void ApplyForce(ForceReceiver receiver, Vector3 force)
@@ -27,4 +37,5 @@ public abstract class ForceApplier : MonoBehaviour
     public abstract void CreateAndApplyForce(ForceReceiver receiver);
 
     public abstract void AddOrToggleReceiver(ForceReceiver r, bool togleMode);
+    
 }
