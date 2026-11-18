@@ -11,6 +11,8 @@ public abstract class ForceApplier : MonoBehaviour
     protected float influenceRadius;
     [SerializeField] public Collider collider;
     public MeshRenderer meshRenderer;
+    public Color activeColor = Color.greenYellow;
+    public Color noColor = Color.antiqueWhite;
     
     protected HashSet<ForceReceiver> receivers = new HashSet<ForceReceiver>();
 
