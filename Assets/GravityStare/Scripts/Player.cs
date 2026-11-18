@@ -89,8 +89,8 @@ public class Player : MonoBehaviour
             if (first is not null)
             {
                 first.meshRenderer.material.SetColor("_OL_Color",Color.green);
-                if(Input.GetMouseButton(1)) first.power=-first.power;
-                if(Input.GetMouseButton(0)) first.AddOrToggleReceiver(thisForceReceiver,true); 
+                if(Input.GetMouseButtonDown(1)) first.power=-first.power;
+                if(Input.GetMouseButtonDown(0)) first.AddOrToggleReceiver(thisForceReceiver,true); 
             }
             
         }

@@ -24,15 +24,19 @@ public class LocalSimplifiedAttraction : ForceApplier
         {
             //if(collider.bounds.Contains(r.transform.position))return;
             if (!receivers.Add(r))
-
             {
+                meshRenderer.material.SetColor("_BaseColor",Color.antiqueWhite);
                 r.forces.Remove(this);
                 receivers.Remove(r);
+                return;
             }
+            meshRenderer.material.SetColor("_BaseColor",Color.greenYellow);
+            receivers.Add(r);
             
         }
         else
         {
+            meshRenderer.material.SetColor("_BaseColor",Color.greenYellow);
             receivers.Add(r);
         }
     }
@@ -41,6 +45,7 @@ public class LocalSimplifiedAttraction : ForceApplier
     {
         if (other.CompareTag("Forceless")) return;
         receivers.Add(CollidersHolder.FindReceiverByCollider(other));
+        meshRenderer.material.SetColor("_BaseColor",Color.greenYellow);
     }
 
     private void FixedUpdate()
@@ -57,6 +62,8 @@ public class LocalSimplifiedAttraction : ForceApplier
         var r = CollidersHolder.FindReceiverByCollider(other);
         r.forces.Remove(this);
         receivers.Remove(r);
+        meshRenderer.material.SetColor("_BaseColor",Color.antiqueWhite);
+        
     }
 
     // private void OnTriggerStay(Collider other)
