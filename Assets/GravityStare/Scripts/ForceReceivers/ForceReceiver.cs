@@ -10,7 +10,7 @@ public abstract class ForceReceiver : MonoBehaviour
     public float speed;
     public float maxSpeed;
     
-    public Dictionary<ForceApplier, Vector3> forces = new Dictionary<ForceApplier, Vector3>();
+     [SerializeField]public Dictionary<ForceApplier, Vector3> forces = new Dictionary<ForceApplier, Vector3>();
     
     private void Start()
     {
