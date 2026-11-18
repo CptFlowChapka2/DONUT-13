@@ -1664,7 +1664,36 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 7590836531520345733, guid: 347f290d9eaddc74b84f6ba0c0af9070, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1100754483}
+    - targetCorrespondingSourceObject: {fileID: 7590836531520345733, guid: 347f290d9eaddc74b84f6ba0c0af9070, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8521805950222669937}
   m_SourcePrefab: {fileID: 100100000, guid: 347f290d9eaddc74b84f6ba0c0af9070, type: 3}
+--- !u!136 &8521805950222669935 stripped
+CapsuleCollider:
+  m_CorrespondingSourceObject: {fileID: 2410323147755769984, guid: 347f290d9eaddc74b84f6ba0c0af9070, type: 3}
+  m_PrefabInstance: {fileID: 8521805950222669934}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &8521805950222669936 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 6961843855031825445, guid: 347f290d9eaddc74b84f6ba0c0af9070, type: 3}
+  m_PrefabInstance: {fileID: 8521805950222669934}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &8521805950222669937
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 916320186}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1124734df8024e1484f96d16e2f971c9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GravityStare.Scripts.ForceAppliers.PlayerJetpack
+  power: 5
+  force: {x: 0, y: 0, z: 0}
+  collider: {fileID: 8521805950222669935}
+  meshRenderer: {fileID: 8521805950222669936}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

@@ -58,10 +58,11 @@ public class Player : MonoBehaviour
             Cursor.lockState = CursorLockMode.None;
         }
         
-        if (Input.GetKey(KeyCode.Space))
+        if (Input.GetKey(KeyCode.L))
         {
             Cursor.lockState = CursorLockMode.Locked;
         }
+        
 
         if (Input.GetKeyDown(KeyCode.Q))
         {
