@@ -9,6 +9,8 @@ Shader "OutlinableMat"
 		_OutlineScale( "OutlineScale", Range( 0, 255 ) ) = 0
 		_OL_Color( "OL_Color", Color ) = ( 1, 0, 0, 0 )
 		_BaseColor( "BaseColor", Color ) = ( 1, 1, 1, 0 )
+		_Roughness( "Roughness", Float ) = 0
+		_Metalness( "Metalness", Float ) = 0
 		[HideInInspector] __dirty( "", Int ) = 1
 	}
 
@@ -65,6 +67,8 @@ Shader "OutlinableMat"
 		};
 
 		uniform float4 _BaseColor;
+		uniform float _Metalness;
+		uniform float _Roughness;
 
 		void vertexDataFunc( inout appdata_full v, out Input o )
 		{
@@ -76,6 +80,8 @@ Shader "OutlinableMat"
 		void surf( Input i , inout SurfaceOutputStandard o )
 		{
 			o.Albedo = _BaseColor.rgb;
+			o.Metallic = _Metalness;
+			o.Smoothness = ( 1.0 - _Roughness );
 			o.Alpha = 1;
 		}
 
@@ -90,14 +96,20 @@ Version=19912
 {"type":"AmplifyShaderEditor.RangedFloatNode, AmplifyShaderEditor","id":15,"pos":[-584,216],"params":["Inherit","False","InstancedProperty","_OutlineScale","OutlineScale","0","0","Create","True","0","0","0","False","0","False","Object","-1","","0","0.5","0","255","0","1","FLOAT","0"]}
 {"type":"AmplifyShaderEditor.ColorNode, AmplifyShaderEditor","id":26,"pos":[-312,-56],"params":["Inherit","False","InstancedProperty","_OL_Color","OL_Color","1","0","Create","True","0","0","0","False","0","False","Object","-1","","1,0,0,0","1,0,0,0","True","True","0","6","COLOR","0","FLOAT","1","FLOAT","2","FLOAT","3","FLOAT","4","FLOAT3","5"]}
 {"type":"AmplifyShaderEditor.SimpleDivideOpNode, AmplifyShaderEditor","id":54,"pos":[-216,160],"params":["Inherit","False","2","0","FLOAT","0","False","1","FLOAT3","0,0,0","False","1","FLOAT3","0"]}
+{"type":"AmplifyShaderEditor.RangedFloatNode, AmplifyShaderEditor","id":56,"pos":[56,-48],"params":["Inherit","False","Property","_Roughness","Roughness","3","0","Create","True","0","0","0","False","0","False","Object","-1","","0","0.6","0","0","0","1","FLOAT","0"]}
 {"type":"AmplifyShaderEditor.OutlineNode, AmplifyShaderEditor","id":51,"pos":[40,120],"params":["Inherit","False","0","True","None","0","0","Front","True","True","True","True","0","False","","0","3","0","FLOAT3","0,0,0","False","2","FLOAT","0","False","1","FLOAT","0","False","1","FLOAT3","0"]}
-{"type":"AmplifyShaderEditor.ColorNode, AmplifyShaderEditor","id":53,"pos":[-32,-280],"params":["Inherit","False","Property","_BaseColor","BaseColor","2","0","Create","True","0","0","0","False","0","False","Object","-1","","1,1,1,0","1,1,1,0","True","True","0","6","COLOR","0","FLOAT","1","FLOAT","2","FLOAT","3","FLOAT","4","FLOAT3","5"]}
+{"type":"AmplifyShaderEditor.ColorNode, AmplifyShaderEditor","id":53,"pos":[-208,-552],"params":["Inherit","False","Property","_BaseColor","BaseColor","2","0","Create","True","0","0","0","False","0","False","Object","-1","","1,1,1,0","0.8930817,0.8930817,0.8930817,0","True","True","0","6","COLOR","0","FLOAT","1","FLOAT","2","FLOAT","3","FLOAT","4","FLOAT3","5"]}
+{"type":"AmplifyShaderEditor.RangedFloatNode, AmplifyShaderEditor","id":57,"pos":[136,-152],"params":["Inherit","False","Property","_Metalness","Metalness","4","0","Create","True","0","0","0","False","0","False","Object","-1","","0","1","0","0","0","1","FLOAT","0"]}
+{"type":"AmplifyShaderEditor.OneMinusNode, AmplifyShaderEditor","id":58,"pos":[240,-24],"params":["Inherit","False","1","0","FLOAT","0","False","1","FLOAT","0"]}
 {"type":"AmplifyShaderEditor.StandardSurfaceOutputNode, AmplifyShaderEditor","id":52,"pos":[416,-144],"params":["Float","False","True","-1","3","AmplifyShaderEditor.MaterialInspector","0","0","Standard","OutlinableMat","False","False","False","False","False","False","False","False","False","False","False","False","False","False","False","False","False","False","False","False","False","Back","0","False","","0","False","","False","0","False","","0","False","","False","0","0","False","","0","Opaque","0.5","True","True","0","False","Opaque","","Geometry","All","14","all","True","True","True","True","0","False","","False","0","False","","255","False","","255","False","","0","False","","0","False","","0","False","","0","False","","0","False","","0","False","","0","False","","0","False","","False","2","15","10","25","False","0.5","True","0","0","False","","0","False","","0","0","False","","0","False","","0","False","","0","False","","0","False","0","0,0,0,0","VertexOffset","True","False","Cylindrical","False","True","Relative","0","","-1","-1","-1","-1","0","False","0","0","False","","-1","0","False","","0","0","0","False","0.1","False","","0","False","","False","17","0","FLOAT3","0,0,0","False","1","FLOAT3","0,0,0","False","2","FLOAT3","0,0,0","False","3","FLOAT","0","False","4","FLOAT","0","False","5","FLOAT","0","False","6","FLOAT3","0,0,0","False","7","FLOAT3","0,0,0","False","8","FLOAT","0","False","9","FLOAT","0","False","10","FLOAT","0","False","13","FLOAT3","0,0,0","False","11","FLOAT3","0,0,0","False","12","FLOAT3","0,0,0","False","16","FLOAT4","0,0,0,0","False","14","FLOAT4","0,0,0,0","False","15","FLOAT3","0,0,0","False","0"]}
 {"wire":[54,0,15,0]}
 {"wire":[54,1,55,0]}
 {"wire":[51,0,26,5]}
 {"wire":[51,1,54,0]}
+{"wire":[58,0,56,0]}
 {"wire":[52,0,53,0]}
+{"wire":[52,3,57,0]}
+{"wire":[52,4,58,0]}
 {"wire":[52,11,51,0]}
 ASEEND*/
-//CHKSM=42CCA26D83363B9AF629900D1F809FFDA7216443
+//CHKSM=5B5A2732B19590043AF9DB650A53861E8E6C3EC6
